@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;530;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-space: "Space Grotesk", sans-serif;
+  --font-orbitron: "Orbitron", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --animate-spin-slow: spin 20s linear infinite;
+  --animate-spin-slower: spin 45s linear infinite;
+  --animate-spin-slow-reverse: spin 30s linear infinite reverse;
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-glow: pulse-glow 3s ease-in-out infinite;
+
+  --color-electric-blue: #2979FF;
+  --color-energy-cyan: #00E4FF;
+  --color-ia-violet: #8A2BE2;
+  --color-solar-gold: #FFD166;
+  --color-energy-green: #3CFF9B;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.3;
+    filter: drop-shadow(0 0 10px rgba(138, 43, 226, 0.2));
+  }
+  50% {
+    opacity: 0.7;
+    filter: drop-shadow(0 0 25px rgba(0, 228, 255, 0.6));
+  }
+}
+
+/* Glassmorphism Classes */
+.glass-panel {
+  background: rgba(11, 16, 38, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-panel-heavy {
+  background: rgba(5, 8, 22, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel-glow-blue {
+  border: 1px solid rgba(41, 121, 255, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), 0 0 15px rgba(41, 121, 255, 0.05);
+}
+
+.glass-panel-glow-green {
+  border: 1px solid rgba(60, 255, 155, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), 0 0 15px rgba(60, 255, 155, 0.05);
+}
+
+.glass-panel-glow-purple {
+  border: 1px solid rgba(138, 43, 226, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), 0 0 15px rgba(138, 43, 226, 0.05);
+}
+
+/* Custom Scrollbar */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: rgba(5, 8, 22, 0.5);
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Grid background helper */
+.grid-overlay {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Custom radial glows */
+.radial-shield {
+  background: radial-gradient(circle, rgba(138,43,226,0.15) 0%, rgba(5,8,22,0) 70%);
+}
+
+/* Cinematic Video and Logo Styles */
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at center, rgba(0, 229, 255, 0.15), transparent 45%),
+    linear-gradient(180deg, rgba(5, 8, 22, 0.4) 0%, rgba(5, 8, 22, 0.75) 50%, rgba(5, 8, 22, 0.98) 100%);
+  z-index: 1;
+}
+
+.hero-logo {
+  width: min(520px, 82vw);
+  height: auto;
+  filter:
+    drop-shadow(0 0 22px rgba(0, 229, 255, 0.55))
+    drop-shadow(0 0 48px rgba(138, 43, 226, 0.35));
+  animation: logoReveal 1.2s ease-out both, logoPulse 4s ease-in-out infinite;
+}
+
+@keyframes logoReveal {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.92);
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes logoPulse {
+  0%, 100% {
+    filter:
+      drop-shadow(0 0 18px rgba(0, 229, 255, 0.45))
+      drop-shadow(0 0 36px rgba(138, 43, 226, 0.25));
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 30px rgba(0, 229, 255, 0.75))
+      drop-shadow(0 0 70px rgba(60, 255, 155, 0.35));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-video {
+    display: none;
+  }
+
+  .animated,
+  .hero-logo {
+    animation: none !important;
+  }
+}

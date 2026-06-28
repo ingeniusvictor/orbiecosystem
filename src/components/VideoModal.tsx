@@ -76,7 +76,7 @@ function playSystemBeep(frequency = 800, type: OscillatorType = "sine", duration
   }
 }
 
-export default function VideoModal({ isOpen, onClose, videoSrc = "/assets/orbi/orbi-ecosystem-intro.mp4", initialComponentId, isAdminMode }: VideoModalProps) {
+export default function VideoModal({ isOpen, onClose, videoSrc = "/assets/videos/orbi-intro.mp4", initialComponentId, isAdminMode }: VideoModalProps) {
   // Tabs: "interactive" for the zero-latency presentation, "youtube" for direct YouTube stream, "local" for standard MP4 asset
   const [activeTab, setActiveTab] = useState<"interactive" | "youtube" | "local" >("interactive");
   
@@ -143,28 +143,42 @@ export default function VideoModal({ isOpen, onClose, videoSrc = "/assets/orbi/o
         id: "eco-general",
         name: "Ecosistema Orbi General",
         description: "Video de presentación global del ecosistema Orbi.",
-        videoUrl: "/assets/orbi/orbi-ecosystem-intro.mp4",
+        videoUrl: "/assets/videos/orbi-intro.mp4",
         videoFileUrl: null,
       },
       {
         id: "foton-prime",
         name: "Core IA Foton Prime",
         description: "La IA central invisible unificadora del ecosistema Orbi.",
-        videoUrl: "",
+        videoUrl: "/assets/videos/orbi-chatbox-ia-core.mp4",
         videoFileUrl: null,
       },
       {
         id: "orbi-games",
         name: "Orbi Games System",
         description: "Presentación de la liga y videojuegos Web3.",
-        videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-background-of-digital-glowing-lines-41584-large.mp4",
+        videoUrl: "",
+        videoFileUrl: null,
+      },
+      {
+        id: "orbi-corp",
+        name: "Orbi Corporate System",
+        description: "Demo corporativa enfocada en terreno e inspeccion con Orbi GEO.",
+        videoUrl: "/assets/videos/orbi-geo.mp4",
+        videoFileUrl: null,
+      },
+      {
+        id: "orbi-development",
+        name: "Orbi Development System",
+        description: "Infraestructura, APIs y automatizacion inteligente del ecosistema Orbi.",
+        videoUrl: "",
         videoFileUrl: null,
       },
       {
         id: "orbi-geo",
         name: "Orbi GEO",
         description: "Inspección técnica en terreno con georreferenciación segura.",
-        videoUrl: "",
+        videoUrl: "/assets/videos/orbi-geo.mp4",
         videoFileUrl: null,
       },
       {
@@ -199,7 +213,21 @@ export default function VideoModal({ isOpen, onClose, videoSrc = "/assets/orbi/o
         id: "orbi-doc-scan-pro",
         name: "Orbi Doc Scan Pro",
         description: "Procesamiento integral con OCR de facturas y contratos.",
-        videoUrl: "",
+        videoUrl: "/assets/videos/orbi-docs-ia.mp4",
+        videoFileUrl: null,
+      },
+      {
+        id: "orbi-assistant-ia-framework",
+        name: "Orbi Assistant IA Framework",
+        description: "Framework nativo para asistentes conversacionales y memoria contextual.",
+        videoUrl: "/assets/videos/orbi-chatbox-ia-core.mp4",
+        videoFileUrl: null,
+      },
+      {
+        id: "orbi-media-core-ia",
+        name: "Orbi Media Core IA",
+        description: "Presentacion del motor multimedia inteligente del ecosistema Orbi.",
+        videoUrl: "/assets/videos/orbi-media-core-ia.mp4",
         videoFileUrl: null,
       },
     ];
@@ -764,7 +792,7 @@ export default function VideoModal({ isOpen, onClose, videoSrc = "/assets/orbi/o
         /* ==================== THEATER SPECTATOR MODE VIEW ==================== */
         (() => {
           const currentComp = components.find((c) => c.id === selectedCompId) || components[0];
-          const activeVideoSrc = currentComp.videoFileUrl || currentComp.videoUrl || "/assets/orbi/orbi-ecosystem-intro.mp4";
+          const activeVideoSrc = currentComp.videoFileUrl || currentComp.videoUrl || "/assets/videos/orbi-intro.mp4";
           const youtubeEmbed = getYouTubeEmbedUrl(activeVideoSrc);
 
           return (
@@ -1768,7 +1796,7 @@ export default function VideoModal({ isOpen, onClose, videoSrc = "/assets/orbi/o
                           <div className="flex">
                             <input
                               type="text"
-                              placeholder="Ej. /assets/orbi/orbi-games.mp4"
+                              placeholder="Ej. /assets/videos/orbi-games.mp4"
                               value={currentComp.videoFileUrl ? "" : currentComp.videoUrl}
                               disabled={!!currentComp.videoFileUrl}
                               onChange={(e) => handleUpdateUrl(currentComp.id, e.target.value)}

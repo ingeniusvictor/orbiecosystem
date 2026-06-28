@@ -8,7 +8,7 @@ dotenv.config();
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = Number(process.env.PORT) || 3000;
 
   // Middleware for parsing JSON
   app.use(express.json());
@@ -273,7 +273,7 @@ Responde siempre en español de manera futurista, sumamente profesional, clara y
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
+  app.listen(PORT, () => {//, "0.0.0.0"
     console.log(`Server running on http://localhost:${PORT}`);
   });
 }

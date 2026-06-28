@@ -1,6 +1,7 @@
 import React from "react";
 import { DIVISIONS } from "../data";
 import { Gamepad2, Briefcase, Code, Cpu, ArrowRight, CheckCircle2, Play } from "lucide-react";
+import SectionVideo from "./SectionVideo";
 
 interface DivisionCardsProps {
   onSelectDivision: (divisionId: "games" | "corporate" | "development") => void;
@@ -8,6 +9,13 @@ interface DivisionCardsProps {
 }
 
 export default function DivisionCards({ onSelectDivision, onPlayVideo }: DivisionCardsProps) {
+  const divisionVideos: Partial<Record<"games" | "corporate" | "development", { src: string; title: string }>> = {
+    corporate: {
+      src: "/assets/videos/orbi-geo.mp4",
+      title: "ORBI GEO // TERRENO"
+    }
+  };
+
   const getIcon = (name: string, colorClass: string) => {
     switch (name) {
       case "Gamepad2":
@@ -87,6 +95,7 @@ export default function DivisionCards({ onSelectDivision, onPlayVideo }: Divisio
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {DIVISIONS.map((division) => {
             const theme = getColorTheme(division.colorClass);
+            const sectionVideo = divisionVideos[division.id];
             return (
               <div
                 key={division.id}
@@ -119,7 +128,7 @@ export default function DivisionCards({ onSelectDivision, onPlayVideo }: Divisio
                             e.stopPropagation();
                             const videoId = 
                               division.id === "games" ? "orbi-games" :
-                              division.id === "corporate" ? "orbi-corp" : "eco-general";
+                              division.id === "corporate" ? "orbi-corp" : "orbi-development";
                             onPlayVideo(videoId);
                           }}
                           className="flex items-center gap-1 text-[8px] font-mono text-cyan-400 hover:text-white px-2 py-0.5 rounded bg-cyan-950/20 hover:bg-cyan-600/30 border border-cyan-500/10 hover:border-cyan-500/40 transition-all cursor-pointer uppercase font-black"
@@ -142,6 +151,21 @@ export default function DivisionCards({ onSelectDivision, onPlayVideo }: Divisio
                   <p className="text-slate-300 text-sm leading-relaxed font-light">
                     {division.description}
                   </p>
+
+                  {sectionVideo ? (
+                    <SectionVideo
+                      src={sectionVideo.src}
+                      title={sectionVideo.title}
+                      className="shadow-lg"
+                      videoClassName="aspect-video object-cover"
+                    />
+                  ) : (
+                    /*
+                      TODO: Simon debe elegir aquí el video correspondiente.
+                      Ejemplo temporal: src="/assets/videos/colocar-video-aqui.mp4"
+                    */
+                    null
+                  )}
 
                   {/* Highlights section */}
                   <div className="space-y-2.5 pt-4 border-t border-slate-800/60 select-none">

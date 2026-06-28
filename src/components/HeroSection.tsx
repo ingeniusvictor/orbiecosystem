@@ -26,7 +26,7 @@ export default function HeroSection({ onNavigate, onPlayVideo }: HeroSectionProp
           console.warn("Ecosystem background video not ready, falling back to cinematic animated canvas.");
         }}
       >
-        <source src="/assets/orbi/orbi-ecosystem-intro.mp4" type="video/mp4" />
+        <source src="/assets/videos/orbi-intro.mp4" type="video/mp4" />
         <source src="https://assets.mixkit.co/videos/preview/mixkit-background-of-digital-glowing-lines-41584-large.mp4" type="video/mp4" />
       </video>
 

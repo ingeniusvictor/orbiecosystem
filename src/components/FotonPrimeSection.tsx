@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Cpu, Send, Bot, Sparkles, AlertCircle, RefreshCw, Zap, Play } from "lucide-react";
 import { Message } from "../types";
+import SectionVideo from "./SectionVideo";
 
 interface FotonPrimeSectionProps {
   onPlayVideo?: (compId: string) => void;
@@ -137,12 +138,19 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
               Orbi Foton Prime es el nexo inteligente que unifica la visión central de ORBI. Coordina y eleva las distintas aplicaciones, permitiendo interoperabilidad continua, auto-categorización y resolución de flujos críticos de la red.
             </p>
 
+            <SectionVideo
+              src="/assets/videos/orbi-chatbox-ia-core.mp4"
+              title="ORBI IA CORE"
+              className="max-w-xl"
+              videoClassName="aspect-video object-cover"
+            />
+
             {/* Cinematic Presentation Watcher trigger */}
             {onPlayVideo && (
               <div className="pt-3 pb-1">
                 <button
                   onClick={() => {
-                    onPlayVideo("orbi-foton");
+                    onPlayVideo("foton-prime");
                   }}
                   className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-950/40 to-indigo-950/40 hover:from-[#150F2E] hover:to-[#17123A] border border-purple-550/30 hover:border-purple-400 px-4 py-2.5 rounded-xl cursor-pointer group transition-all duration-350"
                 >

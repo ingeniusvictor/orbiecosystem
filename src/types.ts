@@ -7,6 +7,7 @@ export interface Product {
   tags: string[];
   division: "games" | "corporate" | "development";
   features?: string[];
+  launchUrl?: string;
 }
 
 export interface Division {

@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { PRODUCTS } from "../data";
 import { Product } from "../types";
-import { Search, Filter, ArrowRight, X, Compass, Tag, Cpu, Info, CheckCircle, Play } from "lucide-react";
+import { Search, Filter, ArrowRight, X, Compass, Tag, Cpu, Info, CheckCircle, Play, ExternalLink } from "lucide-react";
 
 interface ProductGridProps {
   initialDivisionFilter: "all" | "games" | "corporate" | "development";
@@ -310,6 +310,18 @@ export default function ProductGrid({ initialDivisionFilter, onResetDivisionFilt
                     <span>Ficha</span>
                     <ArrowRight className="w-3 h-3 transition-transform duration-250 group-hover:translate-x-0.5" />
                   </button>
+                  {product.launchUrl && (
+                    <a
+                      href={product.launchUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3 py-2.5 bg-emerald-950/20 hover:bg-emerald-600/30 border border-emerald-500/20 hover:border-emerald-500 text-emerald-400 hover:text-white rounded-xl transition-all flex items-center justify-center cursor-pointer gap-1.5 text-[10px] font-bold uppercase tracking-wider shrink-0"
+                      title={`Abrir ${product.name}`}
+                    >
+                      <ExternalLink className="w-3 h-3" />
+                      <span>App</span>
+                    </a>
+                  )}
                   {onPlayVideo && (
                     <button
                       onClick={() => onPlayVideo(product.id)}
@@ -417,6 +429,17 @@ export default function ProductGrid({ initialDivisionFilter, onResetDivisionFilt
 
               {/* Modal footer / Quick action info */}
               <div className="bg-slate-950 px-6 py-4 border-t border-slate-900 flex flex-col gap-2.5 select-none">
+                {selectedProduct.launchUrl && (
+                  <a
+                    href={selectedProduct.launchUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-mono text-[9px] font-black tracking-widest uppercase rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-emerald-500/10 transition-all active:scale-[0.98]"
+                  >
+                    <ExternalLink className="w-3 h-3" />
+                    <span>Abrir Aplicación Web ({selectedProduct.name})</span>
+                  </a>
+                )}
                 {onPlayVideo && (
                   <button
                     onClick={() => {

@@ -217,6 +217,13 @@ export default function VideoModal({ isOpen, onClose, videoSrc = "/assets/videos
         videoFileUrl: null,
       },
       {
+        id: "orbi-docs-ia",
+        name: "Orbi Docs IA",
+        description: "Demo web de trabajo documental asistido por inteligencia artificial.",
+        videoUrl: "/assets/videos/orbi-docs-ia.mp4",
+        videoFileUrl: null,
+      },
+      {
         id: "orbi-assistant-ia-framework",
         name: "Orbi Assistant IA Framework",
         description: "Framework nativo para asistentes conversacionales y memoria contextual.",

@@ -35,6 +35,7 @@ export const DIVISIONS: Division[] = [
       "Orbi Corporate Assistant",
       "Orbi GEO",
       "Orbi Plan IA",
+      "Orbi Docs IA",
       "Orbi Sign",
       "Orbi Doc Scan Pro",
       "Orbi HSEC Center",
@@ -82,6 +83,16 @@ export const PRODUCTS: Product[] = [
     description: "Plataforma inteligente para la planificación diaria y semanal de obras, asignación de tareas por recinto, carga y análisis de planos en formato PDF, checklists fotográficos, calendarios integrados, diagramas de Gantt y automatización aplicada a la construcción.",
     tags: ["Planificación", "Construcción", "IA", "Gantt", "Android"],
     division: "corporate"
+  },
+  {
+    id: "orbi-docs-ia",
+    name: "ORBI DOCS IA",
+    category: "AI Document Workspace",
+    status: "Prototipo",
+    description: "Herramienta web de trabajo documental asistido por IA, preparada como demo estática dentro del ecosistema ORBI para crear, revisar y gestionar documentos desde una interfaz independiente.",
+    tags: ["Documentos", "IA", "Web Demo", "Productividad", "Workspace"],
+    division: "corporate",
+    launchUrl: "/orbi-docs/"
   },
   {
     id: "orbi-sign",

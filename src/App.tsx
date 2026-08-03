@@ -16,8 +16,11 @@ import Roadmap from "./components/Roadmap";
 import FinalCTA from "./components/FinalCTA";
 import Footer from "./components/Footer";
 import VideoModal from "./components/VideoModal";
+import ClimateRecoveryLanding from "./components/ClimateRecoveryLanding";
 
 export default function App() {
+  const normalizedPath = window.location.pathname.replace(/\/$/, "") || "/";
+  const isClimateRecoveryRoute = normalizedPath === "/climate-recovery";
   const [activeSection, setActiveSection] = useState("hero");
   const [initialDivisionFilter, setInitialDivisionFilter] = useState<"all" | "games" | "corporate" | "development">("all");
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
@@ -86,6 +89,10 @@ export default function App() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  if (isClimateRecoveryRoute) {
+    return <ClimateRecoveryLanding />;
+  }
+
   return (
     <div id="orbi-root-canvas" className="min-h-screen bg-slate-950 text-slate-100 selection:bg-purple-500/30 selection:text-white antialiased">
       {/* Premium Loader Overlay */}
@@ -146,4 +153,3 @@ export default function App() {
     </div>
   );
 }
-

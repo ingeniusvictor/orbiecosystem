@@ -17,10 +17,12 @@ import FinalCTA from "./components/FinalCTA";
 import Footer from "./components/Footer";
 import VideoModal from "./components/VideoModal";
 import ClimateRecoveryLanding from "./components/ClimateRecoveryLanding";
+import OrbiPBMetricsPage from "./components/projects/OrbiPBMetricsPage";
 
 export default function App() {
   const normalizedPath = window.location.pathname.replace(/\/$/, "") || "/";
   const isClimateRecoveryRoute = normalizedPath === "/climate-recovery";
+  const isPBMetricsRoute = normalizedPath === "/projects/orbi-pbmetrics";
   const [activeSection, setActiveSection] = useState("hero");
   const [initialDivisionFilter, setInitialDivisionFilter] = useState<"all" | "games" | "corporate" | "development">("all");
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
@@ -91,6 +93,10 @@ export default function App() {
 
   if (isClimateRecoveryRoute) {
     return <ClimateRecoveryLanding />;
+  }
+
+  if (isPBMetricsRoute) {
+    return <OrbiPBMetricsPage />;
   }
 
   return (

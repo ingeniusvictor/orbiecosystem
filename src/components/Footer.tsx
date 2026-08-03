@@ -110,7 +110,7 @@ export default function Footer({ onNavigate }: FooterProps) {
             <p className="text-xs text-slate-500 leading-normal">
               Sigue el desarrollo técnico del ecosistema modular de ORBI.
             </p>
-            <div className="flex items-center space-x-3 pt-1">
+            <div className="flex flex-wrap items-center gap-3 pt-1">
               <a 
                 href="#" 
                 className="p-2.5 bg-slate-900 hover:bg-slate-850 hover:text-white border border-slate-850 hover:border-slate-755 rounded-xl transition-all"

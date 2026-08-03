@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { ArrowRight, Play, Compass, Grid, Sparkles, ChevronDown } from "lucide-react";
+import { competitionContent } from "../content/competition";
 
 interface HeroSectionProps {
   onNavigate: (sectionId: string) => void;
@@ -75,8 +76,15 @@ export default function HeroSection({ onNavigate, onPlayVideo }: HeroSectionProp
             </span>
           </h2>
           <p className="text-slate-300 text-sm sm:text-base md:text-md max-w-2xl mx-auto leading-relaxed font-light">
-            Aplicaciones, videojuegos, inteligencia artificial, energía y productividad unidos bajo una misma visión tecnológica.
+            {competitionContent.home.supportText}
           </p>
+          <a
+            href="/climate-recovery"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-cyan-500/25 bg-cyan-950/20 px-4 py-2 font-mono text-[10px] font-black uppercase tracking-widest text-cyan-300 transition hover:border-cyan-400/60 hover:bg-cyan-500/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-950"
+          >
+            {competitionContent.home.cta}
+            <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+          </a>
         </div>
 
         {/* Action Buttons Box */}

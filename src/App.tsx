@@ -23,6 +23,7 @@ export default function App() {
   const normalizedPath = window.location.pathname.replace(/\/$/, "") || "/";
   const isClimateRecoveryRoute = normalizedPath === "/climate-recovery";
   const isPBMetricsRoute = normalizedPath === "/projects/orbi-pbmetrics";
+  const shouldShowDevPanel = Boolean((import.meta as unknown as { env?: { DEV?: boolean } }).env?.DEV);
   const [activeSection, setActiveSection] = useState("hero");
   const [initialDivisionFilter, setInitialDivisionFilter] = useState<"all" | "games" | "corporate" | "development">("all");
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
@@ -105,7 +106,7 @@ export default function App() {
       <LoaderScreen />
 
       {/* Header navbar */}
-      <Header onNavigate={handleNavigate} activeSection={activeSection} onOpenDevPanel={handleOpenDevPanel} />
+      <Header onNavigate={handleNavigate} activeSection={activeSection} onOpenDevPanel={shouldShowDevPanel ? handleOpenDevPanel : undefined} />
 
       {/* Main Page Blocks wrapper */}
       <main className="relative">

@@ -1,7 +1,8 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { PRODUCTS } from "../data";
 import { Product } from "../types";
-import { Search, Filter, ArrowRight, X, Compass, Tag, Cpu, Info, CheckCircle, Play, ExternalLink } from "lucide-react";
+import { Search, Filter, ArrowRight, X, Compass, Tag, Cpu, Info, CheckCircle, Play, ExternalLink, Leaf, ShieldCheck } from "lucide-react";
+import { competitionContent } from "../content/competition";
 
 interface ProductGridProps {
   initialDivisionFilter: "all" | "games" | "corporate" | "development";
@@ -132,6 +133,43 @@ export default function ProductGrid({ initialDivisionFilter, onResetDivisionFilt
             SOLUCIONES OPERATIVAS: <span className="text-white font-bold">{filteredProducts.length}</span>
           </div>
         </div>
+
+        <article className="mb-10 glass-panel border border-cyan-500/20 rounded-2xl p-5 md:p-6 shadow-2xl glass-panel-glow-blue relative overflow-hidden">
+          <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-cyan-500/20 via-purple-400/70 to-cyan-500/20" aria-hidden="true" />
+          <div className="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-center">
+            <div className="space-y-4">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-2 rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1 font-mono text-[10px] font-black uppercase tracking-widest text-cyan-300">
+                  <Leaf className="h-3.5 w-3.5" aria-hidden="true" />
+                  Climate Recovery
+                </span>
+                <span className="inline-flex items-center gap-2 rounded-full border border-purple-400/25 bg-purple-400/10 px-3 py-1 font-mono text-[10px] font-black uppercase tracking-widest text-purple-300">
+                  <ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" />
+                  {competitionContent.product.statusLabel}
+                </span>
+              </div>
+              <div>
+                <h3 className="font-space text-2xl font-extrabold leading-tight text-white">{competitionContent.home.featuredCard}</h3>
+                <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-300">{competitionContent.home.subtext}</p>
+              </div>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row lg:flex-col xl:flex-row">
+              <a
+                href="/climate-recovery"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-cyan-400/30 bg-gradient-to-r from-blue-600 to-cyan-500 px-5 py-3 text-xs font-extrabold uppercase tracking-widest text-white shadow-lg shadow-cyan-500/15 transition hover:from-blue-500 hover:to-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-300 focus:ring-offset-2 focus:ring-offset-slate-950"
+              >
+                {competitionContent.home.cta}
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </a>
+              <a
+                href="/projects/orbi-pbmetrics"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-slate-700 bg-slate-950/70 px-5 py-3 text-xs font-extrabold uppercase tracking-widest text-slate-200 transition hover:border-purple-400/60 hover:text-white focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-offset-2 focus:ring-offset-slate-950"
+              >
+                Ficha PBMetrics
+              </a>
+            </div>
+          </div>
+        </article>
 
         {/* Filter and Search Bar Panel */}
         <div className="glass-panel border border-slate-800/80 rounded-2xl p-4 md:p-6 mb-10 space-y-4 shadow-2xl relative overflow-hidden">

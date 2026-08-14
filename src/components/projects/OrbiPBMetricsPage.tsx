@@ -11,6 +11,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { competitionContent } from "../../content/competition";
+import { CompetitionAssetLinks } from "../competition/CompetitionAssetLinks";
 import {
   climateRecoveryCapabilities,
   existingVerifiedCapabilities,
@@ -252,6 +253,7 @@ function ClimateCTASection() {
             Volver al ecosistema
           </ProductLinkButton>
         </div>
+        <CompetitionAssetLinks locale="es" className="mt-4" />
       </div>
     </section>
   );

@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import type { ClimateLocale, competitionContent } from "../../content/competition";
 import type { CapabilityGroup, ClimateRecoveryDataSet } from "./ClimateRecoveryData";
+import { CompetitionAssetLinks } from "../competition/CompetitionAssetLinks";
 import { CapabilityStatusBadge, ClimateButton, GlassCard, SectionShell, StatusBadge } from "./ClimateRecoveryPrimitives";
 
 type CompetitionContent = typeof competitionContent;
@@ -405,7 +406,7 @@ export function CompetitionBadgeSection({ content, localeContent }: { content: C
   );
 }
 
-export function ContactCTA({ localeContent }: { localeContent: LocaleContent }) {
+export function ContactCTA({ locale, localeContent }: { locale: ClimateLocale; localeContent: LocaleContent }) {
   return (
     <section id="contact" className="border-t border-slate-900 bg-slate-950 py-16 sm:py-20 lg:py-24">
       <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
@@ -413,14 +414,7 @@ export function ContactCTA({ localeContent }: { localeContent: LocaleContent }) 
         <p className="font-mono text-xs font-bold uppercase tracking-[0.18em] text-energy-cyan sm:tracking-[0.22em]">{localeContent.sections.contactEyebrow}</p>
         <h2 className="mt-3 font-space text-2xl font-extrabold leading-tight text-white sm:text-3xl lg:text-4xl">{localeContent.sections.contactTitle}</h2>
         <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-slate-400">{localeContent.labels.contactDescription}</p>
-        <button
-          type="button"
-          disabled
-          aria-disabled="true"
-          className="mt-8 inline-flex min-h-12 cursor-not-allowed items-center justify-center gap-2 rounded-full border border-slate-800 bg-slate-900/70 px-6 py-3 text-sm font-extrabold uppercase tracking-widest text-slate-500"
-        >
-          {localeContent.labels.contactDisabled}
-        </button>
+        <CompetitionAssetLinks locale={locale} className="mt-8" />
       </div>
     </section>
   );

@@ -47,7 +47,7 @@ export default function ClimateRecoveryLanding({ locale = "es" }: { locale?: Cli
       <ProductStatusTimeline localeContent={localeContent} data={localizedData} />
       <CompanyContextSection localeContent={localeContent} />
       <CompetitionBadgeSection content={content} localeContent={localeContent} />
-      <ContactCTA localeContent={localeContent} />
+      <ContactCTA locale={locale} localeContent={localeContent} />
     </main>
   );
 }

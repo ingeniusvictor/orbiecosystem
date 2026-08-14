@@ -18,24 +18,18 @@ import Footer from "./components/Footer";
 import VideoModal from "./components/VideoModal";
 import ClimateRecoveryLanding from "./components/ClimateRecoveryLanding";
 import OrbiPBMetricsPage from "./components/projects/OrbiPBMetricsPage";
-import { competitionContent, type ClimateLocale } from "./content/competition";
+import type { ClimateLocale } from "./content/competition";
+import { getSeoRouteMetadata, type SeoRouteMetadata } from "./seoMetadata";
 
-type RouteMetadata = {
-  lang: string;
-  title: string;
-  description: string;
-  canonical: string;
-  alternates?: readonly { hreflang: string; href: string }[];
-};
-
-function upsertMetaDescription(content: string) {
-  let meta = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+function upsertManagedMeta(key: string, attributes: Record<string, string>) {
+  let meta = document.querySelector<HTMLMetaElement>(`meta[data-orbi-managed="${key}"]`);
   if (!meta) {
     meta = document.createElement("meta");
-    meta.name = "description";
+    meta.dataset.orbiManaged = key;
     document.head.appendChild(meta);
   }
-  meta.content = content;
+
+  Object.entries(attributes).forEach(([name, value]) => meta?.setAttribute(name, value));
 }
 
 function upsertManagedLink(key: string, attributes: Record<string, string>) {
@@ -49,10 +43,22 @@ function upsertManagedLink(key: string, attributes: Record<string, string>) {
   Object.entries(attributes).forEach(([name, value]) => link?.setAttribute(name, value));
 }
 
-function applyRouteMetadata(metadata: RouteMetadata) {
+function upsertStructuredData(items: readonly Record<string, unknown>[] = []) {
+  document.querySelectorAll<HTMLScriptElement>('script[data-orbi-managed^="json-ld-"]').forEach((script) => script.remove());
+
+  items.forEach((item, index) => {
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.dataset.orbiManaged = `json-ld-${index}`;
+    script.text = JSON.stringify(item);
+    document.head.appendChild(script);
+  });
+}
+
+function applyRouteMetadata(metadata: SeoRouteMetadata) {
   document.documentElement.lang = metadata.lang;
   document.title = metadata.title;
-  upsertMetaDescription(metadata.description);
+  upsertManagedMeta("description", { name: "description", content: metadata.description });
   upsertManagedLink("canonical", { rel: "canonical", href: metadata.canonical });
 
   document.querySelectorAll<HTMLLinkElement>('link[data-orbi-managed^="alternate-"]').forEach((link) => link.remove());
@@ -63,6 +69,30 @@ function applyRouteMetadata(metadata: RouteMetadata) {
       href: alternate.href,
     });
   });
+
+  document.querySelectorAll<HTMLMetaElement>('meta[data-orbi-managed^="og-"], meta[data-orbi-managed^="twitter-"]').forEach((meta) => meta.remove());
+
+  if (metadata.openGraph) {
+    upsertManagedMeta("og-title", { property: "og:title", content: metadata.openGraph.title });
+    upsertManagedMeta("og-description", { property: "og:description", content: metadata.openGraph.description });
+    upsertManagedMeta("og-type", { property: "og:type", content: metadata.openGraph.type });
+    upsertManagedMeta("og-url", { property: "og:url", content: metadata.openGraph.url });
+    upsertManagedMeta("og-site-name", { property: "og:site_name", content: metadata.openGraph.siteName });
+    if (metadata.openGraph.image) {
+      upsertManagedMeta("og-image", { property: "og:image", content: metadata.openGraph.image });
+    }
+  }
+
+  if (metadata.twitter) {
+    upsertManagedMeta("twitter-card", { name: "twitter:card", content: metadata.twitter.card });
+    upsertManagedMeta("twitter-title", { name: "twitter:title", content: metadata.twitter.title });
+    upsertManagedMeta("twitter-description", { name: "twitter:description", content: metadata.twitter.description });
+    if (metadata.twitter.image) {
+      upsertManagedMeta("twitter-image", { name: "twitter:image", content: metadata.twitter.image });
+    }
+  }
+
+  upsertStructuredData(metadata.structuredData);
 }
 
 export default function App() {
@@ -143,16 +173,16 @@ export default function App() {
 
   useEffect(() => {
     if (isClimateRecoveryRoute) {
-      applyRouteMetadata(competitionContent.routeMetadata.climateRecovery[climateRecoveryLocale]);
+      applyRouteMetadata(getSeoRouteMetadata("climateRecovery", climateRecoveryLocale));
       return;
     }
 
     if (isPBMetricsRoute) {
-      applyRouteMetadata(competitionContent.routeMetadata.pbmetrics);
+      applyRouteMetadata(getSeoRouteMetadata("pbmetrics"));
       return;
     }
 
-    applyRouteMetadata(competitionContent.routeMetadata.home);
+    applyRouteMetadata(getSeoRouteMetadata("home"));
   }, [climateRecoveryLocale, isClimateRecoveryRoute, isPBMetricsRoute]);
 
   if (isClimateRecoveryRoute) {

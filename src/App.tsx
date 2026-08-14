@@ -18,10 +18,59 @@ import Footer from "./components/Footer";
 import VideoModal from "./components/VideoModal";
 import ClimateRecoveryLanding from "./components/ClimateRecoveryLanding";
 import OrbiPBMetricsPage from "./components/projects/OrbiPBMetricsPage";
+import { competitionContent, type ClimateLocale } from "./content/competition";
+
+type RouteMetadata = {
+  lang: string;
+  title: string;
+  description: string;
+  canonical: string;
+  alternates?: readonly { hreflang: string; href: string }[];
+};
+
+function upsertMetaDescription(content: string) {
+  let meta = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+  if (!meta) {
+    meta = document.createElement("meta");
+    meta.name = "description";
+    document.head.appendChild(meta);
+  }
+  meta.content = content;
+}
+
+function upsertManagedLink(key: string, attributes: Record<string, string>) {
+  let link = document.querySelector<HTMLLinkElement>(`link[data-orbi-managed="${key}"]`);
+  if (!link) {
+    link = document.createElement("link");
+    link.dataset.orbiManaged = key;
+    document.head.appendChild(link);
+  }
+
+  Object.entries(attributes).forEach(([name, value]) => link?.setAttribute(name, value));
+}
+
+function applyRouteMetadata(metadata: RouteMetadata) {
+  document.documentElement.lang = metadata.lang;
+  document.title = metadata.title;
+  upsertMetaDescription(metadata.description);
+  upsertManagedLink("canonical", { rel: "canonical", href: metadata.canonical });
+
+  document.querySelectorAll<HTMLLinkElement>('link[data-orbi-managed^="alternate-"]').forEach((link) => link.remove());
+  metadata.alternates?.forEach((alternate) => {
+    upsertManagedLink(`alternate-${alternate.hreflang}`, {
+      rel: "alternate",
+      hreflang: alternate.hreflang,
+      href: alternate.href,
+    });
+  });
+}
 
 export default function App() {
   const normalizedPath = window.location.pathname.replace(/\/$/, "") || "/";
-  const isClimateRecoveryRoute = normalizedPath === "/climate-recovery";
+  const isClimateRecoverySpanishRoute = normalizedPath === "/climate-recovery";
+  const isClimateRecoveryEnglishRoute = normalizedPath === "/climate-recovery/en";
+  const isClimateRecoveryRoute = isClimateRecoverySpanishRoute || isClimateRecoveryEnglishRoute;
+  const climateRecoveryLocale: ClimateLocale = isClimateRecoveryEnglishRoute ? "en" : "es";
   const isPBMetricsRoute = normalizedPath === "/projects/orbi-pbmetrics";
   const shouldShowDevPanel = Boolean((import.meta as unknown as { env?: { DEV?: boolean } }).env?.DEV);
   const [activeSection, setActiveSection] = useState("hero");
@@ -92,8 +141,22 @@ export default function App() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (isClimateRecoveryRoute) {
+      applyRouteMetadata(competitionContent.routeMetadata.climateRecovery[climateRecoveryLocale]);
+      return;
+    }
+
+    if (isPBMetricsRoute) {
+      applyRouteMetadata(competitionContent.routeMetadata.pbmetrics);
+      return;
+    }
+
+    applyRouteMetadata(competitionContent.routeMetadata.home);
+  }, [climateRecoveryLocale, isClimateRecoveryRoute, isPBMetricsRoute]);
+
   if (isClimateRecoveryRoute) {
-    return <ClimateRecoveryLanding />;
+    return <ClimateRecoveryLanding locale={climateRecoveryLocale} />;
   }
 
   if (isPBMetricsRoute) {

@@ -76,14 +76,16 @@ export function StatusBadge({ children, tone = "cyan" }: { children: ReactNode; 
   );
 }
 
-export function CapabilityStatusBadge({ state }: { state: CapabilityState }) {
+export function CapabilityStatusBadge({ state, statusPrefix = "Status" }: { state: CapabilityState; statusPrefix?: string }) {
   const style = stateStyles[state];
   const Icon = style.icon;
 
   return (
     <span className={`inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-widest ${style.tone}`}>
       <Icon className="h-3.5 w-3.5" aria-hidden="true" />
-      <span>Status: {style.label}</span>
+      <span>
+        {statusPrefix}: {style.label}
+      </span>
     </span>
   );
 }

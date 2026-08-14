@@ -1,19 +1,27 @@
 # SEO Specification
 
-This document defines future SEO requirements. It does not implement metadata.
+This document defines SEO requirements and WEB-06 preparatory metadata. It does not implement final WEB-07 SEO assets.
 
-## Primary Metadata
+## Primary Metadata ES
+
+- Title: `ORBI PBMetrics IA | Climate Recovery Intelligence`
+- Meta description: `IA explicable para identificar pérdidas fotovoltaicas recuperables, priorizar mantenimiento y verificar energía limpia recuperada.`
+- Canonical: `https://orbiecosystem.vercel.app/climate-recovery`
+- HTML language: `es`
+
+## Primary Metadata EN
 
 - Title: `ORBI PBMetrics IA | Climate Recovery Intelligence`
 - Meta description: `Explainable AI for identifying recoverable photovoltaic losses, prioritizing maintenance and verifying recovered clean energy.`
-- Canonical: `https://orbiecosystem.vercel.app/climate-recovery`
+- Canonical: `https://orbiecosystem.vercel.app/climate-recovery/en`
+- HTML language: `en`
 
 ## Open Graph
 
 - `og:type`: `website`
 - `og:title`: `ORBI PBMetrics IA | Climate Recovery Intelligence`
 - `og:description`: `Explainable AI for identifying recoverable photovoltaic losses, prioritizing maintenance and verifying recovered clean energy.`
-- `og:url`: `https://orbiecosystem.vercel.app/climate-recovery`
+- `og:url`: pending final WEB-07 route-specific implementation
 - `og:site_name`: `ORBI Ecosystem SpA`
 - `og:image`: pending approved asset
 
@@ -39,11 +47,13 @@ Future `robots.txt` should allow crawl of approved public pages and reference th
 
 ## hreflang
 
-Future bilingual pages should include:
+Bilingual pages should include:
 
 - `es-CL`: `https://orbiecosystem.vercel.app/climate-recovery`
 - `en`: `https://orbiecosystem.vercel.app/climate-recovery/en`
 - `x-default`: recommended to point to the Spanish route unless strategy changes
+
+WEB-06 may prepare these relationships in the single-page app head. Final sitemap, robots, structured data and social images remain deferred to WEB-07.
 
 ## Structured Data
 

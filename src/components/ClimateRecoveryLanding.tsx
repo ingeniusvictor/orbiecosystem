@@ -1,4 +1,5 @@
-import { competitionContent } from "../content/competition";
+import { competitionContent, type ClimateLocale } from "../content/competition";
+import { climateRecoveryData } from "./climate-recovery/ClimateRecoveryData";
 import {
   buildCapabilityGroups,
   CapabilitiesSection,
@@ -16,9 +17,11 @@ import {
   SyntheticDemoScenario,
 } from "./climate-recovery/ClimateRecoverySections";
 
-export default function ClimateRecoveryLanding() {
+export default function ClimateRecoveryLanding({ locale = "es" }: { locale?: ClimateLocale }) {
   const content = competitionContent;
-  const capabilityGroups = buildCapabilityGroups(content);
+  const localeContent = content.climateRecoveryLocales[locale];
+  const localizedData = climateRecoveryData[locale];
+  const capabilityGroups = buildCapabilityGroups(content, localeContent);
 
   const scrollTo = (id: string) => {
     const target = document.getElementById(id);
@@ -32,19 +35,19 @@ export default function ClimateRecoveryLanding() {
 
   return (
     <main className="min-h-screen bg-slate-950 text-slate-100 selection:bg-cyan-400/30 selection:text-white">
-      <CompetitionHero content={content} onNavigate={scrollTo} />
-      <ProblemSection content={content} />
-      <RecoveryFlowSection />
-      <RecoveryPillarsSection />
-      <CapabilitiesSection groups={capabilityGroups} />
-      <ExplainabilityPanel content={content} />
-      <ClimateImpactMethod content={content} />
-      <SyntheticDemoScenario syntheticLabel={content.statusLabels.syntheticData} />
-      <PublicArchitectureDiagram />
-      <ProductStatusTimeline content={content} />
-      <CompanyContextSection content={content} />
-      <CompetitionBadgeSection content={content} />
-      <ContactCTA />
+      <CompetitionHero content={content} locale={locale} localeContent={localeContent} data={localizedData} onNavigate={scrollTo} />
+      <ProblemSection localeContent={localeContent} data={localizedData} />
+      <RecoveryFlowSection localeContent={localeContent} data={localizedData} />
+      <RecoveryPillarsSection localeContent={localeContent} data={localizedData} />
+      <CapabilitiesSection groups={capabilityGroups} localeContent={localeContent} />
+      <ExplainabilityPanel localeContent={localeContent} data={localizedData} />
+      <ClimateImpactMethod localeContent={localeContent} data={localizedData} />
+      <SyntheticDemoScenario syntheticLabel={content.statusLabels.syntheticData} localeContent={localeContent} data={localizedData} />
+      <PublicArchitectureDiagram localeContent={localeContent} data={localizedData} />
+      <ProductStatusTimeline localeContent={localeContent} data={localizedData} />
+      <CompanyContextSection localeContent={localeContent} />
+      <CompetitionBadgeSection content={content} localeContent={localeContent} />
+      <ContactCTA localeContent={localeContent} />
     </main>
   );
 }

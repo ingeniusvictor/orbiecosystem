@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Cpu, Send, Bot, Sparkles, AlertCircle, RefreshCw, Zap, Play } from "lucide-react";
 import { Message } from "../types";
 import SectionVideo from "./SectionVideo";
+import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 
 interface FotonPrimeSectionProps {
   onPlayVideo?: (compId: string) => void;
@@ -18,6 +19,7 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const prefersReducedMotion = usePrefersReducedMotion();
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -39,8 +41,8 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
 
   // Auto scroll to bottom
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isLoading]);
+    messagesEndRef.current?.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth" });
+  }, [messages, isLoading, prefersReducedMotion]);
 
   const handleSendMessage = async (textToSend: string) => {
     if (!textToSend.trim() || isLoading) return;
@@ -130,7 +132,7 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-none font-space">
               Orbi Foton Prime
             </h2>
-            <h3 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400 leading-normal font-space">
+            <h3 className="text-xl font-bold gradient-text-accessible bg-gradient-to-r from-purple-400 to-blue-400 leading-normal font-space">
               La IA madre invisible del ecosistema ORBI
             </h3>
 
@@ -203,7 +205,8 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
                 <button
                   onClick={resetChat}
                   title="Reiniciar conversación"
-                  className="p-1.5 px-3 bg-[#050816] hover:bg-slate-900 border border-slate-800 text-slate-500 hover:text-white rounded-lg transition-colors flex items-center space-x-1.5 text-[10px] font-mono cursor-pointer font-bold tracking-wider"
+                  aria-label="Reiniciar conversacion de Orbi Foton Prime"
+                  className="p-1.5 px-3 bg-[#050816] hover:bg-slate-900 border border-slate-800 text-slate-500 hover:text-white rounded-lg transition-colors flex items-center space-x-1.5 text-[10px] font-mono cursor-pointer font-bold tracking-wider focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-slate-950"
                 >
                   <RefreshCw className="w-3 h-3 text-purple-400" />
                   <span>RESET</span>
@@ -287,6 +290,7 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
               {/* Input container */}
               <div className="p-4 bg-[#0B1026]/90 border-t border-slate-900 flex items-center space-x-2">
                 <input
+                  aria-label="Pregunta para Orbi Foton Prime"
                   type="text"
                   placeholder="Escribe tu pregunta para Orbi Foton Prime..."
                   value={input}
@@ -298,7 +302,8 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
                 <button
                   onClick={() => handleSendMessage(input)}
                   disabled={isLoading || !input.trim()}
-                  className="p-3 bg-purple-600 hover:bg-purple-500 disabled:bg-slate-800 disabled:text-slate-600 text-white rounded-xl transition-all shadow-lg hover:shadow-purple-500/25 active:scale-95 duration-200 cursor-pointer flex items-center justify-center shrink-0"
+                  aria-label="Enviar pregunta a Orbi Foton Prime"
+                  className="p-3 bg-purple-600 hover:bg-purple-500 disabled:bg-slate-800 disabled:text-slate-600 text-white rounded-xl transition-all shadow-lg hover:shadow-purple-500/25 active:scale-95 duration-200 cursor-pointer flex items-center justify-center shrink-0 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-slate-950"
                 >
                   <Send className="w-4 h-4" />
                 </button>

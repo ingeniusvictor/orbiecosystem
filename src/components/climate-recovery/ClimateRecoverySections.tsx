@@ -119,7 +119,7 @@ export function CompetitionHero({
           <div className="max-w-4xl space-y-5">
             <StatusBadge>{localeContent.product.statusLabel}</StatusBadge>
             <h1 className="font-space text-3xl font-black leading-tight text-white sm:text-5xl lg:text-6xl">{localeContent.title}</h1>
-            <p className="font-orbitron text-sm font-bold uppercase tracking-[0.14em] text-transparent bg-clip-text bg-gradient-to-r from-energy-cyan via-blue-400 to-purple-400 sm:text-lg sm:tracking-[0.18em]">
+            <p className="font-orbitron text-sm font-bold uppercase tracking-[0.14em] gradient-text-accessible bg-gradient-to-r from-energy-cyan via-blue-400 to-purple-400 sm:text-lg sm:tracking-[0.18em]">
               {localeContent.phrase}
             </p>
             <p className="max-w-2xl text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">{localeContent.description}</p>

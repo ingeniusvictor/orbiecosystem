@@ -1,4 +1,5 @@
 import React from "react";
+import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 
 interface SectionVideoProps {
   src: string;
@@ -23,8 +24,9 @@ export default function SectionVideo({
   muted,
   poster
 }: SectionVideoProps) {
-  const shouldAutoPlay = autoPlay ?? !controls;
-  const shouldLoop = loop ?? !controls;
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const shouldAutoPlay = !prefersReducedMotion && (autoPlay ?? !controls);
+  const shouldLoop = !prefersReducedMotion && (loop ?? !controls);
   const shouldMute = muted ?? !controls;
 
   return (

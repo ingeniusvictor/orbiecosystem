@@ -14,9 +14,11 @@ export default function Footer({ onNavigate }: FooterProps) {
           
           {/* Column 1: Brand presentation */}
           <div className="md:col-span-4 space-y-4">
-            <div 
+            <button
+              type="button"
               onClick={() => onNavigate("hero")}
-              className="flex items-center space-x-3 cursor-pointer group w-fit"
+              className="flex items-center space-x-3 cursor-pointer group w-fit rounded-full focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-950"
+              aria-label="Volver al inicio de ORBI Ecosystem"
             >
               <div className="relative w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 via-purple-600 to-emerald-500 p-[1.5px]">
                 <div className="w-full h-full bg-slate-950 rounded-full flex items-center justify-center">
@@ -26,7 +28,7 @@ export default function Footer({ onNavigate }: FooterProps) {
               <span className="text-white font-bold tracking-wider text-base">
                 ORBI <span className="text-slate-500 font-medium text-xs tracking-widest pl-0.5">ECOSYSTEM</span>
               </span>
-            </div>
+            </button>
             
             <p className="text-xs sm:text-sm text-slate-500 leading-relaxed max-w-sm">
               Un universo digital interconectado que combina el poder operacional de la Inteligencia Artificial corporativa, la sinergia de los videojuegos y la robustez de APIs de integración segura.
@@ -111,34 +113,34 @@ export default function Footer({ onNavigate }: FooterProps) {
               Sigue el desarrollo técnico del ecosistema modular de ORBI.
             </p>
             <div className="flex flex-wrap items-center gap-3 pt-1">
-              <a 
-                href="#" 
-                className="p-2.5 bg-slate-900 hover:bg-slate-850 hover:text-white border border-slate-850 hover:border-slate-755 rounded-xl transition-all"
+              <span
+                aria-disabled="true"
+                className="p-2.5 bg-slate-900 border border-slate-850 rounded-xl text-slate-500"
                 title="Sigue el código en GitHub"
               >
                 <Github className="w-4.5 h-4.5" />
-              </a>
-              <a 
-                href="#" 
-                className="p-2.5 bg-slate-900 hover:bg-slate-850 hover:text-blue-400 border border-slate-850 hover:border-slate-755 rounded-xl transition-all"
+              </span>
+              <span
+                aria-disabled="true"
+                className="p-2.5 bg-slate-900 border border-slate-850 rounded-xl text-slate-500"
                 title="LinkedIn Corporativo"
               >
                 <Linkedin className="w-4.5 h-4.5" />
-              </a>
-              <a 
-                href="#" 
-                className="p-2.5 bg-slate-900 hover:bg-slate-850 hover:text-sky-400 border border-slate-850 hover:border-slate-755 rounded-xl transition-all"
+              </span>
+              <span
+                aria-disabled="true"
+                className="p-2.5 bg-slate-900 border border-slate-850 rounded-xl text-slate-500"
                 title="Canal Twitter / X"
               >
                 <Twitter className="w-4.5 h-4.5" />
-              </a>
-              <a 
-                href="#" 
-                className="p-2.5 bg-slate-900 hover:bg-slate-850 hover:text-emerald-400 border border-slate-850 hover:border-slate-755 rounded-xl transition-all"
+              </span>
+              <span
+                aria-disabled="true"
+                className="p-2.5 bg-slate-900 border border-slate-850 rounded-xl text-slate-500"
                 title="Portal Público Web"
               >
                 <Globe className="w-4.5 h-4.5" />
-              </a>
+              </span>
             </div>
           </div>
 
@@ -148,9 +150,9 @@ export default function Footer({ onNavigate }: FooterProps) {
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
           <p>© {currentYear} ORBI ECOSYSTEM. Todos los derechos reservados.</p>
           <div className="flex space-x-4 items-center">
-            <a href="#" className="hover:text-slate-400 transition-colors">Términos de Servicio</a>
+            <span className="text-slate-600">Términos de Servicio</span>
             <span className="text-slate-800">•</span>
-            <a href="#" className="hover:text-slate-400 transition-colors">Políticas de Privacidad</a>
+            <span className="text-slate-600">Políticas de Privacidad</span>
             <span className="text-slate-800">•</span>
             <span className="text-slate-600 font-mono">HASH: FOTON_SEC_P_0x{currentYear}</span>
           </div>

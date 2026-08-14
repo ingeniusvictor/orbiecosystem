@@ -49,13 +49,15 @@ export default function Header({ onNavigate, activeSection, onOpenDevPanel }: He
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div 
+          <button
+            type="button"
             onClick={() => handleLinkClick("hero")}
-            className="flex items-center space-x-3 cursor-pointer group select-none"
+            className="flex items-center space-x-3 cursor-pointer group select-none rounded-full focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-950"
+            aria-label="Ir al inicio de ORBI Ecosystem"
           >
             <div className="relative w-8 h-8 flex items-center justify-center">
               <img
-                src="/assets/orbi/orbi-ecosystem-logo.png"
+                src="/assets/logo.jpeg"
                 alt="ORBI Ecosystem Logo"
                 className="w-7 h-7 object-contain filter drop-shadow-[0_0_8px_rgba(0,229,255,0.5)] transition-transform duration-300 group-hover:scale-110"
                 onError={(e) => {
@@ -80,7 +82,7 @@ export default function Header({ onNavigate, activeSection, onOpenDevPanel }: He
                 ORBI <span className="text-energy-cyan font-light text-[10px] sm:text-xs tracking-[0.2em] pl-1 font-sans">ECOSYSTEM</span>
               </span>
             </div>
-          </div>
+          </button>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-1 lg:space-x-2">
@@ -138,8 +140,9 @@ export default function Header({ onNavigate, activeSection, onOpenDevPanel }: He
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="p-2.5 text-slate-400 hover:text-white hover:bg-slate-800/40 rounded-lg transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-950"
-              aria-label="Abrir menú principal"
+              aria-label={isOpen ? "Cerrar menu principal" : "Abrir menu principal"}
               aria-expanded={isOpen}
+              aria-controls="orbi-mobile-menu"
             >
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -149,7 +152,7 @@ export default function Header({ onNavigate, activeSection, onOpenDevPanel }: He
 
       {/* Mobile Navigation Panel */}
       {isOpen && (
-        <div className="lg:hidden absolute top-full left-0 right-0 bg-slate-950 border-b border-slate-800/80 shadow-2xl backdrop-blur-lg animate-in fade-in slide-in-from-top-4 duration-200">
+        <div id="orbi-mobile-menu" className="lg:hidden absolute top-full left-0 right-0 bg-slate-950 border-b border-slate-800/80 shadow-2xl backdrop-blur-lg animate-in fade-in slide-in-from-top-4 duration-200">
           <div className="px-4 pt-3 pb-6 space-y-2">
             {navLinks.map((link) =>
               link.type === "route" ? (

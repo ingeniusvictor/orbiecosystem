@@ -43,7 +43,7 @@ export default function FinalCTA({ onNavigate }: FinalCTAProps) {
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-none uppercase">
             ORBI no es solo una idea.
           </h2>
-          <h3 className="text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400">
+          <h3 className="text-2xl sm:text-3xl font-extrabold gradient-text-accessible bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400">
             Es un ecosistema en construcción.
           </h3>
         </div>
@@ -127,16 +127,19 @@ export default function FinalCTA({ onNavigate }: FinalCTAProps) {
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-bold text-white">Contacto ORBI Ecosystem</h3>
                 <button 
+                  type="button"
                   onClick={() => setShowContactForm(false)}
-                  className="p-1 text-slate-400 hover:text-white rounded-lg"
+                  className="p-1 text-slate-400 hover:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-slate-900"
+                  aria-label="Cerrar formulario de contacto"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
               <form onSubmit={handleSubmitContact} className="space-y-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs uppercase text-slate-500 font-mono tracking-wider font-bold">Tu Correo Electrónico:</label>
+                  <label htmlFor="orbi-contact-email" className="text-xs uppercase text-slate-500 font-mono tracking-wider font-bold">Tu Correo Electrónico:</label>
                   <input
+                    id="orbi-contact-email"
                     type="email"
                     required
                     placeholder="ejemplo@correo.com"
@@ -146,8 +149,9 @@ export default function FinalCTA({ onNavigate }: FinalCTAProps) {
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-xs uppercase text-slate-500 font-mono tracking-wider font-bold">Mensaje o Solicitud:</label>
+                  <label htmlFor="orbi-contact-message" className="text-xs uppercase text-slate-500 font-mono tracking-wider font-bold">Mensaje o Solicitud:</label>
                   <textarea
+                    id="orbi-contact-message"
                     rows={3}
                     placeholder="Cuéntanos en qué proyecto o división de ORBI estás interesado..."
                     value={contactMessage}
@@ -158,7 +162,7 @@ export default function FinalCTA({ onNavigate }: FinalCTAProps) {
                 <button
                   type="submit"
                   disabled={formSubmitted}
-                  className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-extrabold text-sm rounded-xl cursor-pointer"
+                  className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-extrabold text-sm rounded-xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-slate-900"
                 >
                   {formSubmitted ? "Enviando..." : "Enviar Solicitud"}
                 </button>

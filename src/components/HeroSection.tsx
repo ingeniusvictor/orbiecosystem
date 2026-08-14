@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ArrowRight, Play, Compass, Grid, Sparkles, ChevronDown } from "lucide-react";
 import { competitionContent } from "../content/competition";
+import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 
 interface HeroSectionProps {
   onNavigate: (sectionId: string) => void;
@@ -9,6 +10,7 @@ interface HeroSectionProps {
 
 export default function HeroSection({ onNavigate, onPlayVideo }: HeroSectionProps) {
   const [logoFailed, setLogoFailed] = useState(false);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   return (
     <section
@@ -16,20 +18,22 @@ export default function HeroSection({ onNavigate, onPlayVideo }: HeroSectionProp
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#050816] font-sans"
     >
       {/* Background Cinematic Video */}
-      <video
-        className="hero-video pointer-events-none"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        onError={(e) => {
-          console.warn("Ecosystem background video not ready, falling back to cinematic animated canvas.");
-        }}
-      >
-        <source src="/assets/videos/orbi-intro.mp4" type="video/mp4" />
-        <source src="https://assets.mixkit.co/videos/preview/mixkit-background-of-digital-glowing-lines-41584-large.mp4" type="video/mp4" />
-      </video>
+      {!prefersReducedMotion && (
+        <video
+          className="hero-video pointer-events-none"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          onError={() => {
+            console.warn("Ecosystem background video not ready, falling back to cinematic animated canvas.");
+          }}
+        >
+          <source src="/assets/videos/orbi-intro.mp4" type="video/mp4" />
+          <source src="https://assets.mixkit.co/videos/preview/mixkit-background-of-digital-glowing-lines-41584-large.mp4" type="video/mp4" />
+        </video>
+      )}
 
       {/* Cinematic Dark Grid Overlay */}
       <div className="hero-overlay pointer-events-none" />
@@ -46,32 +50,33 @@ export default function HeroSection({ onNavigate, onPlayVideo }: HeroSectionProp
 
         {/* Brand Official Logo with smooth interactive error handler */}
         <div className="relative py-4 flex items-center justify-center min-h-[140px] w-full max-w-[540px]">
-          {!logoFailed ? (
-            <img
-              src="/assets/orbi/orbi-ecosystem-logo.png"
-              alt="ORBI Ecosystem"
-              className="hero-logo cursor-pointer object-contain transition-transform duration-500 hover:scale-[1.03]"
-              onError={() => setLogoFailed(true)}
-              referrerPolicy="no-referrer"
-            />
-          ) : (
-            /* Breathtaking CSS backup if logo image is not found */
-            <div className="flex flex-col items-center justify-center animate-[logoReveal_1.2s_ease-out_both]">
-              <h1 className="text-6xl sm:text-8xl font-black tracking-[0.2em] font-orbitron text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-500 to-emerald-400 drop-shadow-[0_0_35px_rgba(0,195,255,0.8)] leading-none select-none">
-                ORBI
-              </h1>
-              <p className="text-sm sm:text-lg font-bold font-mono tracking-[0.6em] text-cyan-400/80 drop-shadow-[0_0_12px_rgba(168,85,247,0.4)] mt-3">
-                ECOSYSTEM
-              </p>
-            </div>
-          )}
+          <h1 className="flex items-center justify-center">
+            {!logoFailed ? (
+              <img
+                src="/assets/logo.jpeg"
+                alt="ORBI Ecosystem"
+                className="hero-logo cursor-pointer object-contain transition-transform duration-500 hover:scale-[1.03]"
+                onError={() => setLogoFailed(true)}
+                referrerPolicy="no-referrer"
+              />
+            ) : (
+              <span className="flex flex-col items-center justify-center animate-[logoReveal_1.2s_ease-out_both]" aria-label="ORBI Ecosystem">
+                <span className="text-6xl sm:text-8xl font-black tracking-[0.2em] font-orbitron gradient-text-accessible bg-gradient-to-r from-cyan-400 via-purple-500 to-emerald-400 drop-shadow-[0_0_35px_rgba(0,195,255,0.8)] leading-none select-none">
+                  ORBI
+                </span>
+                <span className="text-sm sm:text-lg font-bold font-mono tracking-[0.6em] text-cyan-400/80 drop-shadow-[0_0_12px_rgba(168,85,247,0.4)] mt-3">
+                  ECOSYSTEM
+                </span>
+              </span>
+            )}
+          </h1>
         </div>
 
         {/* High impact slogan and subtitle */}
         <div className="space-y-4 max-w-3xl">
           <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-wide font-space">
             El futuro no es una sola aplicación. <br className="hidden sm:inline" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-energy-cyan to-purple-400">
+            <span className="gradient-text-accessible bg-gradient-to-r from-energy-cyan to-purple-400">
               Es un ecosistema conectado.
             </span>
           </h2>
@@ -135,15 +140,17 @@ export default function HeroSection({ onNavigate, onPlayVideo }: HeroSectionProp
       </div>
 
       {/* Scroll indicator with click navigation */}
-      <div 
+      <button
+        type="button"
         onClick={() => onNavigate("ecosistema-mirada")}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center space-y-2 cursor-pointer text-slate-400 hover:text-energy-cyan transition-colors"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center space-y-2 cursor-pointer rounded-xl px-3 py-2 text-slate-400 transition-colors hover:text-energy-cyan focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-950"
+        aria-label="Ir a la mirada del ecosistema"
       >
         <span className="text-[10px] font-mono tracking-[0.25em] uppercase font-bold">
           Desliza para explorar
         </span>
         <ChevronDown className="w-5 h-5 {animate-bounce} text-cyan-400 animate-bounce" />
-      </div>
+      </button>
     </section>
   );
 }

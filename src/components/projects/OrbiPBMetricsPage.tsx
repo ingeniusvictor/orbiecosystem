@@ -61,7 +61,7 @@ function ProductHero() {
           <div className="space-y-5">
             <ProductBadge>Technical Product Profile</ProductBadge>
             <h1 className="font-space text-3xl font-black leading-tight text-white sm:text-5xl lg:text-6xl">{competitionContent.product.name}</h1>
-            <p className="font-orbitron text-sm font-bold uppercase tracking-[0.14em] text-transparent bg-clip-text bg-gradient-to-r from-energy-cyan via-blue-400 to-purple-400 sm:text-lg sm:tracking-[0.18em]">
+            <p className="font-orbitron text-sm font-bold uppercase tracking-[0.14em] gradient-text-accessible bg-gradient-to-r from-energy-cyan via-blue-400 to-purple-400 sm:text-lg sm:tracking-[0.18em]">
               {competitionContent.product.edition}
             </p>
             <p className="max-w-2xl text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">{competitionContent.product.positioning}.</p>

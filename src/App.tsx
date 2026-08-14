@@ -20,6 +20,7 @@ import ClimateRecoveryLanding from "./components/ClimateRecoveryLanding";
 import OrbiPBMetricsPage from "./components/projects/OrbiPBMetricsPage";
 import type { ClimateLocale } from "./content/competition";
 import { getSeoRouteMetadata, type SeoRouteMetadata } from "./seoMetadata";
+import { usePrefersReducedMotion } from "./hooks/usePrefersReducedMotion";
 
 function upsertManagedMeta(key: string, attributes: Record<string, string>) {
   let meta = document.querySelector<HTMLMetaElement>(`meta[data-orbi-managed="${key}"]`);
@@ -108,6 +109,7 @@ export default function App() {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [initialComponentId, setInitialComponentId] = useState<string>("eco-general");
   const [isModalAdminMode, setIsModalAdminMode] = useState<boolean>(false);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   // Standard client watcher video trigger
   const handlePlayVideo = (compId: string = "eco-general") => {
@@ -134,7 +136,7 @@ export default function App() {
 
       window.scrollTo({
         top: offsetPosition,
-        behavior: "smooth"
+        behavior: prefersReducedMotion ? "auto" : "smooth"
       });
     }
   };

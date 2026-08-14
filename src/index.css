@@ -154,6 +154,15 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+
   .hero-video {
     display: none;
   }
@@ -161,5 +170,31 @@
   .animated,
   .hero-logo {
     animation: none !important;
+  }
+}
+
+html,
+body,
+#root {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+:where(a[href], button, input, select, textarea, summary) {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.gradient-text-accessible {
+  color: #00E4FF;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@media (forced-colors: active), (prefers-contrast: more) {
+  .gradient-text-accessible {
+    background-image: none !important;
+    -webkit-text-fill-color: currentColor;
   }
 }

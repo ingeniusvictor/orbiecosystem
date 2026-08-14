@@ -1,7 +1,8 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { PRODUCTS } from "../data";
 import { Product } from "../types";
-import { Search, Filter, ArrowRight, X, Compass, Tag, Cpu, Info, CheckCircle, Play, ExternalLink } from "lucide-react";
+import { Search, Filter, ArrowRight, X, Compass, Tag, Cpu, Info, CheckCircle, Play, ExternalLink, Leaf, ShieldCheck } from "lucide-react";
+import { competitionContent } from "../content/competition";
 
 interface ProductGridProps {
   initialDivisionFilter: "all" | "games" | "corporate" | "development";
@@ -23,7 +24,8 @@ export default function ProductGrid({ initialDivisionFilter, onResetDivisionFilt
       setTimeout(() => {
         const element = document.getElementById("proyectos");
         if (element) {
-          element.scrollIntoView({ behavior: "smooth", block: "start" });
+          const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          element.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth", block: "start" });
         }
       }, 100);
       onResetDivisionFilter();
@@ -133,6 +135,43 @@ export default function ProductGrid({ initialDivisionFilter, onResetDivisionFilt
           </div>
         </div>
 
+        <article className="mb-10 glass-panel border border-cyan-500/20 rounded-2xl p-5 md:p-6 shadow-2xl glass-panel-glow-blue relative overflow-hidden">
+          <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-cyan-500/20 via-purple-400/70 to-cyan-500/20" aria-hidden="true" />
+          <div className="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-center">
+            <div className="space-y-4">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-2 rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1 font-mono text-[10px] font-black uppercase tracking-widest text-cyan-300">
+                  <Leaf className="h-3.5 w-3.5" aria-hidden="true" />
+                  Climate Recovery
+                </span>
+                <span className="inline-flex items-center gap-2 rounded-full border border-purple-400/25 bg-purple-400/10 px-3 py-1 font-mono text-[10px] font-black uppercase tracking-widest text-purple-300">
+                  <ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" />
+                  {competitionContent.product.statusLabel}
+                </span>
+              </div>
+              <div>
+                <h3 className="font-space text-2xl font-extrabold leading-tight text-white">{competitionContent.home.featuredCard}</h3>
+                <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-300">{competitionContent.home.subtext}</p>
+              </div>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row lg:flex-col xl:flex-row">
+              <a
+                href="/climate-recovery"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-cyan-400/30 bg-gradient-to-r from-blue-600 to-cyan-500 px-5 py-3 text-xs font-extrabold uppercase tracking-widest text-white shadow-lg shadow-cyan-500/15 transition hover:from-blue-500 hover:to-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-300 focus:ring-offset-2 focus:ring-offset-slate-950"
+              >
+                {competitionContent.home.cta}
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </a>
+              <a
+                href="/projects/orbi-pbmetrics"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-slate-700 bg-slate-950/70 px-5 py-3 text-xs font-extrabold uppercase tracking-widest text-slate-200 transition hover:border-purple-400/60 hover:text-white focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-offset-2 focus:ring-offset-slate-950"
+              >
+                Ficha PBMetrics
+              </a>
+            </div>
+          </div>
+        </article>
+
         {/* Filter and Search Bar Panel */}
         <div className="glass-panel border border-slate-800/80 rounded-2xl p-4 md:p-6 mb-10 space-y-4 shadow-2xl relative overflow-hidden">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
@@ -143,6 +182,8 @@ export default function ProductGrid({ initialDivisionFilter, onResetDivisionFilt
                 <Search className="w-4.5 h-4.5" />
               </span>
               <input
+                id="product-search"
+                aria-label="Buscar modulos del ecosistema ORBI"
                 type="text"
                 placeholder="Buscar por nombre, categoría, etiquetas..."
                 value={searchTerm}
@@ -151,8 +192,10 @@ export default function ProductGrid({ initialDivisionFilter, onResetDivisionFilt
               />
               {searchTerm && (
                 <button
+                  type="button"
                   onClick={() => setSearchTerm("")}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-white"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-950"
+                  aria-label="Limpiar busqueda"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -162,7 +205,9 @@ export default function ProductGrid({ initialDivisionFilter, onResetDivisionFilt
             {/* Division Selector Filter */}
             <div className="md:col-span-4 flex flex-wrap gap-1.5 justify-start md:justify-center">
               <button
+                type="button"
                 onClick={() => setDivisionFilter("all")}
+                aria-pressed={divisionFilter === "all"}
                 className={`px-3 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider border transition-all duration-200 cursor-pointer ${
                   divisionFilter === "all"
                     ? "bg-slate-800 border-slate-700 text-white shadow-md font-black"
@@ -172,7 +217,9 @@ export default function ProductGrid({ initialDivisionFilter, onResetDivisionFilt
                 Todos
               </button>
               <button
+                type="button"
                 onClick={() => setDivisionFilter("corporate")}
+                aria-pressed={divisionFilter === "corporate"}
                 className={`px-3 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider border transition-all duration-200 cursor-pointer ${
                   divisionFilter === "corporate"
                     ? "bg-emerald-950/60 border-emerald-800/80 text-emerald-400 shadow-md font-black"
@@ -182,7 +229,9 @@ export default function ProductGrid({ initialDivisionFilter, onResetDivisionFilt
                 Corporate
               </button>
               <button
+                type="button"
                 onClick={() => setDivisionFilter("games")}
+                aria-pressed={divisionFilter === "games"}
                 className={`px-3 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider border transition-all duration-200 cursor-pointer ${
                   divisionFilter === "games"
                     ? "bg-blue-950/60 border-blue-800/80 text-blue-400 shadow-md font-black"
@@ -192,7 +241,9 @@ export default function ProductGrid({ initialDivisionFilter, onResetDivisionFilt
                 Games
               </button>
               <button
+                type="button"
                 onClick={() => setDivisionFilter("development")}
+                aria-pressed={divisionFilter === "development"}
                 className={`px-3 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider border transition-all duration-200 cursor-pointer ${
                   divisionFilter === "development"
                     ? "bg-purple-950/60 border-purple-800/80 text-purple-400 shadow-md font-black"
@@ -209,6 +260,8 @@ export default function ProductGrid({ initialDivisionFilter, onResetDivisionFilt
                 <Filter className="w-3.5 h-3.5" />
               </span>
               <select
+                id="product-status-filter"
+                aria-label="Filtrar modulos por estado"
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
                 className="w-full pl-9 pr-3 py-3 bg-[#0B1026]/75 border border-slate-800/80 text-slate-200 rounded-xl text-xs focus:outline-none focus:border-energy-cyan tracking-wide font-mono select-none"
@@ -342,7 +395,12 @@ export default function ProductGrid({ initialDivisionFilter, onResetDivisionFilt
         {/* Detail Modal Dialog Overlay */}
         {selectedProduct && (
           <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-            <div className="bg-[#0B1026] border border-slate-800 rounded-2xl w-full max-w-xl max-h-[90vh] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="product-detail-title"
+              className="bg-[#0B1026] border border-slate-800 rounded-2xl w-full max-w-xl max-h-[90vh] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200"
+            >
               
               {/* Modal Header */}
               <div className="bg-slate-950 px-6 py-5 border-b border-slate-900 flex items-center justify-between select-none">
@@ -355,11 +413,13 @@ export default function ProductGrid({ initialDivisionFilter, onResetDivisionFilt
                       {selectedProduct.status}
                     </span>
                   </div>
-                  <h3 className="text-2xl font-black text-white tracking-wide font-space uppercase">{selectedProduct.name}</h3>
+                  <h3 id="product-detail-title" className="text-2xl font-black text-white tracking-wide font-space uppercase">{selectedProduct.name}</h3>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setSelectedProduct(null)}
-                  className="p-1 px-3 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-lg text-slate-400 hover:text-white transition-colors cursor-pointer text-[10px] font-bold tracking-widest flex items-center space-x-1 font-mono"
+                  className="p-1 px-3 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-lg text-slate-400 hover:text-white transition-colors cursor-pointer text-[10px] font-bold tracking-widest flex items-center space-x-1 font-mono focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-950"
+                  aria-label="Cerrar ficha de producto"
                 >
                   <X className="w-3.5 h-3.5" />
                   <span>CERRAR</span>

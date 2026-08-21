@@ -16,6 +16,7 @@ import Roadmap from "./components/Roadmap";
 import FinalCTA from "./components/FinalCTA";
 import Footer from "./components/Footer";
 import VideoModal from "./components/VideoModal";
+import WhatsAppWidget from "./components/WhatsAppWidget";
 import ClimateRecoveryLanding from "./components/ClimateRecoveryLanding";
 import OrbiPBMetricsPage from "./components/projects/OrbiPBMetricsPage";
 import type { ClimateLocale } from "./content/competition";
@@ -244,6 +245,9 @@ export default function App() {
 
       {/* Footer legal & navigation coordinates */}
       <Footer onNavigate={handleNavigate} />
+
+      {/* Floating contact channel */}
+      <WhatsAppWidget />
 
       {/* Unified ecosystem video presentation controller */}
       <VideoModal

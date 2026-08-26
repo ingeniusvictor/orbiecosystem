@@ -13,8 +13,16 @@ import {
   type EditorialFirestoreEnvironment,
   type FirestoreSdkLoader,
 } from './firestore-sdk';
+import {
+  combineEditorialIdentityResolvers,
+  createEditorialSessionRouter,
+  createEditorialSessionSecurity,
+  resolveEditorialSessionOptions,
+  type EditorialSessionEnvironment,
+} from './session-auth';
 
-export interface EditorialRuntimeEnvironment extends EditorialFirestoreEnvironment {
+export interface EditorialRuntimeEnvironment
+  extends EditorialFirestoreEnvironment, EditorialSessionEnvironment {
   readonly ORBI_EDITORIAL_AUTH_SECRET?: string;
   readonly ORBI_EDITORIAL_LOCAL_STORE_FILE?: string;
   readonly NODE_ENV?: string;
@@ -61,11 +69,20 @@ export const mountEditorialPrivateApiIfConfigured = (
     : null;
   const defaultPersistence = firestorePersistence ?? localPersistence;
 
-  const identityResolver = createHmacEditorialIdentityResolver({ secret });
+  const bearerIdentityResolver = createHmacEditorialIdentityResolver({ secret });
+  const sessionSecurity = createEditorialSessionSecurity({ secret });
+  const sessionOptions = resolveEditorialSessionOptions(environment, secret);
+  const identityResolver = combineEditorialIdentityResolvers(
+    bearerIdentityResolver,
+    sessionSecurity.identityResolver,
+  );
+
+  app.use('/api/editorial', createEditorialSessionRouter(sessionOptions, sessionSecurity));
   app.use('/api/editorial', createEditorialPrivateApi({
     reader: options.reader ?? defaultPersistence ?? undefined,
     mutationUnitOfWork: options.mutationUnitOfWork ?? defaultPersistence ?? undefined,
     identityResolver,
+    sessionSecurity,
   }));
   return true;
 };

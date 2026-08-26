@@ -10,6 +10,9 @@ import {
 } from './control-center';
 import { IntegratedEditorialDecision } from './editorial-gate';
 import { PublicationStatus } from '../publications/publication';
+import type { SocialEmailStatus } from './social-mailer';
+import type { ManualPublicationStatus } from './social-publication-tracker';
+import type { SocialReadinessDecision } from './social-readiness-gate';
 
 export enum EditorialQueueBucket {
   NEEDS_REVIEW = 'NEEDS_REVIEW',
@@ -20,6 +23,18 @@ export enum EditorialQueueBucket {
   PUBLISHED = 'PUBLISHED',
   FAILED = 'FAILED',
   DRAFTING = 'DRAFTING',
+}
+
+export interface SocialDistributionQueueView {
+  readonly readiness: SocialReadinessDecision;
+  readonly socialScore: number;
+  readonly copy: string;
+  readonly characterCount: number;
+  readonly hashtags: readonly string[];
+  readonly imageUrl: string | null;
+  readonly mailerStatus: SocialEmailStatus | null;
+  readonly facebookStatus: ManualPublicationStatus | null;
+  readonly instagramStatus: ManualPublicationStatus | null;
 }
 
 export interface EditorialQueueSource {
@@ -33,6 +48,7 @@ export interface EditorialQueueSource {
   readonly orbiScore: number;
   readonly updatedAt: IsoUtcDateTime;
   readonly snapshot: EditorialControlSnapshot;
+  readonly socialDistribution?: SocialDistributionQueueView | null;
 }
 
 export interface EditorialQueueItem {
@@ -49,58 +65,29 @@ export interface EditorialQueueItem {
   readonly requiresHumanAttention: boolean;
   readonly attentionReasons: readonly string[];
   readonly actionAssessments: readonly EditorialActionAssessment[];
+  readonly socialDistribution?: SocialDistributionQueueView | null;
 }
 
 const deriveBucket = (source: EditorialQueueSource): EditorialQueueBucket => {
   const { storyStatus, publicationStatus, editorialGate } = source.snapshot;
-
-  if (
-    storyStatus === CanonicalStoryStatus.BLOCKED ||
-    editorialGate.decision === IntegratedEditorialDecision.BLOCK ||
-    publicationStatus === PublicationStatus.BLOCKED
-  ) return EditorialQueueBucket.BLOCKED;
-
-  if (
-    storyStatus === CanonicalStoryStatus.FAILED ||
-    publicationStatus === PublicationStatus.FAILED ||
-    publicationStatus === PublicationStatus.RETRY_PENDING
-  ) return EditorialQueueBucket.FAILED;
-
-  if (
-    storyStatus === CanonicalStoryStatus.PUBLISHED ||
-    publicationStatus === PublicationStatus.PUBLISHED
-  ) return EditorialQueueBucket.PUBLISHED;
-
+  if (storyStatus === CanonicalStoryStatus.BLOCKED || editorialGate.decision === IntegratedEditorialDecision.BLOCK || publicationStatus === PublicationStatus.BLOCKED) return EditorialQueueBucket.BLOCKED;
+  if (storyStatus === CanonicalStoryStatus.FAILED || publicationStatus === PublicationStatus.FAILED || publicationStatus === PublicationStatus.RETRY_PENDING) return EditorialQueueBucket.FAILED;
+  if (storyStatus === CanonicalStoryStatus.PUBLISHED || publicationStatus === PublicationStatus.PUBLISHED) return EditorialQueueBucket.PUBLISHED;
   if (publicationStatus === PublicationStatus.PUBLISHING) return EditorialQueueBucket.PUBLISHING;
   if (publicationStatus === PublicationStatus.SCHEDULED) return EditorialQueueBucket.SCHEDULED;
   if (storyStatus === CanonicalStoryStatus.APPROVED) return EditorialQueueBucket.APPROVED;
-
-  if (
-    storyStatus === CanonicalStoryStatus.READY_FOR_REVIEW ||
-    editorialGate.decision === IntegratedEditorialDecision.REQUIRE_HUMAN_REVIEW
-  ) return EditorialQueueBucket.NEEDS_REVIEW;
-
+  if (storyStatus === CanonicalStoryStatus.READY_FOR_REVIEW || editorialGate.decision === IntegratedEditorialDecision.REQUIRE_HUMAN_REVIEW) return EditorialQueueBucket.NEEDS_REVIEW;
   return EditorialQueueBucket.DRAFTING;
 };
 
 const deriveAttentionReasons = (source: EditorialQueueSource): readonly string[] => {
   const reasons: string[] = [];
   const { editorialGate, publicationStatus } = source.snapshot;
-
-  if (editorialGate.decision === IntegratedEditorialDecision.BLOCK) {
-    reasons.push('EDITORIAL_BLOCKED', ...editorialGate.reasons);
-  }
-  if (editorialGate.decision === IntegratedEditorialDecision.REQUIRE_HUMAN_REVIEW) {
-    reasons.push('HUMAN_REVIEW_REQUIRED', ...editorialGate.reasons);
-  }
-  if (source.riskLevel === RiskLevel.HIGH || source.riskLevel === RiskLevel.CRITICAL) {
-    reasons.push('ELEVATED_RISK');
-  }
-  if (publicationStatus === PublicationStatus.FAILED || publicationStatus === PublicationStatus.RETRY_PENDING) {
-    reasons.push('PUBLICATION_FAILURE');
-  }
+  if (editorialGate.decision === IntegratedEditorialDecision.BLOCK) reasons.push('EDITORIAL_BLOCKED', ...editorialGate.reasons);
+  if (editorialGate.decision === IntegratedEditorialDecision.REQUIRE_HUMAN_REVIEW) reasons.push('HUMAN_REVIEW_REQUIRED', ...editorialGate.reasons);
+  if (source.riskLevel === RiskLevel.HIGH || source.riskLevel === RiskLevel.CRITICAL) reasons.push('ELEVATED_RISK');
+  if (publicationStatus === PublicationStatus.FAILED || publicationStatus === PublicationStatus.RETRY_PENDING) reasons.push('PUBLICATION_FAILURE');
   if (publicationStatus === PublicationStatus.BLOCKED) reasons.push('PUBLICATION_BLOCKED');
-
   return [...new Set(reasons)];
 };
 
@@ -115,10 +102,7 @@ const bucketPriority: Readonly<Record<EditorialQueueBucket, number>> = {
   [EditorialQueueBucket.PUBLISHED]: 7,
 };
 
-export const buildEditorialQueueItem = (
-  role: EditorialRole,
-  source: EditorialQueueSource,
-): EditorialQueueItem => {
+export const buildEditorialQueueItem = (role: EditorialRole, source: EditorialQueueSource): EditorialQueueItem => {
   const attentionReasons = deriveAttentionReasons(source);
   return {
     storyId: source.storyId,
@@ -133,28 +117,19 @@ export const buildEditorialQueueItem = (
     bucket: deriveBucket(source),
     requiresHumanAttention: attentionReasons.length > 0,
     attentionReasons,
-    actionAssessments: Object.values(EditorialControlAction).map((action) =>
-      assessEditorialControlAction(role, action, source.snapshot),
-    ),
+    actionAssessments: Object.values(EditorialControlAction).map((action) => assessEditorialControlAction(role, action, source.snapshot)),
+    socialDistribution: source.socialDistribution ?? null,
   };
 };
 
-export const buildEditorialQueue = (
-  role: EditorialRole,
-  sources: readonly EditorialQueueSource[],
-): readonly EditorialQueueItem[] =>
-  sources
-    .map((source) => buildEditorialQueueItem(role, source))
-    .sort((a, b) => {
-      const bucketDelta = bucketPriority[a.bucket] - bucketPriority[b.bucket];
-      if (bucketDelta !== 0) return bucketDelta;
-      const scoreDelta = b.orbiScore - a.orbiScore;
-      if (scoreDelta !== 0) return scoreDelta;
-      return b.updatedAt.localeCompare(a.updatedAt);
-    });
+export const buildEditorialQueue = (role: EditorialRole, sources: readonly EditorialQueueSource[]): readonly EditorialQueueItem[] =>
+  sources.map((source) => buildEditorialQueueItem(role, source)).sort((a, b) => {
+    const bucketDelta = bucketPriority[a.bucket] - bucketPriority[b.bucket];
+    if (bucketDelta !== 0) return bucketDelta;
+    const scoreDelta = b.orbiScore - a.orbiScore;
+    if (scoreDelta !== 0) return scoreDelta;
+    return b.updatedAt.localeCompare(a.updatedAt);
+  });
 
-export const filterEditorialQueue = (
-  items: readonly EditorialQueueItem[],
-  bucket: EditorialQueueBucket | null,
-): readonly EditorialQueueItem[] =>
+export const filterEditorialQueue = (items: readonly EditorialQueueItem[], bucket: EditorialQueueBucket | null): readonly EditorialQueueItem[] =>
   bucket === null ? items : items.filter((item) => item.bucket === bucket);

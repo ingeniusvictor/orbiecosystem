@@ -202,7 +202,7 @@ export default function App() {
   }
 
   if (newsRoute) {
-    return <NewsPortal route={newsRoute} />;
+    return <NewsPortal route={newsRoute} onMetadataChange={applyRouteMetadata} />;
   }
 
   return (

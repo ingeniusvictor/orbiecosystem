@@ -1,3 +1,4 @@
+import type { OrganizationId } from '../../domain/common/types';
 import {
   EditorialRole,
   buildEditorialQueue,
@@ -8,10 +9,11 @@ import {
 } from '../../domain/editorial';
 
 export interface EditorialQueueReader {
-  listQueueSources(): Promise<readonly EditorialQueueSource[]>;
+  listQueueSources(organizationId: OrganizationId): Promise<readonly EditorialQueueSource[]>;
 }
 
 export interface EditorialQueueQuery {
+  readonly organizationId: OrganizationId;
   readonly role: EditorialRole;
   readonly bucket?: EditorialQueueBucket | null;
 }
@@ -24,13 +26,16 @@ export const createEditorialControlCenterReadService = (
   reader: EditorialQueueReader,
 ): EditorialControlCenterReadService => ({
   async listQueue(query): Promise<readonly EditorialQueueItem[]> {
-    const queue = buildEditorialQueue(query.role, await reader.listQueueSources());
+    const queue = buildEditorialQueue(
+      query.role,
+      await reader.listQueueSources(query.organizationId),
+    );
     return filterEditorialQueue(queue, query.bucket ?? null);
   },
 });
 
 export const emptyEditorialQueueReader: EditorialQueueReader = {
-  async listQueueSources(): Promise<readonly EditorialQueueSource[]> {
+  async listQueueSources(_organizationId: OrganizationId): Promise<readonly EditorialQueueSource[]> {
     return [];
   },
 };

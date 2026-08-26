@@ -4,6 +4,7 @@ export * from './social-package';
 export * from './social-length-policy';
 export * from './social-scoring';
 export * from './social-readiness-gate';
+export * from './social-copy-builder';
 export * from './policy';
 export * from './scoring';
 export * from './editorial-gate';

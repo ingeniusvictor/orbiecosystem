@@ -14,12 +14,14 @@ import {
   type EditorialMutationUnitOfWork,
 } from './mutation-command-service';
 import { createEditorialControlCenterRouter } from './routes';
+import type { EditorialSessionSecurity } from './session-auth';
 
 export interface EditorialPrivateApiDependencies {
   readonly reader?: EditorialQueueReader;
   readonly identityResolver?: EditorialIdentityResolver;
   readonly mutationUnitOfWork?: EditorialMutationUnitOfWork;
   readonly mutationService?: EditorialMutationCommandService;
+  readonly sessionSecurity?: EditorialSessionSecurity;
 }
 
 export const createEditorialPrivateApi = (
@@ -34,5 +36,10 @@ export const createEditorialPrivateApi = (
       ? createEditorialMutationCommandService(dependencies.mutationUnitOfWork)
       : null);
 
-  return createEditorialControlCenterRouter(service, identityResolver, mutationService);
+  return createEditorialControlCenterRouter(
+    service,
+    identityResolver,
+    mutationService,
+    dependencies.sessionSecurity ?? null,
+  );
 };

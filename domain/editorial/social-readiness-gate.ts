@@ -9,7 +9,7 @@ import {
 } from './social-package';
 import {
   SocialCopyLengthBand,
-  evaluateSocialCopyLength,
+  evaluateSocialPackageLengthConsistency,
 } from './social-length-policy';
 import { SOCIAL_SCORE_CANDIDATE_THRESHOLD } from './social-scoring';
 import type { VisualAsset } from '../visuals/visual-asset';
@@ -57,7 +57,7 @@ export const evaluateSocialReadiness = (
   input: SocialReadinessInput,
 ): SocialReadinessResult => {
   const { story, storyRevision, socialPackage, visualAsset } = input;
-  const length = evaluateSocialCopyLength(socialPackage.copy, socialPackage.characterCount);
+  const length = evaluateSocialPackageLengthConsistency(socialPackage);
 
   const blockReasons: string[] = [];
   const deferReasons: string[] = [];
@@ -101,7 +101,7 @@ export const evaluateSocialReadiness = (
     return {
       decision: SocialReadinessDecision.BLOCK,
       reasons: blockReasons,
-      measuredCharacterCount: length.measuredCharacterCount,
+      measuredCharacterCount: length.characterCount,
       lengthBand: length.band,
     };
   }
@@ -165,7 +165,7 @@ export const evaluateSocialReadiness = (
     return {
       decision: SocialReadinessDecision.BLOCK,
       reasons: blockReasons,
-      measuredCharacterCount: length.measuredCharacterCount,
+      measuredCharacterCount: length.characterCount,
       lengthBand: length.band,
     };
   }
@@ -174,7 +174,7 @@ export const evaluateSocialReadiness = (
     return {
       decision: SocialReadinessDecision.DEFER,
       reasons: deferReasons,
-      measuredCharacterCount: length.measuredCharacterCount,
+      measuredCharacterCount: length.characterCount,
       lengthBand: length.band,
     };
   }
@@ -202,7 +202,7 @@ export const evaluateSocialReadiness = (
     return {
       decision: SocialReadinessDecision.REVIEW,
       reasons: reviewReasons,
-      measuredCharacterCount: length.measuredCharacterCount,
+      measuredCharacterCount: length.characterCount,
       lengthBand: length.band,
     };
   }
@@ -210,7 +210,7 @@ export const evaluateSocialReadiness = (
   return {
     decision: SocialReadinessDecision.READY,
     reasons: [],
-    measuredCharacterCount: length.measuredCharacterCount,
+    measuredCharacterCount: length.characterCount,
     lengthBand: length.band,
   };
 };

@@ -1,7 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import type { CanonicalStoryId, OrganizationId, SocialPackageId } from '../../domain/common/types';
+import type {
+  CanonicalStoryId,
+  IsoUtcDateTime,
+  OrganizationId,
+  SocialPackageId,
+} from '../../domain/common/types';
 import {
   SOCIAL_COPY_HARD_LIMIT,
   SOCIAL_COPY_TARGET_MAX,
@@ -65,8 +70,8 @@ test('canonical social package binds organization, story revision, public URL, a
       canonicalStoryRevision: 'story-rev-7',
       webArticleUrl: 'https://orbi.example/news/story-1',
     },
-    createdAt: '2026-08-26T19:20:00.000Z',
-    updatedAt: '2026-08-26T19:20:00.000Z',
+    createdAt: '2026-08-26T19:20:00.000Z' as IsoUtcDateTime,
+    updatedAt: '2026-08-26T19:20:00.000Z' as IsoUtcDateTime,
   };
 
   assert.equal(packageValue.organizationId, 'orbi-ecosystem');

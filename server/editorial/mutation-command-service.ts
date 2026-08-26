@@ -264,7 +264,7 @@ export const createEditorialMutationCommandService = (
       auditEntry,
     });
 
-    if (!commit.ok) {
+    if ('code' in commit) {
       return commit.code === 'REVISION_CONFLICT'
         ? {
             ok: false,

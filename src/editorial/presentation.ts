@@ -1,7 +1,11 @@
 import {
   EditorialControlAction,
   EditorialQueueBucket,
+  ManualPublicationStatus,
+  SocialEmailStatus,
+  SocialReadinessDecision,
   type EditorialActionAssessment,
+  type SocialDistributionQueueView,
 } from '../../domain/editorial';
 
 export const EDITORIAL_BUCKET_LABELS: Readonly<Record<EditorialQueueBucket, string>> = {
@@ -25,24 +29,44 @@ export const EDITORIAL_ACTION_LABELS: Readonly<Record<EditorialControlAction, st
   [EditorialControlAction.PUBLISH_WEB_NOW]: 'Publicar ahora',
 };
 
-export const getEditorialActionDisplayState = (
-  assessment: EditorialActionAssessment,
-): {
-  label: string;
-  domainAllowed: boolean;
-  disabledReason: string | null;
-  requiresStrongConfirmation: boolean;
-} => ({
+export const SOCIAL_READINESS_LABELS: Readonly<Record<SocialReadinessDecision, string>> = {
+  [SocialReadinessDecision.READY]: 'Listo',
+  [SocialReadinessDecision.REVIEW]: 'Revisión',
+  [SocialReadinessDecision.DEFER]: 'Pendiente',
+  [SocialReadinessDecision.BLOCK]: 'Bloqueado',
+};
+
+export const SOCIAL_EMAIL_LABELS: Readonly<Record<SocialEmailStatus, string>> = {
+  [SocialEmailStatus.NOT_CREATED]: 'No creado',
+  [SocialEmailStatus.GENERATING]: 'Generando',
+  [SocialEmailStatus.READY]: 'Listo',
+  [SocialEmailStatus.SENDING]: 'Enviando',
+  [SocialEmailStatus.SENT]: 'Enviado',
+  [SocialEmailStatus.FAILED]: 'Fallido',
+};
+
+export const MANUAL_PUBLICATION_LABELS: Readonly<Record<ManualPublicationStatus, string>> = {
+  [ManualPublicationStatus.NOT_POSTED]: 'No publicado',
+  [ManualPublicationStatus.POSTED]: 'Publicado',
+  [ManualPublicationStatus.FAILED]: 'Fallido',
+};
+
+export const getSocialDistributionSummary = (social: SocialDistributionQueueView | null | undefined): string => {
+  if (!social) return 'Paquete social no preparado';
+  const email = social.mailerStatus ? SOCIAL_EMAIL_LABELS[social.mailerStatus] : 'Sin mailer';
+  const facebook = social.facebookStatus ? MANUAL_PUBLICATION_LABELS[social.facebookStatus] : 'Sin tracker';
+  const instagram = social.instagramStatus ? MANUAL_PUBLICATION_LABELS[social.instagramStatus] : 'Sin tracker';
+  return `${SOCIAL_READINESS_LABELS[social.readiness]} · Email: ${email} · Facebook: ${facebook} · Instagram: ${instagram}`;
+};
+
+export const getEditorialActionDisplayState = (assessment: EditorialActionAssessment): { label: string; domainAllowed: boolean; disabledReason: string | null; requiresStrongConfirmation: boolean } => ({
   label: EDITORIAL_ACTION_LABELS[assessment.action],
   domainAllowed: assessment.allowed,
   disabledReason: assessment.allowed ? null : assessment.reasons.join(', '),
   requiresStrongConfirmation: assessment.action === EditorialControlAction.PUBLISH_WEB_NOW,
 });
 
-export const buildEditorialActionConfirmation = (
-  action: EditorialControlAction,
-  headline: string,
-): string => {
+export const buildEditorialActionConfirmation = (action: EditorialControlAction, headline: string): string => {
   const label = EDITORIAL_ACTION_LABELS[action];
   return action === EditorialControlAction.PUBLISH_WEB_NOW
     ? `Confirmación reforzada: ¿Publicar ahora "${headline}"? El servidor volverá a validar rol, estado, gates y revisión antes de iniciar la publicación.`

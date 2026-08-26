@@ -44,8 +44,8 @@ export interface EditorialSessionOptions {
 
 export interface EditorialSessionSecurity {
   readonly identityResolver: EditorialIdentityResolver;
-  readonly requiresCsrf(request: Request): boolean;
-  readonly validateCsrf(request: Request): boolean;
+  requiresCsrf(request: Request): boolean;
+  validateCsrf(request: Request): boolean;
 }
 
 const parseCookies = (request: Request): Readonly<Record<string, string>> => {

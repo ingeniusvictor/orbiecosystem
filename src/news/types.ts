@@ -1,34 +1,13 @@
 import type { ContentCategory } from '../../domain/common/enums';
-
-export interface PublicNewsCard {
-  readonly id: string;
-  readonly slug: string;
-  readonly headline: string;
-  readonly dek: string;
-  readonly category: ContentCategory;
-  readonly publishedAt: string;
-  readonly imageUrl: string | null;
-  readonly imageAlt: string;
-  readonly isBreaking: boolean;
-}
-
-export interface PublicNewsArticle extends PublicNewsCard {
-  readonly sections: readonly {
-    key: 'SUMMARY' | 'WHAT_HAPPENED' | 'WHY_IT_MATTERS' | 'PRACTICAL_IMPACT' | 'ORBI_LENS' | 'FUTURE_OUTLOOK';
-    heading: string;
-    body: string;
-  }[];
-  readonly sources: readonly {
-    label: string;
-    url: string;
-    isPrimary: boolean;
-  }[];
-}
-
-export interface PublicNewsFeed {
-  readonly items: readonly PublicNewsCard[];
-  readonly breaking: PublicNewsCard | null;
-}
+export type {
+  PublicNewsArticle,
+  PublicNewsCard,
+  PublicNewsFeed,
+} from '../../domain/publications/public-news';
+import type {
+  PublicNewsArticle,
+  PublicNewsFeed,
+} from '../../domain/publications/public-news';
 
 export interface PublicNewsRepository {
   listLatest(): Promise<PublicNewsFeed>;

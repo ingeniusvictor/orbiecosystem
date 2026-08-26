@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import { ContentCategory } from '../../domain/common/enums';
+import { getCategoryAriaCurrent, getNewsRetryPath } from '../../src/news/accessibility';
 import { HOME_NEWS_LIMIT, selectHomeLatestNews } from '../../src/news/home-presentation';
 import { selectBreakingNewsCard } from '../../src/news/presentation';
 import {
@@ -72,6 +73,18 @@ test('ORBI News has canonical base SEO metadata', () => {
   assert.equal(metadata.openGraph.url, metadata.canonical);
   assert.ok(metadata.title.includes('ORBI News'));
   assert.ok(seoPublicRoutes.includes(metadata.canonical as (typeof seoPublicRoutes)[number]));
+});
+
+test('category navigation exposes aria-current only for the active destination', () => {
+  assert.equal(getCategoryAriaCurrent(null, null), 'page');
+  assert.equal(getCategoryAriaCurrent(ContentCategory.AI, ContentCategory.AI), 'page');
+  assert.equal(getCategoryAriaCurrent(ContentCategory.AI, ContentCategory.TECH), undefined);
+  assert.equal(getCategoryAriaCurrent(ContentCategory.AI, null), undefined);
+});
+
+test('news retry path preserves the current category context', () => {
+  assert.equal(getNewsRetryPath(null), '/news');
+  assert.equal(getNewsRetryPath(ContentCategory.CYBERSECURITY), buildNewsCategoryPath(ContentCategory.CYBERSECURITY));
 });
 
 test('breaking banner selector requires explicit isBreaking true', () => {

@@ -3,6 +3,8 @@ import path from "path";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from "dotenv";
+import { createPublicNewsRouter } from "./server/news/routes";
+import { createPublicNewsService, emptyPublicNewsReader } from "./server/news/public-news-service";
 
 dotenv.config();
 
@@ -12,6 +14,9 @@ async function startServer() {
 
   // Middleware for parsing JSON
   app.use(express.json());
+
+  const publicNewsService = createPublicNewsService(emptyPublicNewsReader);
+  app.use("/api/news", createPublicNewsRouter(publicNewsService));
 
   // Initialize Gemini if key exists
   const apiKey = process.env.GEMINI_API_KEY;

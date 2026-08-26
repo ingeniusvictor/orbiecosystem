@@ -19,6 +19,7 @@ import VideoModal from "./components/VideoModal";
 import ClimateRecoveryLanding from "./components/ClimateRecoveryLanding";
 import OrbiPBMetricsPage from "./components/projects/OrbiPBMetricsPage";
 import NewsPortal from "./news/NewsPortal";
+import HomeLatestNews from "./news/HomeLatestNews";
 import { parsePublicNewsRoute } from "./news/routes";
 import type { ClimateLocale } from "./content/competition";
 import { getSeoRouteMetadata, type SeoRouteMetadata } from "./seoMetadata";
@@ -229,6 +230,7 @@ export default function App() {
           onPlayVideo={handlePlayVideo}
         />
         <Roadmap />
+        <HomeLatestNews />
         <FinalCTA onNavigate={handleNavigate} />
       </main>
 

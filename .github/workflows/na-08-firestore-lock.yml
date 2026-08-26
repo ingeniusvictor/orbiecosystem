@@ -1,0 +1,39 @@
+name: NA-08 Firestore lockfile generation
+
+on:
+  push:
+    branches:
+      - feature/orbi-news-agent
+    paths:
+      - .github/workflows/na-08-firestore-lock.yml
+
+permissions:
+  contents: write
+
+jobs:
+  generate-lockfile:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: feature/orbi-news-agent
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Generate Firestore lockfile
+        run: npm install --package-lock-only --save-exact @google-cloud/firestore@9.0.0
+
+      - name: Commit generated lockfile and remove temporary workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/na-08-firestore-lock.yml
+          git add package.json package-lock.json
+          git commit -m "build(na-08): wire Firestore SDK dependency"
+          git push origin HEAD:feature/orbi-news-agent

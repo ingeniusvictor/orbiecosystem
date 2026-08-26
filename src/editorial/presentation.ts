@@ -30,14 +30,24 @@ export const getEditorialActionDisplayState = (
 ): {
   label: string;
   domainAllowed: boolean;
-  disabledReason: string;
+  disabledReason: string | null;
+  requiresStrongConfirmation: boolean;
 } => ({
   label: EDITORIAL_ACTION_LABELS[assessment.action],
   domainAllowed: assessment.allowed,
-  disabledReason: assessment.allowed
-    ? 'EJECUCION_MUTABLE_NO_HABILITADA_EN_NA_08_9'
-    : assessment.reasons.join(', '),
+  disabledReason: assessment.allowed ? null : assessment.reasons.join(', '),
+  requiresStrongConfirmation: assessment.action === EditorialControlAction.PUBLISH_WEB_NOW,
 });
+
+export const buildEditorialActionConfirmation = (
+  action: EditorialControlAction,
+  headline: string,
+): string => {
+  const label = EDITORIAL_ACTION_LABELS[action];
+  return action === EditorialControlAction.PUBLISH_WEB_NOW
+    ? `Confirmación reforzada: ¿Publicar ahora "${headline}"? El servidor volverá a validar rol, estado, gates y revisión antes de iniciar la publicación.`
+    : `¿Confirmas "${label}" para "${headline}"? El servidor volverá a validar toda la autoridad editorial antes de guardar cambios.`;
+};
 
 export const formatEditorialReason = (reason: string): string =>
   reason.replaceAll('_', ' ').toLowerCase().replace(/^./, (letter) => letter.toUpperCase());

@@ -5,3 +5,4 @@ export * from './source-policy';
 export * from './risk-classifier';
 export * from './research-strategy';
 export * from './gate-integration';
+export * from './failure-policy';

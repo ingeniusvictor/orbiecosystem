@@ -1,3 +1,5 @@
+import { createRequire } from 'node:module';
+import { join } from 'node:path';
 import type { FirestoreClientLike } from './firestore-persistence';
 
 export interface EditorialFirestoreEnvironment {
@@ -18,13 +20,13 @@ export interface FirestoreSdkModuleLike {
   readonly Firestore: FirestoreConstructorLike;
 }
 
-export type FirestoreSdkLoader = () => Promise<unknown>;
+export type FirestoreSdkLoader = () => unknown;
 
 const FIRESTORE_PACKAGE_NAME = '@google-cloud/firestore';
 
-const defaultFirestoreSdkLoader: FirestoreSdkLoader = async () => {
-  const packageName = FIRESTORE_PACKAGE_NAME;
-  return import(packageName);
+const defaultFirestoreSdkLoader: FirestoreSdkLoader = () => {
+  const requireFromProject = createRequire(join(process.cwd(), 'package.json'));
+  return requireFromProject(FIRESTORE_PACKAGE_NAME);
 };
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -41,10 +43,10 @@ const parseEnabledFlag = (value: string | undefined): boolean => {
   throw new Error('EDITORIAL_FIRESTORE_ENABLED_INVALID');
 };
 
-export const createConfiguredFirestoreClient = async (
+export const createConfiguredFirestoreClient = (
   environment: EditorialFirestoreEnvironment,
   loader: FirestoreSdkLoader = defaultFirestoreSdkLoader,
-): Promise<FirestoreClientLike | null> => {
+): FirestoreClientLike | null => {
   if (!parseEnabledFlag(environment.ORBI_EDITORIAL_FIRESTORE_ENABLED)) return null;
 
   const projectId = environment.ORBI_EDITORIAL_FIRESTORE_PROJECT_ID?.trim();
@@ -54,7 +56,7 @@ export const createConfiguredFirestoreClient = async (
 
   let loaded: unknown;
   try {
-    loaded = await loader();
+    loaded = loader();
   } catch {
     throw new Error('EDITORIAL_FIRESTORE_SDK_NOT_INSTALLED');
   }

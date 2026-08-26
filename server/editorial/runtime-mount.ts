@@ -24,9 +24,6 @@ export interface EditorialRuntimeMountOptions {
   readonly reader?: EditorialQueueReader;
   readonly mutationUnitOfWork?: EditorialMutationUnitOfWork;
   readonly firestore?: FirestoreClientLike;
-}
-
-export interface EditorialRuntimeEnvironmentMountOptions extends EditorialRuntimeMountOptions {
   readonly firestoreSdkLoader?: FirestoreSdkLoader;
 }
 
@@ -42,15 +39,25 @@ export const mountEditorialPrivateApiIfConfigured = (
   if (localStoreFile && environment.NODE_ENV === 'production') {
     throw new Error('EDITORIAL_LOCAL_STORE_FORBIDDEN_IN_PRODUCTION');
   }
-  if (localStoreFile && options.firestore) {
+
+  const hasInjectedPersistence = Boolean(
+    options.reader || options.mutationUnitOfWork || options.firestore,
+  );
+  const configuredFirestore = options.firestore ?? (
+    hasInjectedPersistence
+      ? null
+      : createConfiguredFirestoreClient(environment, options.firestoreSdkLoader)
+  );
+
+  if (localStoreFile && configuredFirestore) {
     throw new Error('EDITORIAL_MULTIPLE_PERSISTENCE_BACKENDS_CONFIGURED');
   }
 
   const localPersistence = localStoreFile
     ? createJsonEditorialPersistence({ filePath: localStoreFile })
     : null;
-  const firestorePersistence = options.firestore
-    ? createFirestoreEditorialPersistence({ firestore: options.firestore })
+  const firestorePersistence = configuredFirestore
+    ? createFirestoreEditorialPersistence({ firestore: configuredFirestore })
     : null;
   const defaultPersistence = firestorePersistence ?? localPersistence;
 
@@ -61,33 +68,4 @@ export const mountEditorialPrivateApiIfConfigured = (
     identityResolver,
   }));
   return true;
-};
-
-export const mountEditorialPrivateApiFromEnvironment = async (
-  app: Express,
-  environment: EditorialRuntimeEnvironment,
-  options: EditorialRuntimeEnvironmentMountOptions = {},
-): Promise<boolean> => {
-  const secret = environment.ORBI_EDITORIAL_AUTH_SECRET?.trim();
-  if (!secret) return false;
-
-  const injectedPersistence = options.reader || options.mutationUnitOfWork || options.firestore;
-  if (injectedPersistence) {
-    return mountEditorialPrivateApiIfConfigured(app, environment, options);
-  }
-
-  const localStoreFile = environment.ORBI_EDITORIAL_LOCAL_STORE_FILE?.trim();
-  const firestore = await createConfiguredFirestoreClient(
-    environment,
-    options.firestoreSdkLoader,
-  );
-
-  if (localStoreFile && firestore) {
-    throw new Error('EDITORIAL_MULTIPLE_PERSISTENCE_BACKENDS_CONFIGURED');
-  }
-
-  return mountEditorialPrivateApiIfConfigured(app, environment, {
-    ...options,
-    ...(firestore ? { firestore } : {}),
-  });
 };

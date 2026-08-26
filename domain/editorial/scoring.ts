@@ -1,4 +1,5 @@
 import { RiskLevel, VerificationConfidence } from '../common/enums';
+import { SOCIAL_SCORE_PRIORITY_THRESHOLD } from './social-scoring';
 
 export interface OrbiEditorialScoreDimensions {
   readonly strategicRelevance: number;
@@ -101,7 +102,7 @@ export const evaluateBreakingEligibility = (
 
   const reasons: string[] = [];
   if (input.orbiScore < 93) reasons.push('ORBI_SCORE_BELOW_BREAKING_THRESHOLD');
-  if (input.socialScore === null || input.socialScore < 90) {
+  if (input.socialScore === null || input.socialScore < SOCIAL_SCORE_PRIORITY_THRESHOLD) {
     reasons.push('SOCIAL_SCORE_BELOW_BREAKING_THRESHOLD');
   }
   if (input.verificationConfidence !== VerificationConfidence.VERY_HIGH) {

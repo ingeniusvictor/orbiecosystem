@@ -9,6 +9,7 @@ on:
       - 'server/**'
       - 'server.ts'
       - 'src/news/**'
+      - 'src/editorial/**'
       - 'src/App.tsx'
       - 'src/seoMetadata.ts'
       - 'tests/deterministic/**'

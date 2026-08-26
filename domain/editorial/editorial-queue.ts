@@ -24,6 +24,7 @@ export enum EditorialQueueBucket {
 
 export interface EditorialQueueSource {
   readonly storyId: CanonicalStoryId;
+  readonly revision: string;
   readonly headline: string;
   readonly slug: string;
   readonly category: ContentCategory;
@@ -36,6 +37,7 @@ export interface EditorialQueueSource {
 
 export interface EditorialQueueItem {
   readonly storyId: CanonicalStoryId;
+  readonly revision: string;
   readonly headline: string;
   readonly slug: string;
   readonly category: ContentCategory;
@@ -120,6 +122,7 @@ export const buildEditorialQueueItem = (
   const attentionReasons = deriveAttentionReasons(source);
   return {
     storyId: source.storyId,
+    revision: source.revision,
     headline: source.headline,
     slug: source.slug,
     category: source.category,

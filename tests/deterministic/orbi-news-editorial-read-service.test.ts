@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import { ContentCategory, RiskLevel, VerificationConfidence } from '../../domain/common/enums';
-import type { CanonicalStoryId, IsoUtcDateTime } from '../../domain/common/types';
+import type { CanonicalStoryId, IsoUtcDateTime, OrganizationId } from '../../domain/common/types';
 import { CanonicalStoryStatus } from '../../domain/editorial/canonical-story';
 import { EditorialRole } from '../../domain/editorial/control-center';
 import { EditorialQueueBucket, type EditorialQueueSource } from '../../domain/editorial/editorial-queue';
@@ -13,6 +13,8 @@ import {
   createEditorialControlCenterReadService,
   emptyEditorialQueueReader,
 } from '../../server/editorial/control-center-read-service';
+
+const organizationId = 'orbi-ecosystem' as OrganizationId;
 
 const source = (id: string, bucket: 'review' | 'approved'): EditorialQueueSource => ({
   storyId: id as CanonicalStoryId,
@@ -40,14 +42,17 @@ const source = (id: string, bucket: 'review' | 'approved'): EditorialQueueSource
   },
 });
 
-test('read service builds a role-aware queue from reader sources', async () => {
+test('read service builds a role-aware queue from organization-scoped reader sources', async () => {
+  let receivedOrganizationId: OrganizationId | null = null;
   const service = createEditorialControlCenterReadService({
-    async listQueueSources() {
+    async listQueueSources(nextOrganizationId) {
+      receivedOrganizationId = nextOrganizationId;
       return [source('review', 'review'), source('approved', 'approved')];
     },
   });
 
-  const items = await service.listQueue({ role: EditorialRole.REVIEWER });
+  const items = await service.listQueue({ organizationId, role: EditorialRole.REVIEWER });
+  assert.equal(receivedOrganizationId, organizationId);
   assert.equal(items.length, 2);
   assert.equal(items[0].bucket, EditorialQueueBucket.NEEDS_REVIEW);
   assert.ok(items[0].actionAssessments.some((assessment) => assessment.allowed));
@@ -66,6 +71,7 @@ test('read service filters by derived queue bucket', async () => {
   });
 
   const approved = await service.listQueue({
+    organizationId,
     role: EditorialRole.OWNER,
     bucket: EditorialQueueBucket.APPROVED,
   });
@@ -76,5 +82,5 @@ test('read service filters by derived queue bucket', async () => {
 
 test('empty queue reader returns a stable empty read model', async () => {
   const service = createEditorialControlCenterReadService(emptyEditorialQueueReader);
-  assert.deepEqual(await service.listQueue({ role: EditorialRole.VIEWER }), []);
+  assert.deepEqual(await service.listQueue({ organizationId, role: EditorialRole.VIEWER }), []);
 });

@@ -8,11 +8,18 @@ import {
   notConfiguredEditorialIdentityResolver,
   type EditorialIdentityResolver,
 } from './identity';
+import {
+  createEditorialMutationCommandService,
+  type EditorialMutationCommandService,
+  type EditorialMutationUnitOfWork,
+} from './mutation-command-service';
 import { createEditorialControlCenterRouter } from './routes';
 
 export interface EditorialPrivateApiDependencies {
   readonly reader?: EditorialQueueReader;
   readonly identityResolver?: EditorialIdentityResolver;
+  readonly mutationUnitOfWork?: EditorialMutationUnitOfWork;
+  readonly mutationService?: EditorialMutationCommandService;
 }
 
 export const createEditorialPrivateApi = (
@@ -22,6 +29,10 @@ export const createEditorialPrivateApi = (
     dependencies.reader ?? emptyEditorialQueueReader,
   );
   const identityResolver = dependencies.identityResolver ?? notConfiguredEditorialIdentityResolver;
+  const mutationService = dependencies.mutationService
+    ?? (dependencies.mutationUnitOfWork
+      ? createEditorialMutationCommandService(dependencies.mutationUnitOfWork)
+      : null);
 
-  return createEditorialControlCenterRouter(service, identityResolver);
+  return createEditorialControlCenterRouter(service, identityResolver, mutationService);
 };

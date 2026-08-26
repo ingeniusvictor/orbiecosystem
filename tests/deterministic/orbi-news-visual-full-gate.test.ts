@@ -54,7 +54,7 @@ const baseInput = () => ({
   story: story(),
   subject: 'verified artificial intelligence platform update',
   editorialContext: 'show the practical meaning of a verified AI platform update',
-  truthLabel: VisualTruthLabel.TECH_VISUALIZATION,
+  truthLabel: VisualTruthLabel.TECH_VISUALIZATION as const,
   overlayText: 'Nueva actualización de inteligencia artificial',
   factualEntityNames: ['OpenAI'],
 });

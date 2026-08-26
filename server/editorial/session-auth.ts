@@ -18,6 +18,7 @@ export const EDITORIAL_CSRF_COOKIE = 'orbi_editorial_csrf';
 export const EDITORIAL_CSRF_HEADER = 'x-orbi-editorial-csrf';
 
 const SESSION_COOKIE_PATH = '/api/editorial';
+const CSRF_COOKIE_PATH = '/';
 const DEFAULT_SESSION_TTL_SECONDS = 8 * 60 * 60;
 const MAX_SESSION_TTL_SECONDS = 24 * 60 * 60;
 const MIN_BOOTSTRAP_ACCESS_KEY_LENGTH = 24;
@@ -78,11 +79,12 @@ const hasBearerAuthorization = (request: Request): boolean =>
   /^Bearer\s+[^\s]+$/i.test(request.header('authorization')?.trim() ?? '');
 
 const cookieAttributes = (
+  path: string,
   maxAgeSeconds: number,
   secure: boolean,
   httpOnly: boolean,
 ): string => [
-  `Path=${SESSION_COOKIE_PATH}`,
+  `Path=${path}`,
   `Max-Age=${maxAgeSeconds}`,
   'SameSite=Strict',
   ...(secure ? ['Secure'] : []),
@@ -92,13 +94,18 @@ const cookieAttributes = (
 const setCookie = (
   name: string,
   value: string,
+  path: string,
   maxAgeSeconds: number,
   secure: boolean,
   httpOnly: boolean,
-): string => `${name}=${encodeURIComponent(value)}; ${cookieAttributes(maxAgeSeconds, secure, httpOnly)}`;
+): string => `${name}=${encodeURIComponent(value)}; ${cookieAttributes(path, maxAgeSeconds, secure, httpOnly)}`;
 
-const clearCookie = (name: string, secure: boolean, httpOnly: boolean): string =>
-  `${name}=; ${cookieAttributes(0, secure, httpOnly)}`;
+const clearCookie = (
+  name: string,
+  path: string,
+  secure: boolean,
+  httpOnly: boolean,
+): string => `${name}=; ${cookieAttributes(path, 0, secure, httpOnly)}`;
 
 const parseTtl = (value: string | undefined): number => {
   if (!value?.trim()) return DEFAULT_SESSION_TTL_SECONDS;
@@ -208,8 +215,8 @@ export const createEditorialSessionRouter = (
     const csrfToken = randomBytes(32).toString('base64url');
 
     response.setHeader('Set-Cookie', [
-      setCookie(EDITORIAL_SESSION_COOKIE, sessionToken, options.ttlSeconds, options.secureCookies, true),
-      setCookie(EDITORIAL_CSRF_COOKIE, csrfToken, options.ttlSeconds, options.secureCookies, false),
+      setCookie(EDITORIAL_SESSION_COOKIE, sessionToken, SESSION_COOKIE_PATH, options.ttlSeconds, options.secureCookies, true),
+      setCookie(EDITORIAL_CSRF_COOKIE, csrfToken, CSRF_COOKIE_PATH, options.ttlSeconds, options.secureCookies, false),
     ]);
     response.status(200).json({
       actor: {
@@ -238,8 +245,8 @@ export const createEditorialSessionRouter = (
 
     const secure = options?.secureCookies ?? false;
     response.setHeader('Set-Cookie', [
-      clearCookie(EDITORIAL_SESSION_COOKIE, secure, true),
-      clearCookie(EDITORIAL_CSRF_COOKIE, secure, false),
+      clearCookie(EDITORIAL_SESSION_COOKIE, SESSION_COOKIE_PATH, secure, true),
+      clearCookie(EDITORIAL_CSRF_COOKIE, CSRF_COOKIE_PATH, secure, false),
     ]);
     response.status(204).end();
   });

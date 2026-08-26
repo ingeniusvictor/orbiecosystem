@@ -6,6 +6,7 @@ export * from './social-scoring';
 export * from './social-readiness-gate';
 export * from './social-copy-builder';
 export * from './social-distribution-policy';
+export * from './social-image-binding';
 export * from './policy';
 export * from './scoring';
 export * from './editorial-gate';

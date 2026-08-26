@@ -1,4 +1,5 @@
 import { RiskLevel, VerificationConfidence } from '../common/enums';
+import type { IsoUtcDateTime } from '../common/types';
 import type { CanonicalStory } from './canonical-story';
 import { CanonicalStoryStatus } from './canonical-story';
 import {
@@ -35,6 +36,10 @@ export interface SocialReadinessResult {
   readonly reasons: readonly string[];
   readonly measuredCharacterCount: number;
   readonly lengthBand: SocialCopyLengthBand;
+}
+
+export interface MarkSocialPackageReadyInput extends SocialReadinessInput {
+  readonly readyAt: IsoUtcDateTime;
 }
 
 export const SOCIAL_ORBI_SCORE_MINIMUM = 85;
@@ -212,5 +217,36 @@ export const evaluateSocialReadiness = (
     reasons: [],
     measuredCharacterCount: length.characterCount,
     lengthBand: length.band,
+  };
+};
+
+/**
+ * Materializes READY only after the deterministic readiness gate allows it.
+ * Existing READY packages are idempotent; no other caller may promote status
+ * by assignment without bypassing this domain authority.
+ */
+export const markSocialPackageReady = (
+  input: MarkSocialPackageReadyInput,
+): SocialPackage => {
+  if (
+    input.socialPackage.status !== SocialPackageStatus.DRAFT &&
+    input.socialPackage.status !== SocialPackageStatus.READY
+  ) {
+    throw new RangeError('SOCIAL_PACKAGE_READY_TRANSITION_REQUIRES_DRAFT');
+  }
+
+  const readiness = evaluateSocialReadiness(input);
+  if (readiness.decision !== SocialReadinessDecision.READY) {
+    throw new RangeError(
+      `SOCIAL_PACKAGE_READY_TRANSITION_DENIED:${readiness.decision}:${readiness.reasons.join(',')}`,
+    );
+  }
+
+  if (input.socialPackage.status === SocialPackageStatus.READY) return input.socialPackage;
+
+  return {
+    ...input.socialPackage,
+    status: SocialPackageStatus.READY,
+    updatedAt: input.readyAt,
   };
 };

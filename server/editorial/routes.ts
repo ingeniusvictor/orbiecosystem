@@ -134,7 +134,7 @@ export const createEditorialControlCenterRouter = (
         reason,
       });
 
-      if (result.ok) {
+      if (!('code' in result)) {
         response.status(200).json({ result });
         return;
       }

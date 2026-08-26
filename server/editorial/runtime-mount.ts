@@ -8,8 +8,13 @@ import {
   createFirestoreEditorialPersistence,
   type FirestoreClientLike,
 } from './firestore-persistence';
+import {
+  createConfiguredFirestoreClient,
+  type EditorialFirestoreEnvironment,
+  type FirestoreSdkLoader,
+} from './firestore-sdk';
 
-export interface EditorialRuntimeEnvironment {
+export interface EditorialRuntimeEnvironment extends EditorialFirestoreEnvironment {
   readonly ORBI_EDITORIAL_AUTH_SECRET?: string;
   readonly ORBI_EDITORIAL_LOCAL_STORE_FILE?: string;
   readonly NODE_ENV?: string;
@@ -19,6 +24,10 @@ export interface EditorialRuntimeMountOptions {
   readonly reader?: EditorialQueueReader;
   readonly mutationUnitOfWork?: EditorialMutationUnitOfWork;
   readonly firestore?: FirestoreClientLike;
+}
+
+export interface EditorialRuntimeEnvironmentMountOptions extends EditorialRuntimeMountOptions {
+  readonly firestoreSdkLoader?: FirestoreSdkLoader;
 }
 
 export const mountEditorialPrivateApiIfConfigured = (
@@ -52,4 +61,33 @@ export const mountEditorialPrivateApiIfConfigured = (
     identityResolver,
   }));
   return true;
+};
+
+export const mountEditorialPrivateApiFromEnvironment = async (
+  app: Express,
+  environment: EditorialRuntimeEnvironment,
+  options: EditorialRuntimeEnvironmentMountOptions = {},
+): Promise<boolean> => {
+  const secret = environment.ORBI_EDITORIAL_AUTH_SECRET?.trim();
+  if (!secret) return false;
+
+  const injectedPersistence = options.reader || options.mutationUnitOfWork || options.firestore;
+  if (injectedPersistence) {
+    return mountEditorialPrivateApiIfConfigured(app, environment, options);
+  }
+
+  const localStoreFile = environment.ORBI_EDITORIAL_LOCAL_STORE_FILE?.trim();
+  const firestore = await createConfiguredFirestoreClient(
+    environment,
+    options.firestoreSdkLoader,
+  );
+
+  if (localStoreFile && firestore) {
+    throw new Error('EDITORIAL_MULTIPLE_PERSISTENCE_BACKENDS_CONFIGURED');
+  }
+
+  return mountEditorialPrivateApiIfConfigured(app, environment, {
+    ...options,
+    ...(firestore ? { firestore } : {}),
+  });
 };

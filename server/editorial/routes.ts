@@ -7,6 +7,7 @@ import type { CanonicalStoryId } from '../../domain/common/types';
 import type { EditorialControlCenterReadService } from './control-center-read-service';
 import type { EditorialIdentityResolver } from './identity';
 import type { EditorialMutationCommandService } from './mutation-command-service';
+import type { EditorialSessionSecurity } from './session-auth';
 
 const parseBucket = (value: unknown): EditorialQueueBucket | null | 'INVALID' => {
   if (value === undefined) return null;
@@ -39,6 +40,7 @@ export const createEditorialControlCenterRouter = (
   service: EditorialControlCenterReadService,
   identityResolver: EditorialIdentityResolver,
   mutationService: EditorialMutationCommandService | null = null,
+  sessionSecurity: EditorialSessionSecurity | null = null,
 ): Router => {
   const router = Router();
 
@@ -87,6 +89,11 @@ export const createEditorialControlCenterRouter = (
 
       if (!actor.role) {
         response.status(403).json({ error: 'EDITORIAL_ROLE_REQUIRED' });
+        return;
+      }
+
+      if (sessionSecurity?.requiresCsrf(request) && !sessionSecurity.validateCsrf(request)) {
+        response.status(403).json({ error: 'EDITORIAL_CSRF_REQUIRED' });
         return;
       }
 

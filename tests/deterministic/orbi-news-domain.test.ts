@@ -11,6 +11,8 @@ import type { CanonicalStory } from '../../domain/editorial/canonical-story';
 import { CanonicalStoryStatus } from '../../domain/editorial/canonical-story';
 import {
   SOCIAL_COPY_HARD_LIMIT,
+  SOCIAL_PACKAGE_REQUIRED_SECTIONS,
+  SOCIAL_PACKAGE_V1_PLATFORMS,
   SocialPackageStatus,
   isSocialCopyWithinHardLimit,
   type SocialPackage,
@@ -134,15 +136,19 @@ test('social package validator rejects a 2201-character package', () => {
   const copy = 'a'.repeat(SOCIAL_COPY_HARD_LIMIT + 1);
   const socialPackage: SocialPackage = {
     id: 'social-1' as SocialPackage['id'],
+    organizationId: 'org-1' as SocialPackage['organizationId'],
     canonicalStoryId: 'story-1' as SocialPackage['canonicalStoryId'],
     status: SocialPackageStatus.READY,
+    targetPlatforms: [...SOCIAL_PACKAGE_V1_PLATFORMS],
     socialHeadline: 'ORBI News',
+    sections: SOCIAL_PACKAGE_REQUIRED_SECTIONS.map((section) => ({ section, text: section })),
     copy,
     hashtags: ['#ORBINews'],
     characterCount: [...copy].length,
     imageAspectRatio: '16:9',
     imageAssetId: null,
     webArticleUrl: null,
+    provenance: null,
     createdAt: '2026-08-26T00:00:00Z' as SocialPackage['createdAt'],
     updatedAt: '2026-08-26T00:00:00Z' as SocialPackage['updatedAt'],
   };

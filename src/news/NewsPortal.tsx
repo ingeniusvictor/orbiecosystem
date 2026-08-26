@@ -8,6 +8,7 @@ import {
 } from '../seoMetadata';
 import { buildNewsArticlePath, buildNewsCategoryPath, type PublicNewsRoute } from './routes';
 import { publicNewsRepository } from './repository';
+import { selectBreakingNewsCard } from './presentation';
 import type { PublicNewsArticle, PublicNewsFeed } from './types';
 
 interface NewsPortalProps {
@@ -126,6 +127,7 @@ function FeedView({ route }: { readonly route: Extract<PublicNewsRoute, { kind: 
   const [feed, setFeed] = useState<PublicNewsFeed>(emptyFeed);
   const [loading, setLoading] = useState(true);
   const category = route.kind === 'CATEGORY' ? route.category : null;
+  const breaking = selectBreakingNewsCard(feed);
 
   useEffect(() => {
     let active = true;
@@ -146,7 +148,7 @@ function FeedView({ route }: { readonly route: Extract<PublicNewsRoute, { kind: 
   return (
     <>
       <CategoryNav active={category} />
-      {feed.breaking ? <BreakingBanner item={feed.breaking} /> : null}
+      {breaking ? <BreakingBanner item={breaking} /> : null}
       <main className="mx-auto max-w-7xl px-5 py-10 lg:px-8 lg:py-14">
         <div className="mb-10 max-w-3xl">
           <p className="text-xs font-semibold tracking-[0.28em] text-purple-300">INTELIGENCIA EDITORIAL VERIFICADA</p>

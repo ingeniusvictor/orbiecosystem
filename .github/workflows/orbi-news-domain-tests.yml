@@ -6,7 +6,7 @@ on:
       - feature/orbi-news-agent
     paths:
       - 'domain/**'
-      - 'server/news/**'
+      - 'server/**'
       - 'server.ts'
       - 'src/news/**'
       - 'src/App.tsx'

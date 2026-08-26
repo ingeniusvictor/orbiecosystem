@@ -5,3 +5,4 @@ export * from './policy';
 export * from './scoring';
 export * from './editorial-gate';
 export * from './control-center';
+export * from './editorial-queue';

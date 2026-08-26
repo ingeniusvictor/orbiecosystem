@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 
 import {
   RiskLevel,
+  RiskReason,
   SourceCredibilityBand,
   SourceRole,
   SourceType,
@@ -21,6 +22,10 @@ import {
   isEligiblePrimarySource,
   resolvePrimarySource,
 } from '../../domain/verification/source-policy';
+import {
+  classifyVerificationRisk,
+  mergeRiskClassifications,
+} from '../../domain/verification/risk-classifier';
 
 const now = '2026-08-26T05:00:00.000Z' as never;
 const organizationId = 'org-1' as never;
@@ -295,4 +300,49 @@ test('sensitive claim requires authoritative evidence', () => {
 
   assert.equal(assessment.satisfied, false);
   assert.ok(assessment.missing.includes('AUTHORITATIVE_SOURCE_REQUIRED'));
+});
+
+test('medical, privacy, and manipulated-media signals are critical risk', () => {
+  for (const reason of [
+    RiskReason.MEDICAL_CLAIM,
+    RiskReason.PRIVACY_CONCERN,
+    RiskReason.MANIPULATED_MEDIA,
+  ]) {
+    const classification = classifyVerificationRisk([{ reason }]);
+    assert.equal(classification.level, RiskLevel.CRITICAL);
+  }
+});
+
+test('financial, security, political, legal, reputation, and source conflict are high risk', () => {
+  for (const reason of [
+    RiskReason.FINANCIAL_CLAIM,
+    RiskReason.SECURITY_INCIDENT,
+    RiskReason.POLITICAL_CONTENT,
+    RiskReason.LEGAL_SENSITIVITY,
+    RiskReason.REPUTATIONAL_RISK,
+    RiskReason.SOURCE_CONFLICT,
+  ]) {
+    const classification = classifyVerificationRisk([{ reason }]);
+    assert.equal(classification.level, RiskLevel.HIGH);
+  }
+});
+
+test('risk classification deduplicates reasons and notes', () => {
+  const classification = classifyVerificationRisk([
+    { reason: RiskReason.RUMOR, note: 'Needs confirmation' },
+    { reason: RiskReason.RUMOR, note: 'Needs confirmation' },
+  ]);
+
+  assert.deepEqual(classification.reasons, [RiskReason.RUMOR]);
+  assert.deepEqual(classification.notes, ['Needs confirmation']);
+  assert.equal(classification.level, RiskLevel.MEDIUM);
+});
+
+test('merging risk classifications never downgrades an existing higher risk', () => {
+  const critical = classifyVerificationRisk([{ reason: RiskReason.MEDICAL_CLAIM }]);
+  const low = classifyVerificationRisk([{ reason: RiskReason.OTHER }]);
+  const merged = mergeRiskClassifications(critical, low);
+
+  assert.equal(merged.level, RiskLevel.CRITICAL);
+  assert.ok(merged.reasons.includes(RiskReason.MEDICAL_CLAIM));
 });

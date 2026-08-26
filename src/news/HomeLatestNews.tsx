@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import type { PublicNewsCard } from './types';
+import { selectHomeLatestNews } from './home-presentation';
 import { publicNewsRepository } from './repository';
 import { buildNewsArticlePath } from './routes';
-import { selectHomeLatestNews } from './home-presentation';
+import type { PublicNewsCard } from './types';
 
-const navigate = (href: string) => window.location.assign(href);
+const focusRing = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950';
 
 export default function HomeLatestNews() {
   const [items, setItems] = useState<readonly PublicNewsCard[]>([]);
@@ -41,22 +41,27 @@ export default function HomeLatestNews() {
               Hechos verificados sobre inteligencia artificial, tecnología, energía, automatización, ciencia y futuro, explicados con utilidad práctica.
             </p>
           </div>
-          <button
-            type="button"
-            onClick={() => navigate('/news')}
-            className="w-fit rounded-full border border-white/15 px-5 py-2.5 text-sm font-bold text-slate-100 transition hover:border-purple-400/60 hover:text-white"
+          <a
+            href="/news"
+            className={`w-fit rounded-full border border-white/15 px-5 py-2.5 text-sm font-bold text-slate-100 transition hover:border-purple-400/60 hover:text-white ${focusRing}`}
           >
             Ver todas las noticias
-          </button>
+          </a>
         </div>
 
         <div className="mt-9 grid gap-5 md:grid-cols-3">
           {items.map((item) => (
             <article key={item.id} className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04]">
-              <button type="button" onClick={() => navigate(buildNewsArticlePath(item.slug))} className="block h-full w-full text-left">
+              <a href={buildNewsArticlePath(item.slug)} className={`block h-full w-full text-left ${focusRing}`}>
                 <div className="aspect-video bg-gradient-to-br from-slate-900 via-slate-800 to-purple-950">
                   {item.imageUrl ? (
-                    <img src={item.imageUrl} alt={item.imageAlt} className="h-full w-full object-cover" loading="lazy" />
+                    <img
+                      src={item.imageUrl}
+                      alt={item.imageAlt}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
                   ) : null}
                 </div>
                 <div className="p-5">
@@ -67,7 +72,7 @@ export default function HomeLatestNews() {
                   <h3 className="mt-3 text-lg font-bold leading-snug text-white">{item.headline}</h3>
                   <p className="mt-3 line-clamp-3 text-sm leading-6 text-slate-400">{item.dek}</p>
                 </div>
-              </button>
+              </a>
             </article>
           ))}
         </div>

@@ -42,6 +42,7 @@ export interface CanonicalStorySection {
     | 'WHAT_HAPPENED'
     | 'WHY_IT_MATTERS'
     | 'PRACTICAL_IMPACT'
+    | 'ORBI_LENS'
     | 'FUTURE_OUTLOOK';
   readonly heading: string;
   readonly body: string;

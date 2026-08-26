@@ -4,3 +4,4 @@ export * from './resolver';
 export * from './update-classifier';
 export * from './consolidation';
 export * from './evidence-graph';
+export * from './resolution-policy';

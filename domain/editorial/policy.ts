@@ -2,7 +2,7 @@ import { RiskLevel, VerificationConfidence } from '../common/enums';
 import type { CanonicalStory } from './canonical-story';
 import { CanonicalStoryStatus } from './canonical-story';
 import type { SocialPackage } from './social-package';
-import { SOCIAL_COPY_HARD_LIMIT } from './social-package';
+import { evaluateSocialPackageLengthConsistency } from './social-length-policy';
 
 export enum EditorialDecision {
   ALLOW = 'ALLOW',
@@ -62,12 +62,13 @@ export const evaluateCanonicalStory = (story: CanonicalStory): EditorialPolicyRe
 
 export const validateSocialPackage = (socialPackage: SocialPackage): readonly string[] => {
   const errors: string[] = [];
-  const measured = [...socialPackage.copy].length;
+  const length = evaluateSocialPackageLengthConsistency(socialPackage);
 
   if (!socialPackage.socialHeadline.trim()) errors.push('Social headline is required.');
   if (!socialPackage.copy.trim()) errors.push('Social copy is required.');
-  if (measured !== socialPackage.characterCount) errors.push('Stored character count does not match copy length.');
-  if (measured > SOCIAL_COPY_HARD_LIMIT) errors.push('Social copy exceeds the 2200 character hard limit.');
+  if (!length.storedCountMatches) errors.push('Stored character count does not match copy length.');
+  if (!length.withinHardLimit) errors.push('Social copy exceeds the 2200 character hard limit.');
+  if (!length.statusCompatible) errors.push('Social package cannot be READY when copy exceeds the 2200 character hard limit.');
   if (socialPackage.imageAspectRatio !== '16:9') errors.push('V1 social image must use 16:9 aspect ratio.');
 
   return errors;

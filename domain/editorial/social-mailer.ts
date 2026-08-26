@@ -60,6 +60,13 @@ export interface CreateSocialMailerJobInput {
   readonly createdAt: IsoUtcDateTime;
 }
 
+export interface TransitionSocialMailerJobInput {
+  readonly job: SocialMailerJob;
+  readonly to: SocialEmailStatus;
+  readonly transitionedAt: IsoUtcDateTime;
+  readonly failureReason?: string | null;
+}
+
 const normalizeRequired = (label: string, value: string): string => {
   const normalized = value.trim();
   if (!normalized) throw new RangeError(`${label} is required.`);
@@ -133,4 +140,25 @@ export const canTransitionSocialEmailStatus = (
   };
 
   return allowed[from].includes(to);
+};
+
+/** Applies the mailer state machine; provider delivery itself remains outside domain. */
+export const transitionSocialMailerJob = (
+  input: TransitionSocialMailerJobInput,
+): SocialMailerJob => {
+  if (!canTransitionSocialEmailStatus(input.job.status, input.to)) {
+    throw new RangeError(`SOCIAL_MAIL_TRANSITION_NOT_ALLOWED:${input.job.status}->${input.to}`);
+  }
+
+  const failureReason = input.to === SocialEmailStatus.FAILED
+    ? normalizeRequired('Social mail failure reason', input.failureReason ?? '')
+    : null;
+
+  return {
+    ...input.job,
+    status: input.to,
+    updatedAt: input.transitionedAt,
+    sentAt: input.to === SocialEmailStatus.SENT ? input.transitionedAt : input.job.sentAt,
+    failureReason,
+  };
 };

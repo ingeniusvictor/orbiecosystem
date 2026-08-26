@@ -5,6 +5,7 @@ import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from "dotenv";
 import { createPublicNewsRouter } from "./server/news/routes";
 import { createPublicNewsService, emptyPublicNewsReader } from "./server/news/public-news-service";
+import { mountEditorialPrivateApiIfConfigured } from "./server/editorial/runtime-mount";
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ async function startServer() {
 
   const publicNewsService = createPublicNewsService(emptyPublicNewsReader);
   app.use("/api/news", createPublicNewsRouter(publicNewsService));
+  mountEditorialPrivateApiIfConfigured(app, process.env);
 
   // Initialize Gemini if key exists
   const apiKey = process.env.GEMINI_API_KEY;

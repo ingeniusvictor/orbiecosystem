@@ -5,6 +5,7 @@ import {
   RiskLevel,
   SourceCredibilityBand,
   SourceRole,
+  SourceType,
   VerificationConfidence,
   VerificationStatus,
 } from '../../domain/common/enums';
@@ -13,6 +14,13 @@ import {
   calculateClaimConfidenceScore,
   resolveVerificationStatus,
 } from '../../domain/verification/engine';
+import {
+  ClaimSensitivity,
+  assessCorroboration,
+  getCorroborationRequirement,
+  isEligiblePrimarySource,
+  resolvePrimarySource,
+} from '../../domain/verification/source-policy';
 
 const now = '2026-08-26T05:00:00.000Z' as never;
 const organizationId = 'org-1' as never;
@@ -169,4 +177,122 @@ test('global verification status cannot be verified if one claim is contradicted
   ]);
 
   assert.equal(status, VerificationStatus.CONTRADICTED);
+});
+
+test('high-quality media is not automatically an eligible primary source', () => {
+  const eligible = isEligiblePrimarySource({
+    sourceId: corroboratingSourceId,
+    sourceType: SourceType.PRIMARY_MEDIA,
+    credibilityBand: SourceCredibilityBand.AUTHORITATIVE,
+    role: SourceRole.PRIMARY,
+  });
+
+  assert.equal(eligible, false);
+});
+
+test('official authoritative source is eligible and preferred as primary', () => {
+  const resolved = resolvePrimarySource([
+    {
+      sourceId: corroboratingSourceId,
+      sourceType: SourceType.PRIMARY_MEDIA,
+      credibilityBand: SourceCredibilityBand.AUTHORITATIVE,
+      role: SourceRole.CORROBORATING,
+    },
+    {
+      sourceId: primarySourceId,
+      sourceType: SourceType.OFFICIAL,
+      credibilityBand: SourceCredibilityBand.AUTHORITATIVE,
+      role: SourceRole.PRIMARY,
+    },
+  ]);
+
+  assert.equal(resolved.primarySourceId, primarySourceId);
+});
+
+test('standard low-risk claim can proceed with one supporting source', () => {
+  const requirement = getCorroborationRequirement({
+    sensitivity: ClaimSensitivity.STANDARD,
+    riskLevel: RiskLevel.LOW,
+  });
+
+  const assessment = assessCorroboration({
+    requirement,
+    sources: [{
+      sourceId: corroboratingSourceId,
+      sourceType: SourceType.PRIMARY_MEDIA,
+      credibilityBand: SourceCredibilityBand.HIGH,
+      role: SourceRole.CORROBORATING,
+    }],
+  });
+
+  assert.equal(assessment.satisfied, true);
+});
+
+test('high-impact claim requires two sources and an eligible primary source', () => {
+  const requirement = getCorroborationRequirement({
+    sensitivity: ClaimSensitivity.HIGH_IMPACT,
+    riskLevel: RiskLevel.MEDIUM,
+  });
+
+  const insufficient = assessCorroboration({
+    requirement,
+    sources: [{
+      sourceId: corroboratingSourceId,
+      sourceType: SourceType.PRIMARY_MEDIA,
+      credibilityBand: SourceCredibilityBand.HIGH,
+      role: SourceRole.CORROBORATING,
+    }],
+  });
+
+  assert.equal(insufficient.satisfied, false);
+  assert.ok(insufficient.missing.includes('INSUFFICIENT_INDEPENDENT_SUPPORTING_SOURCES'));
+  assert.ok(insufficient.missing.includes('PRIMARY_SOURCE_REQUIRED'));
+
+  const sufficient = assessCorroboration({
+    requirement,
+    sources: [
+      {
+        sourceId: primarySourceId,
+        sourceType: SourceType.OFFICIAL,
+        credibilityBand: SourceCredibilityBand.HIGH,
+        role: SourceRole.PRIMARY,
+      },
+      {
+        sourceId: corroboratingSourceId,
+        sourceType: SourceType.PRIMARY_MEDIA,
+        credibilityBand: SourceCredibilityBand.HIGH,
+        role: SourceRole.CORROBORATING,
+      },
+    ],
+  });
+
+  assert.equal(sufficient.satisfied, true);
+});
+
+test('sensitive claim requires authoritative evidence', () => {
+  const requirement = getCorroborationRequirement({
+    sensitivity: ClaimSensitivity.SENSITIVE,
+    riskLevel: RiskLevel.HIGH,
+  });
+
+  const assessment = assessCorroboration({
+    requirement,
+    sources: [
+      {
+        sourceId: primarySourceId,
+        sourceType: SourceType.OFFICIAL,
+        credibilityBand: SourceCredibilityBand.HIGH,
+        role: SourceRole.PRIMARY,
+      },
+      {
+        sourceId: corroboratingSourceId,
+        sourceType: SourceType.PRIMARY_MEDIA,
+        credibilityBand: SourceCredibilityBand.HIGH,
+        role: SourceRole.CORROBORATING,
+      },
+    ],
+  });
+
+  assert.equal(assessment.satisfied, false);
+  assert.ok(assessment.missing.includes('AUTHORITATIVE_SOURCE_REQUIRED'));
 });

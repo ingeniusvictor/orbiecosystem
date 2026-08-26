@@ -21,7 +21,8 @@ const hasRequiredSections = (story: CanonicalStory): boolean => {
     keys.has('SUMMARY') &&
     keys.has('WHAT_HAPPENED') &&
     keys.has('WHY_IT_MATTERS') &&
-    keys.has('PRACTICAL_IMPACT')
+    keys.has('PRACTICAL_IMPACT') &&
+    keys.has('ORBI_LENS')
   );
 };
 

@@ -1,9 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
+import { SourceCredibilityBand } from '../../domain/common/enums';
 import {
+  EventChangeClassification,
+  EventChangeSignalType,
   EventResolutionOutcome,
   EventType,
+  assessEventChange,
   buildEventFingerprint,
   calculateEventSimilarityScore,
   resolveEventCandidate,
@@ -143,4 +147,64 @@ test('resolver deterministically selects the highest scoring candidate', () => {
 
   assert.equal(result.candidateEventId, eventId);
   assert.equal(result.proposedOutcome, EventResolutionOutcome.SAME_EVENT);
+});
+
+test('explicit factual state change is classified as MATERIAL_UPDATE', () => {
+  const result = assessEventChange([{
+    type: EventChangeSignalType.CONFIRMED_DATE_CHANGE,
+    sourceCredibilityBand: SourceCredibilityBand.AUTHORITATIVE,
+  }]);
+
+  assert.equal(result.classification, EventChangeClassification.MATERIAL_UPDATE);
+  assert.deepEqual(result.materialSignals, [EventChangeSignalType.CONFIRMED_DATE_CHANGE]);
+});
+
+test('new context alone is not a material update', () => {
+  const result = assessEventChange([{
+    type: EventChangeSignalType.NEW_CONTEXT,
+    sourceCredibilityBand: SourceCredibilityBand.HIGH,
+  }]);
+
+  assert.equal(result.classification, EventChangeClassification.NO_MATERIAL_CHANGE);
+});
+
+test('authoritative official denial is classified as CONTRADICTION, not update', () => {
+  const result = assessEventChange([
+    {
+      type: EventChangeSignalType.STATUS_CHANGE,
+      sourceCredibilityBand: SourceCredibilityBand.HIGH,
+    },
+    {
+      type: EventChangeSignalType.OFFICIAL_DENIAL,
+      sourceCredibilityBand: SourceCredibilityBand.AUTHORITATIVE,
+    },
+  ]);
+
+  assert.equal(result.classification, EventChangeClassification.CONTRADICTION);
+  assert.ok(result.reasons.includes('AUTHORITATIVE_EVENT_CONTRADICTION'));
+});
+
+test('non-authoritative contradiction requires human review', () => {
+  const result = assessEventChange([{
+    type: EventChangeSignalType.FACTUAL_CONTRADICTION,
+    sourceCredibilityBand: SourceCredibilityBand.HIGH,
+  }]);
+
+  assert.equal(result.classification, EventChangeClassification.REQUIRE_HUMAN_REVIEW);
+});
+
+test('mixed material update and non-authoritative contradiction requires human review', () => {
+  const result = assessEventChange([
+    {
+      type: EventChangeSignalType.PRICE_CHANGE,
+      sourceCredibilityBand: SourceCredibilityBand.HIGH,
+    },
+    {
+      type: EventChangeSignalType.FACTUAL_CONTRADICTION,
+      sourceCredibilityBand: SourceCredibilityBand.HIGH,
+    },
+  ]);
+
+  assert.equal(result.classification, EventChangeClassification.REQUIRE_HUMAN_REVIEW);
+  assert.ok(result.reasons.includes('MIXED_UPDATE_AND_CONTRADICTION_SIGNALS'));
 });

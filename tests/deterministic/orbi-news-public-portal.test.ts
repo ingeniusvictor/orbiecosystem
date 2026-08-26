@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import { ContentCategory } from '../../domain/common/enums';
+import { HOME_NEWS_LIMIT, selectHomeLatestNews } from '../../src/news/home-presentation';
 import { selectBreakingNewsCard } from '../../src/news/presentation';
 import {
   buildNewsArticlePath,
@@ -81,6 +82,30 @@ test('breaking banner selector requires explicit isBreaking true', () => {
   const malformedBreaking = { ...article, isBreaking: false };
   const malformedFeed: PublicNewsFeed = { items: [malformedBreaking], breaking: malformedBreaking };
   assert.equal(selectBreakingNewsCard(malformedFeed), null);
+});
+
+test('home latest news is capped at three published cards and preserves API ordering', () => {
+  const base = publishedArticle();
+  const items = [1, 2, 3, 4, 5].map((index) => ({
+    ...base,
+    id: `story-${index}`,
+    slug: `story-${index}`,
+    headline: `Story ${index}`,
+  }));
+  const feed: PublicNewsFeed = { items, breaking: null };
+
+  const selected = selectHomeLatestNews(feed);
+  assert.equal(HOME_NEWS_LIMIT, 3);
+  assert.deepEqual(selected.map((item) => item.id), ['story-1', 'story-2', 'story-3']);
+});
+
+test('home latest news cannot be expanded beyond its editorial maximum', () => {
+  const base = publishedArticle();
+  const items = [1, 2, 3, 4].map((index) => ({ ...base, id: `story-${index}`, slug: `story-${index}` }));
+  const feed: PublicNewsFeed = { items, breaking: null };
+
+  assert.equal(selectHomeLatestNews(feed, 99).length, HOME_NEWS_LIMIT);
+  assert.equal(selectHomeLatestNews(feed, 1).length, 1);
 });
 
 test('dynamic article SEO is derived from the published PublicNewsArticle', () => {

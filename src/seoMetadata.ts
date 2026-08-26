@@ -67,6 +67,20 @@ const pbmetricsSoftwareApplication = {
   },
 };
 
+const newsCollection = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "ORBI News",
+  url: `${siteUrl}/news`,
+  description:
+    "Noticias verificadas sobre inteligencia artificial, tecnologia, energia, automatizacion, ciencia y futuro con foco practico.",
+  publisher: {
+    "@type": "Organization",
+    name: siteName,
+    url: `${siteUrl}/`,
+  },
+};
+
 function createSocialMetadata({
   title,
   description,
@@ -95,6 +109,9 @@ function createSocialMetadata({
 const climateDescription =
   "Explainable AI for identifying recoverable photovoltaic losses, prioritizing maintenance and verifying recovered clean energy.";
 
+const newsDescription =
+  "ORBI News explica inteligencia artificial, tecnologia, energia, automatizacion, ciencia y futuro a partir de historias verificadas y con utilidad practica.";
+
 const routeMetadata = {
   home: {
     lang: "es",
@@ -109,6 +126,19 @@ const routeMetadata = {
       url: `${siteUrl}/`,
     }),
     structuredData: [organization, website],
+    socialImageStatus,
+  },
+  news: {
+    lang: "es",
+    title: "ORBI News | Inteligencia y tecnologia verificadas",
+    description: newsDescription,
+    canonical: `${siteUrl}/news`,
+    ...createSocialMetadata({
+      title: "ORBI News | Inteligencia y tecnologia verificadas",
+      description: newsDescription,
+      url: `${siteUrl}/news`,
+    }),
+    structuredData: [newsCollection],
     socialImageStatus,
   },
   climateRecovery: {
@@ -172,13 +202,14 @@ const routeMetadata = {
   },
 } as const satisfies {
   home: SeoRouteMetadata;
+  news: SeoRouteMetadata;
   climateRecovery: Record<ClimateLocale, SeoRouteMetadata>;
   pbmetrics: SeoRouteMetadata;
 };
 
-export function getSeoRouteMetadata(route: "home" | "pbmetrics"): SeoRouteMetadata;
+export function getSeoRouteMetadata(route: "home" | "news" | "pbmetrics"): SeoRouteMetadata;
 export function getSeoRouteMetadata(route: "climateRecovery", locale: ClimateLocale): SeoRouteMetadata;
-export function getSeoRouteMetadata(route: "home" | "climateRecovery" | "pbmetrics", locale: ClimateLocale = "es") {
+export function getSeoRouteMetadata(route: "home" | "news" | "climateRecovery" | "pbmetrics", locale: ClimateLocale = "es") {
   if (route === "climateRecovery") {
     return routeMetadata.climateRecovery[locale];
   }
@@ -188,6 +219,7 @@ export function getSeoRouteMetadata(route: "home" | "climateRecovery" | "pbmetri
 
 export const seoPublicRoutes = [
   `${siteUrl}/`,
+  `${siteUrl}/news`,
   `${siteUrl}/climate-recovery`,
   `${siteUrl}/climate-recovery/en`,
   `${siteUrl}/projects/orbi-pbmetrics`,

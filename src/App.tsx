@@ -20,6 +20,7 @@ import ClimateRecoveryLanding from "./components/ClimateRecoveryLanding";
 import OrbiPBMetricsPage from "./components/projects/OrbiPBMetricsPage";
 import NewsPortal from "./news/NewsPortal";
 import HomeLatestNews from "./news/HomeLatestNews";
+import EditorialControlCenter from "./editorial/EditorialControlCenter";
 import { parsePublicNewsRoute } from "./news/routes";
 import type { ClimateLocale } from "./content/competition";
 import { getSeoRouteMetadata, type SeoRouteMetadata } from "./seoMetadata";
@@ -63,6 +64,7 @@ function applyRouteMetadata(metadata: SeoRouteMetadata) {
   document.documentElement.lang = metadata.lang;
   document.title = metadata.title;
   upsertManagedMeta("description", { name: "description", content: metadata.description });
+  upsertManagedMeta("robots", { name: "robots", content: metadata.robots ?? "index,follow" });
   upsertManagedLink("canonical", { rel: "canonical", href: metadata.canonical });
 
   document.querySelectorAll<HTMLLinkElement>('link[data-orbi-managed^="alternate-"]').forEach((link) => link.remove());
@@ -107,6 +109,7 @@ export default function App() {
   const climateRecoveryLocale: ClimateLocale = isClimateRecoveryEnglishRoute ? "en" : "es";
   const isPBMetricsRoute = normalizedPath === "/projects/orbi-pbmetrics";
   const isNewsRoute = normalizedPath === "/news" || normalizedPath.startsWith("/news/");
+  const isEditorialRoute = normalizedPath === "/editorial";
   const newsRoute = isNewsRoute ? parsePublicNewsRoute(normalizedPath) : null;
   const shouldShowDevPanel = Boolean((import.meta as unknown as { env?: { DEV?: boolean } }).env?.DEV);
   const [activeSection, setActiveSection] = useState("hero");
@@ -152,7 +155,7 @@ export default function App() {
   };
 
   useEffect(() => {
-    if (isClimateRecoveryRoute || isPBMetricsRoute || isNewsRoute) return;
+    if (isClimateRecoveryRoute || isPBMetricsRoute || isNewsRoute || isEditorialRoute) return;
 
     const handleScroll = () => {
       const sections = ["hero", "ecosistema-mirada", "ecosistema", "foton-prime", "divisiones", "proyectos", "roadmap"];
@@ -173,7 +176,7 @@ export default function App() {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isClimateRecoveryRoute, isNewsRoute, isPBMetricsRoute]);
+  }, [isClimateRecoveryRoute, isEditorialRoute, isNewsRoute, isPBMetricsRoute]);
 
   useEffect(() => {
     if (isClimateRecoveryRoute) {
@@ -191,8 +194,13 @@ export default function App() {
       return;
     }
 
+    if (isEditorialRoute) {
+      applyRouteMetadata(getSeoRouteMetadata("editorial"));
+      return;
+    }
+
     applyRouteMetadata(getSeoRouteMetadata("home"));
-  }, [climateRecoveryLocale, isClimateRecoveryRoute, isNewsRoute, isPBMetricsRoute]);
+  }, [climateRecoveryLocale, isClimateRecoveryRoute, isEditorialRoute, isNewsRoute, isPBMetricsRoute]);
 
   if (isClimateRecoveryRoute) {
     return <ClimateRecoveryLanding locale={climateRecoveryLocale} />;
@@ -204,6 +212,10 @@ export default function App() {
 
   if (newsRoute) {
     return <NewsPortal route={newsRoute} onMetadataChange={applyRouteMetadata} />;
+  }
+
+  if (isEditorialRoute) {
+    return <EditorialControlCenter />;
   }
 
   return (

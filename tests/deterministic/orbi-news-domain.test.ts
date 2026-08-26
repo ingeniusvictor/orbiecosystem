@@ -64,6 +64,7 @@ const baseStory = (): CanonicalStory => ({
     { key: 'WHAT_HAPPENED', heading: 'What happened', body: 'Facts' },
     { key: 'WHY_IT_MATTERS', heading: 'Why it matters', body: 'Impact' },
     { key: 'PRACTICAL_IMPACT', heading: 'Practical impact', body: 'Use' },
+    { key: 'ORBI_LENS', heading: 'ORBI lens', body: 'Educational perspective' },
   ],
   sourceRefs: [{ label: 'Primary', url: 'https://example.com/source', isPrimary: true }],
   verificationConfidence: VerificationConfidence.HIGH,

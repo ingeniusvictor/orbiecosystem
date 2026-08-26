@@ -2,6 +2,7 @@ import type { Express } from 'express';
 import { createHmacEditorialIdentityResolver } from './hmac-identity-provider';
 import { createEditorialPrivateApi } from './private-api';
 import type { EditorialQueueReader } from './control-center-read-service';
+import type { EditorialMutationUnitOfWork } from './mutation-command-service';
 
 export interface EditorialRuntimeEnvironment {
   readonly ORBI_EDITORIAL_AUTH_SECRET?: string;
@@ -9,6 +10,7 @@ export interface EditorialRuntimeEnvironment {
 
 export interface EditorialRuntimeMountOptions {
   readonly reader?: EditorialQueueReader;
+  readonly mutationUnitOfWork?: EditorialMutationUnitOfWork;
 }
 
 export const mountEditorialPrivateApiIfConfigured = (
@@ -22,6 +24,7 @@ export const mountEditorialPrivateApiIfConfigured = (
   const identityResolver = createHmacEditorialIdentityResolver({ secret });
   app.use('/api/editorial', createEditorialPrivateApi({
     reader: options.reader,
+    mutationUnitOfWork: options.mutationUnitOfWork,
     identityResolver,
   }));
   return true;

@@ -1,12 +1,18 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ContentCategory } from '../../domain/common/enums';
 import Footer from '../components/Footer';
+import {
+  buildNewsArticleSeoMetadata,
+  getSeoRouteMetadata,
+  type SeoRouteMetadata,
+} from '../seoMetadata';
 import { buildNewsArticlePath, buildNewsCategoryPath, type PublicNewsRoute } from './routes';
 import { publicNewsRepository } from './repository';
 import type { PublicNewsArticle, PublicNewsFeed } from './types';
 
 interface NewsPortalProps {
   readonly route: PublicNewsRoute;
+  readonly onMetadataChange?: (metadata: SeoRouteMetadata) => void;
 }
 
 const emptyFeed: PublicNewsFeed = { items: [], breaking: null };
@@ -61,6 +67,26 @@ function CategoryNav({ active }: { readonly active: ContentCategory | null }) {
         ))}
       </div>
     </nav>
+  );
+}
+
+function BreakingBanner({ item }: { readonly item: NonNullable<PublicNewsFeed['breaking']> }) {
+  return (
+    <aside aria-label="Breaking ORBI News" className="border-b border-red-400/20 bg-red-950/30">
+      <button
+        type="button"
+        onClick={() => navigate(buildNewsArticlePath(item.slug))}
+        className="mx-auto flex w-full max-w-7xl flex-col gap-2 px-5 py-4 text-left sm:flex-row sm:items-center sm:gap-4 lg:px-8"
+      >
+        <span className="w-fit rounded-full border border-red-400/40 bg-red-400/10 px-2.5 py-1 text-[11px] font-black uppercase tracking-[0.2em] text-red-300">
+          Breaking
+        </span>
+        <span className="text-sm font-bold leading-6 text-white">{item.headline}</span>
+        <span className="text-xs font-semibold uppercase tracking-[0.16em] text-red-200/70 sm:ml-auto">
+          {categoryLabel(item.category)}
+        </span>
+      </button>
+    </aside>
   );
 }
 
@@ -120,6 +146,7 @@ function FeedView({ route }: { readonly route: Extract<PublicNewsRoute, { kind: 
   return (
     <>
       <CategoryNav active={category} />
+      {feed.breaking ? <BreakingBanner item={feed.breaking} /> : null}
       <main className="mx-auto max-w-7xl px-5 py-10 lg:px-8 lg:py-14">
         <div className="mb-10 max-w-3xl">
           <p className="text-xs font-semibold tracking-[0.28em] text-purple-300">INTELIGENCIA EDITORIAL VERIFICADA</p>
@@ -145,18 +172,27 @@ function FeedView({ route }: { readonly route: Extract<PublicNewsRoute, { kind: 
   );
 }
 
-function ArticleView({ slug }: { readonly slug: string }) {
+function ArticleView({
+  slug,
+  onMetadataChange,
+}: {
+  readonly slug: string;
+  readonly onMetadataChange?: (metadata: SeoRouteMetadata) => void;
+}) {
   const [article, setArticle] = useState<PublicNewsArticle | null | undefined>(undefined);
 
   useEffect(() => {
     let active = true;
+    onMetadataChange?.(getSeoRouteMetadata('news'));
     publicNewsRepository.findBySlug(slug).then((result) => {
-      if (active) setArticle(result);
+      if (!active) return;
+      setArticle(result);
+      onMetadataChange?.(result ? buildNewsArticleSeoMetadata(result) : getSeoRouteMetadata('news'));
     });
     return () => {
       active = false;
     };
-  }, [slug]);
+  }, [onMetadataChange, slug]);
 
   if (article === undefined) {
     return <main className="mx-auto max-w-4xl px-5 py-20 text-center text-slate-400">Cargando artículo…</main>;
@@ -207,17 +243,17 @@ function ArticleView({ slug }: { readonly slug: string }) {
   );
 }
 
-export default function NewsPortal({ route }: NewsPortalProps) {
+export default function NewsPortal({ route, onMetadataChange }: NewsPortalProps) {
   const content = useMemo(() => {
     if (route.kind === 'INDEX' || route.kind === 'CATEGORY') return <FeedView route={route} />;
-    if (route.kind === 'ARTICLE') return <ArticleView slug={route.slug} />;
+    if (route.kind === 'ARTICLE') return <ArticleView slug={route.slug} onMetadataChange={onMetadataChange} />;
     return (
       <main className="mx-auto max-w-4xl px-5 py-20 text-center">
         <h1 className="text-3xl font-black text-white">Ruta de noticias no encontrada</h1>
         <button type="button" onClick={() => navigate('/news')} className="mt-8 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-slate-950">Ir a ORBI News</button>
       </main>
     );
-  }, [route]);
+  }, [onMetadataChange, route]);
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 antialiased">

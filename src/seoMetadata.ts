@@ -1,4 +1,5 @@
 import type { ClimateLocale } from "./content/competition";
+import type { PublicNewsArticle } from "./news/types";
 
 const siteUrl = "https://orbiecosystem.vercel.app";
 const siteName = "ORBI Ecosystem SpA";
@@ -12,7 +13,7 @@ export type SeoRouteMetadata = {
   openGraph: {
     title: string;
     description: string;
-    type: "website";
+    type: "website" | "article";
     url: string;
     siteName: string;
     image?: string;
@@ -85,23 +86,29 @@ function createSocialMetadata({
   title,
   description,
   url,
+  image,
+  type = "website",
 }: {
   title: string;
   description: string;
   url: string;
+  image?: string;
+  type?: "website" | "article";
 }) {
   return {
     openGraph: {
       title,
       description,
-      type: "website" as const,
+      type,
       url,
       siteName,
+      ...(image ? { image } : {}),
     },
     twitter: {
       card: "summary_large_image" as const,
       title,
       description,
+      ...(image ? { image } : {}),
     },
   };
 }
@@ -205,6 +212,44 @@ const routeMetadata = {
   news: SeoRouteMetadata;
   climateRecovery: Record<ClimateLocale, SeoRouteMetadata>;
   pbmetrics: SeoRouteMetadata;
+};
+
+export const buildNewsArticleSeoMetadata = (article: PublicNewsArticle): SeoRouteMetadata => {
+  const canonical = `${siteUrl}/news/${article.slug}`;
+  const title = `${article.headline} | ORBI News`;
+  const category = article.category.replaceAll("_", " ");
+  const structuredData: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: article.headline,
+    description: article.dek,
+    datePublished: article.publishedAt,
+    dateModified: article.publishedAt,
+    articleSection: category,
+    mainEntityOfPage: canonical,
+    publisher: {
+      "@type": "Organization",
+      name: siteName,
+      url: `${siteUrl}/`,
+    },
+    ...(article.imageUrl ? { image: [article.imageUrl] } : {}),
+  };
+
+  return {
+    lang: "es",
+    title,
+    description: article.dek,
+    canonical,
+    ...createSocialMetadata({
+      title: article.headline,
+      description: article.dek,
+      url: canonical,
+      image: article.imageUrl ?? undefined,
+      type: "article",
+    }),
+    structuredData: [structuredData],
+    socialImageStatus,
+  };
 };
 
 export function getSeoRouteMetadata(route: "home" | "news" | "pbmetrics"): SeoRouteMetadata;

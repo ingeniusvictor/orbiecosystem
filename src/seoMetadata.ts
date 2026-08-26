@@ -10,6 +10,7 @@ export type SeoRouteMetadata = {
   title: string;
   description: string;
   canonical: string;
+  robots?: "index,follow" | "noindex,nofollow";
   openGraph: {
     title: string;
     description: string;
@@ -119,6 +120,9 @@ const climateDescription =
 const newsDescription =
   "ORBI News explica inteligencia artificial, tecnologia, energia, automatizacion, ciencia y futuro a partir de historias verificadas y con utilidad practica.";
 
+const editorialDescription =
+  "Consola editorial privada de ORBI News para revisión operacional de historias, gates y autoridad de acciones.";
+
 const routeMetadata = {
   home: {
     lang: "es",
@@ -146,6 +150,20 @@ const routeMetadata = {
       url: `${siteUrl}/news`,
     }),
     structuredData: [newsCollection],
+    socialImageStatus,
+  },
+  editorial: {
+    lang: "es",
+    title: "ORBI News Editorial Control Center",
+    description: editorialDescription,
+    canonical: `${siteUrl}/editorial`,
+    robots: "noindex,nofollow",
+    ...createSocialMetadata({
+      title: "ORBI News Editorial Control Center",
+      description: editorialDescription,
+      url: `${siteUrl}/editorial`,
+    }),
+    structuredData: [],
     socialImageStatus,
   },
   climateRecovery: {
@@ -210,6 +228,7 @@ const routeMetadata = {
 } as const satisfies {
   home: SeoRouteMetadata;
   news: SeoRouteMetadata;
+  editorial: SeoRouteMetadata;
   climateRecovery: Record<ClimateLocale, SeoRouteMetadata>;
   pbmetrics: SeoRouteMetadata;
 };
@@ -252,9 +271,9 @@ export const buildNewsArticleSeoMetadata = (article: PublicNewsArticle): SeoRout
   };
 };
 
-export function getSeoRouteMetadata(route: "home" | "news" | "pbmetrics"): SeoRouteMetadata;
+export function getSeoRouteMetadata(route: "home" | "news" | "editorial" | "pbmetrics"): SeoRouteMetadata;
 export function getSeoRouteMetadata(route: "climateRecovery", locale: ClimateLocale): SeoRouteMetadata;
-export function getSeoRouteMetadata(route: "home" | "news" | "climateRecovery" | "pbmetrics", locale: ClimateLocale = "es") {
+export function getSeoRouteMetadata(route: "home" | "news" | "editorial" | "climateRecovery" | "pbmetrics", locale: ClimateLocale = "es") {
   if (route === "climateRecovery") {
     return routeMetadata.climateRecovery[locale];
   }

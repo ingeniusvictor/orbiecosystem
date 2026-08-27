@@ -1,7 +1,7 @@
 # ADR-085 — Full Production Runtime Gate
 
 ## Status
-Accepted — NA-11.9 final gate candidate.
+Accepted — NA-11.9 PASS / NA-11 CLOSED.
 
 ## Decision
 NA-11 closes only if the combined production runtime contracts prove these invariants together:
@@ -14,7 +14,9 @@ NA-11 closes only if the combined production runtime contracts prove these invar
 6. Missing handlers fail closed and never simulate success.
 7. Scheduler transport authentication is mandatory.
 
+The final CI gate passed after TypeScript validation and the full deterministic suite completed successfully.
+
 ## Boundary
 A PASS here means the production runtime composition is ready for controlled deployment configuration. It does **not** mean a commercial web-search provider, email provider, Cloud Scheduler job, IAM/OIDC binding, Cloud Run deployment, or autonomous publication has been activated.
 
-External provider activation remains `NOT_CONFIGURED` until credentials, vendor selection, source registry data and deployment infrastructure are supplied explicitly.
+External provider activation remains `NOT_CONFIGURED` until credentials, vendor selection, source registry data and deployment infrastructure are supplied explicitly. Those are activation/deployment inputs, not missing NA-11 domain/runtime code.

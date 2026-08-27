@@ -7,6 +7,7 @@ export enum ControlledActivationProfile {
   DISABLED = 'DISABLED',
   DISCOVERY_ONLY = 'DISCOVERY_ONLY',
   EDITORIAL_ASSISTED = 'EDITORIAL_ASSISTED',
+  WEB_AUTONOMOUS = 'WEB_AUTONOMOUS',
 }
 
 export interface ControlledActivationAssessment {
@@ -22,6 +23,12 @@ export const ORBI_CONTROLLED_ACTIVATION_ACTIONS: Readonly<Record<ControlledActiv
     OperationalAction.DISCOVER_NEWS,
     OperationalAction.VERIFY_NEWS,
     OperationalAction.GENERATE_DRAFT,
+  ],
+  [ControlledActivationProfile.WEB_AUTONOMOUS]: [
+    OperationalAction.DISCOVER_NEWS,
+    OperationalAction.VERIFY_NEWS,
+    OperationalAction.GENERATE_DRAFT,
+    OperationalAction.PUBLISH_WEB,
   ],
 };
 
@@ -67,10 +74,24 @@ const assessExactProfile = ({
   return reasons;
 };
 
+const commonEditorialToggles = [
+  AutomationToggle.AUTO_DISCOVERY,
+  AutomationToggle.AUTO_VERIFICATION,
+  AutomationToggle.AUTO_DRAFT,
+] as const;
+const commonEditorialCapabilities = [
+  SystemCapability.NEWS_DISCOVERY,
+  SystemCapability.WEB_RESEARCH,
+  SystemCapability.VERIFICATION,
+  SystemCapability.EVENT_INTELLIGENCE,
+  SystemCapability.SCORING,
+  SystemCapability.EDITORIAL_GENERATION,
+] as const;
+
 /**
  * Controlled activation is exact allow-list configuration, not a minimum.
- * EDITORIAL_ASSISTED permits discovery, verification and draft generation only;
- * publication, email and social automation remain forbidden.
+ * WEB_AUTONOMOUS is operator authorization for deterministic low-risk web
+ * publication only; email/social/image automation remain separate and forbidden.
  */
 export const assessControlledActivationProfile = ({
   profile,
@@ -85,34 +106,29 @@ export const assessControlledActivationProfile = ({
     return { profile, ready: !runtime.enabled, reasons: runtime.enabled ? ['ACTIVATION_PROFILE_DISABLED_RUNTIME_ENABLED'] : [] };
   }
 
-  const reasons = profile === ControlledActivationProfile.DISCOVERY_ONLY
-    ? assessExactProfile({
-        prefix: 'DISCOVERY_ONLY',
-        runtime,
-        authorityEnvironment,
-        autonomyLevel: AutonomyLevel.LEVEL_1,
-        requiredToggles: [AutomationToggle.AUTO_DISCOVERY],
-        requiredCapabilities: [SystemCapability.NEWS_DISCOVERY],
-      })
-    : assessExactProfile({
-        prefix: 'EDITORIAL_ASSISTED',
-        runtime,
-        authorityEnvironment,
-        autonomyLevel: AutonomyLevel.LEVEL_3,
-        requiredToggles: [
-          AutomationToggle.AUTO_DISCOVERY,
-          AutomationToggle.AUTO_VERIFICATION,
-          AutomationToggle.AUTO_DRAFT,
-        ],
-        requiredCapabilities: [
-          SystemCapability.NEWS_DISCOVERY,
-          SystemCapability.WEB_RESEARCH,
-          SystemCapability.VERIFICATION,
-          SystemCapability.EVENT_INTELLIGENCE,
-          SystemCapability.SCORING,
-          SystemCapability.EDITORIAL_GENERATION,
-        ],
-      });
+  let reasons: readonly string[];
+  if (profile === ControlledActivationProfile.DISCOVERY_ONLY) {
+    reasons = assessExactProfile({
+      prefix: 'DISCOVERY_ONLY', runtime, authorityEnvironment,
+      autonomyLevel: AutonomyLevel.LEVEL_1,
+      requiredToggles: [AutomationToggle.AUTO_DISCOVERY],
+      requiredCapabilities: [SystemCapability.NEWS_DISCOVERY],
+    });
+  } else if (profile === ControlledActivationProfile.EDITORIAL_ASSISTED) {
+    reasons = assessExactProfile({
+      prefix: 'EDITORIAL_ASSISTED', runtime, authorityEnvironment,
+      autonomyLevel: AutonomyLevel.LEVEL_3,
+      requiredToggles: commonEditorialToggles,
+      requiredCapabilities: commonEditorialCapabilities,
+    });
+  } else {
+    reasons = assessExactProfile({
+      prefix: 'WEB_AUTONOMOUS', runtime, authorityEnvironment,
+      autonomyLevel: AutonomyLevel.LEVEL_5,
+      requiredToggles: [...commonEditorialToggles, AutomationToggle.AUTO_PUBLISH_WEB],
+      requiredCapabilities: [...commonEditorialCapabilities, SystemCapability.PUBLIC_NEWS_PORTAL],
+    });
+  }
 
   return { profile, ready: reasons.length === 0, reasons };
 };

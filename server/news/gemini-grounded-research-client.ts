@@ -175,7 +175,6 @@ export const createGeminiGroundedResearchClient = (
           tools: [{ googleSearch: {} }],
           responseMimeType: 'application/json',
           responseSchema: RESPONSE_SCHEMA as never,
-          temperature: 0.1,
         },
       });
 

@@ -22,12 +22,13 @@ const parseEnumList = <T extends string>(
 ): readonly T[] => {
   const value = raw?.trim();
   if (!value) return [];
-  const parts = value.split(',').map((part) => part.trim()).filter(Boolean);
-  const unique = [...new Set(parts)];
-  for (const part of unique) {
+  const parts = [...new Set(value.split(',').map((part) => part.trim()).filter(Boolean))];
+  const resolved: T[] = [];
+  for (const part of parts) {
     if (!allowed.includes(part as T)) throw new RangeError(`${label}_INVALID_${part}`);
+    resolved.push(part as T);
   }
-  return unique as readonly T[];
+  return resolved;
 };
 
 const parseNonNegativeInteger = (label: string, raw: string | undefined, fallback: number): number => {

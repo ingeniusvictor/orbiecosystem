@@ -4,3 +4,4 @@ export * from './execution-lease';
 export * from './operational-run';
 export * from './operational-metrics';
 export * from './operational-health-policy';
+export * from './health-constrained-authority';

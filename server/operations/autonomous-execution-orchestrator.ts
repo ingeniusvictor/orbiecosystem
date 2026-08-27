@@ -50,6 +50,8 @@ const JOB_ACTION: Readonly<Record<SchedulerJob, OperationalAction>> = {
   [SchedulerJob.BREAKING_SOCIAL]: OperationalAction.PREPARE_SOCIAL,
 };
 
+export const getAutonomousActionForSchedulerJob = (job: SchedulerJob): OperationalAction => JOB_ACTION[job];
+
 const required = (label: string, value: string): string => {
   const normalized = value.trim();
   if (!normalized) throw new RangeError(`${label} is required.`);
@@ -67,7 +69,7 @@ export const createAutonomousExecutionOrchestrator = ({ leasePersistence, handle
 }) => ({
   async execute(input: AutonomousExecutionInput): Promise<AutonomousExecutionResult> {
     const workerId = required('Autonomous worker id', input.workerId);
-    if (JOB_ACTION[input.job] !== input.action) throw new RangeError('AUTONOMOUS_JOB_ACTION_MISMATCH');
+    if (getAutonomousActionForSchedulerJob(input.job) !== input.action) throw new RangeError('AUTONOMOUS_JOB_ACTION_MISMATCH');
 
     const scheduler = evaluateSchedulerTick({
       job: input.job,

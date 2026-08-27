@@ -20,6 +20,8 @@ const productionEnvironment = () => ({
   ORBI_EDITORIAL_FIRESTORE_ENABLED: 'true',
   ORBI_EDITORIAL_FIRESTORE_PROJECT_ID: 'orbi-prod',
   ORBI_NEWS_SCHEDULER_TOKEN: TOKEN,
+  ORBI_NEWS_ENABLED_TOGGLES: '',
+  ORBI_NEWS_AVAILABLE_CAPABILITIES: '',
 });
 
 test('FULL GATE: production runtime is disabled and non-authoritative by default', () => {

@@ -12,7 +12,11 @@ import type {
 } from '../../domain/common/types';
 import { EventStatus, type EventRecord } from '../../domain/events/event';
 import type { SourceRegistryEntry, SourceRegistryRepository } from '../../domain/discovery/source-registry';
-import { buildVerificationResearchPlan, evaluateVerificationResearchProgress } from '../../domain/verification/research-strategy';
+import {
+  VerificationResearchDecision,
+  buildVerificationResearchPlan,
+  evaluateVerificationResearchProgress,
+} from '../../domain/verification/research-strategy';
 import { verificationConfidenceFromScore } from '../../domain/verification/policy';
 import type { VerificationEvidence, VerificationRecord } from '../../domain/verification/verification';
 import type { VerifiedEditorialClaim, VerifiedEditorialSource } from '../../domain/editorial/canonical-story-builder';
@@ -111,7 +115,7 @@ const mapAssessment = async ({
   const hasContradiction = acceptedEvidence.some(({ item }) => item.stance === 'CONTRADICTING');
   const status = hasContradiction
     ? VerificationStatus.CONTRADICTED
-    : researchProgress.decision === 'STOP_SUFFICIENT'
+    : researchProgress.decision === VerificationResearchDecision.STOP_SUFFICIENT
       ? VerificationStatus.VERIFIED
       : VerificationStatus.PARTIALLY_VERIFIED;
 
@@ -195,7 +199,7 @@ const mapAssessment = async ({
     if (item.stance !== 'SUPPORTING' || uniqueSourceIds.has(source.id)) continue;
     uniqueSourceIds.add(source.id);
     verifiedSources.push({
-      sourceKey: String(source.id),
+      sourceKey: normalizeHost(source.domain),
       label: source.name,
       url: item.url,
       isPrimary: source.id === primary,

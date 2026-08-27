@@ -46,7 +46,8 @@ export const runVercelDiscoveryPreflight = (environment: VercelDiscoveryEnvironm
 
   if (
     profile !== ControlledActivationProfile.DISCOVERY_ONLY &&
-    profile !== ControlledActivationProfile.EDITORIAL_ASSISTED
+    profile !== ControlledActivationProfile.EDITORIAL_ASSISTED &&
+    profile !== ControlledActivationProfile.WEB_AUTONOMOUS
   ) {
     reasons.push('VERCEL_DISCOVERY_PROFILE_NOT_ALLOWED');
   }

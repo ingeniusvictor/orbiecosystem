@@ -44,8 +44,11 @@ export const runVercelDiscoveryPreflight = (environment: VercelDiscoveryEnvironm
   ).length;
   const reasons = [...activation.reasons];
 
-  if (profile !== ControlledActivationProfile.DISCOVERY_ONLY) {
-    reasons.push('VERCEL_DISCOVERY_PROFILE_MUST_BE_DISCOVERY_ONLY');
+  if (
+    profile !== ControlledActivationProfile.DISCOVERY_ONLY &&
+    profile !== ControlledActivationProfile.EDITORIAL_ASSISTED
+  ) {
+    reasons.push('VERCEL_DISCOVERY_PROFILE_NOT_ALLOWED');
   }
   try { resolveVercelCronSecret(environment); } catch { reasons.push('VERCEL_DISCOVERY_CRON_SECRET_REQUIRED'); }
   if (sources.length === 0) reasons.push('VERCEL_DISCOVERY_SOURCE_REGISTRY_REQUIRED');

@@ -1,7 +1,7 @@
 # ADR-086 — Controlled Production Activation Gate
 
 ## Status
-Accepted — NA-12 final gate candidate.
+Accepted — **NA-12 PASS / CLOSED**.
 
 ## Decision
 The first real activation profile is `DISCOVERY_ONLY` and is intentionally narrow.
@@ -32,5 +32,12 @@ The runtime remains disabled by default. Production deployment, Firestore IAM/AD
 ## Operational runbook
 See `docs/deployment/ORBI-NEWS-CONTROLLED-ACTIVATION.md` and `infra/orbi-news/cloud-scheduler-discovery.template.yaml`.
 
-## Closure criterion
-NA-12 may be declared PASS when TypeScript and the complete deterministic ORBI News test suite pass with the controlled production activation full gate included.
+## Closure evidence
+GitHub Actions run `33072551007` completed successfully with:
+
+- dependency installation: PASS;
+- TypeScript validation: PASS;
+- complete deterministic ORBI News suite: PASS;
+- full controlled production activation gate: PASS.
+
+Therefore **NA-12 — Controlled Production Activation is CLOSED / PASS**.

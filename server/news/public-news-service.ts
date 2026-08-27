@@ -1,13 +1,12 @@
-import { CanonicalStoryStatus } from '../../domain/editorial/canonical-story';
-import {
-  PublicationChannel,
-  PublicationStatus,
-  type PublicNewsArticle,
-  type PublicNewsFeed,
-  type PublicNewsReader,
-  type PublishedNewsSourceRecord,
-} from '../../domain/publications';
-import type { ContentCategory } from '../../domain/common/enums';
+import { CanonicalStoryStatus } from '../../domain/editorial/canonical-story.js';
+import { PublicationChannel, PublicationStatus } from '../../domain/publications/publication.js';
+import type {
+  PublicNewsArticle,
+  PublicNewsFeed,
+  PublicNewsReader,
+  PublishedNewsSourceRecord,
+} from '../../domain/publications/public-news.js';
+import type { ContentCategory } from '../../domain/common/enums.js';
 
 const isPublicWebPublication = (record: PublishedNewsSourceRecord): boolean =>
   record.storyStatus === CanonicalStoryStatus.PUBLISHED &&

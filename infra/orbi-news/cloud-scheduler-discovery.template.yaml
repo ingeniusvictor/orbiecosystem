@@ -1,0 +1,15 @@
+# Template only. Do not apply directly without substituting placeholders.
+# First controlled activation: hourly Discovery only.
+name: projects/<PROJECT_ID>/locations/<REGION>/jobs/orbi-news-discovery-hourly
+schedule: "0 * * * *"
+timeZone: "America/Santiago"
+httpTarget:
+  uri: "https://<CLOUD_RUN_HOST>/api/internal/orbi-news-scheduler"
+  httpMethod: POST
+  headers:
+    Content-Type: application/json
+    Authorization: "Bearer <ORBI_NEWS_SCHEDULER_TOKEN>"
+  body: "<BASE64_OF_{\"job\":\"DISCOVERY_RADAR\"}>"
+retryConfig:
+  retryCount: 0
+  maxRetryDuration: "0s"

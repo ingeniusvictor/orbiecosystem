@@ -1,0 +1,53 @@
+[
+  {
+    "id": "source-openai-news",
+    "organizationId": "orbi-ecosystem-staging",
+    "name": "OpenAI News",
+    "domain": "openai.com",
+    "homepageUrl": "https://openai.com/news/",
+    "feedUrl": "https://openai.com/news/rss.xml",
+    "sourceType": "OFFICIAL",
+    "credibilityBand": "AUTHORITATIVE",
+    "allowedOrigins": ["RSS"],
+    "categories": ["AI", "TECH", "SOFTWARE"],
+    "status": "ACTIVE",
+    "isPrimaryPreferred": true,
+    "notes": "Official OpenAI news feed for staging discovery.",
+    "createdAt": "2026-08-27T00:00:00.000Z",
+    "updatedAt": "2026-08-27T00:00:00.000Z"
+  },
+  {
+    "id": "source-google-blog",
+    "organizationId": "orbi-ecosystem-staging",
+    "name": "Google Blog",
+    "domain": "blog.google",
+    "homepageUrl": "https://blog.google/",
+    "feedUrl": "https://blog.google/feed/",
+    "sourceType": "OFFICIAL",
+    "credibilityBand": "AUTHORITATIVE",
+    "allowedOrigins": ["RSS"],
+    "categories": ["AI", "TECH", "SOFTWARE", "HARDWARE"],
+    "status": "ACTIVE",
+    "isPrimaryPreferred": true,
+    "notes": "Official Google company and product feed for staging discovery.",
+    "createdAt": "2026-08-27T00:00:00.000Z",
+    "updatedAt": "2026-08-27T00:00:00.000Z"
+  },
+  {
+    "id": "source-nvidia-newsroom",
+    "organizationId": "orbi-ecosystem-staging",
+    "name": "NVIDIA Newsroom",
+    "domain": "nvidianews.nvidia.com",
+    "homepageUrl": "https://nvidianews.nvidia.com/",
+    "feedUrl": "https://nvidianews.nvidia.com/cats/press_release.xml",
+    "sourceType": "OFFICIAL",
+    "credibilityBand": "AUTHORITATIVE",
+    "allowedOrigins": ["RSS"],
+    "categories": ["AI", "TECH", "HARDWARE", "ROBOTICS"],
+    "status": "ACTIVE",
+    "isPrimaryPreferred": true,
+    "notes": "Official NVIDIA press-release feed for staging discovery.",
+    "createdAt": "2026-08-27T00:00:00.000Z",
+    "updatedAt": "2026-08-27T00:00:00.000Z"
+  }
+]

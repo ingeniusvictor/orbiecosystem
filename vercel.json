@@ -6,6 +6,10 @@
       "schedule": "0 * * * *"
     },
     {
+      "path": "/api/cron/orbi-news-process",
+      "schedule": "10 * * * *"
+    },
+    {
       "path": "/api/cron/orbi-news-digest",
       "schedule": "15 * * * *"
     }

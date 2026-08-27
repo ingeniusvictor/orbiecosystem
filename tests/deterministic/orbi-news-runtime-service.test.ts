@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
-import { createOrbiNewsRuntimeApp } from '../../orbi-news-runtime';
+import { createOrbiNewsRuntimeApp } from '../../server/operations/runtime-service-app';
 
 const listen = async (app: ReturnType<typeof createOrbiNewsRuntimeApp>) => {
   const server = createServer(app);

@@ -40,6 +40,7 @@ export interface AutonomousExecutionResult {
   readonly scheduler: SchedulerTickResult;
   readonly authority: OperationalAuthorityAssessment | null;
   readonly tickKey: string;
+  readonly leaseAttempt: number | null;
   readonly reasons: readonly string[];
 }
 
@@ -76,34 +77,36 @@ export const createAutonomousExecutionOrchestrator = ({ leasePersistence, handle
     });
 
     if (scheduler.decision === SchedulerDecision.NOT_DUE || scheduler.decision === SchedulerDecision.DUPLICATE_TICK) {
-      return { outcome: AutonomousExecutionOutcome.SKIPPED, scheduler, authority: null, tickKey: scheduler.tickKey, reasons: scheduler.reasons };
+      return { outcome: AutonomousExecutionOutcome.SKIPPED, scheduler, authority: null, tickKey: scheduler.tickKey, leaseAttempt: null, reasons: scheduler.reasons };
     }
 
     const authority = assessOperationalAuthority(input.action, input.authoritySnapshot);
     if (authority.decision === OperationalDecision.BLOCK) {
-      return { outcome: AutonomousExecutionOutcome.BLOCKED, scheduler, authority, tickKey: scheduler.tickKey, reasons: authority.reasons };
+      return { outcome: AutonomousExecutionOutcome.BLOCKED, scheduler, authority, tickKey: scheduler.tickKey, leaseAttempt: null, reasons: authority.reasons };
     }
     if (authority.decision === OperationalDecision.DEFER) {
-      return { outcome: AutonomousExecutionOutcome.DEFERRED, scheduler, authority, tickKey: scheduler.tickKey, reasons: authority.reasons };
+      return { outcome: AutonomousExecutionOutcome.DEFERRED, scheduler, authority, tickKey: scheduler.tickKey, leaseAttempt: null, reasons: authority.reasons };
     }
 
     let claimed = false;
+    let leaseAttempt: number | null = null;
     try {
-      await leasePersistence.claim({ organizationId: input.organizationId, tickKey: scheduler.tickKey, workerId, nowUtc: input.nowUtc, leaseDurationSeconds: input.leaseDurationSeconds, maxAttempts: input.maxAttempts });
+      const lease = await leasePersistence.claim({ organizationId: input.organizationId, tickKey: scheduler.tickKey, workerId, nowUtc: input.nowUtc, leaseDurationSeconds: input.leaseDurationSeconds, maxAttempts: input.maxAttempts });
       claimed = true;
+      leaseAttempt = lease.attempt;
       await handler({ organizationId: input.organizationId, workerId, job: input.job, action: input.action, tickKey: scheduler.tickKey, nowUtc: input.nowUtc });
       await leasePersistence.complete({ organizationId: input.organizationId, tickKey: scheduler.tickKey, workerId, completedAt: input.nowUtc });
-      return { outcome: AutonomousExecutionOutcome.COMPLETED, scheduler, authority, tickKey: scheduler.tickKey, reasons: [] };
+      return { outcome: AutonomousExecutionOutcome.COMPLETED, scheduler, authority, tickKey: scheduler.tickKey, leaseAttempt, reasons: [] };
     } catch (error) {
       const reason = failureReasonFrom(error);
       if (claimed) {
         try {
           await leasePersistence.fail({ organizationId: input.organizationId, tickKey: scheduler.tickKey, workerId, failedAt: input.nowUtc, failureReason: reason });
         } catch {
-          return { outcome: AutonomousExecutionOutcome.FAILED, scheduler, authority, tickKey: scheduler.tickKey, reasons: [reason, 'AUTONOMOUS_EXECUTION_FAILURE_PERSISTENCE_FAILED'] };
+          return { outcome: AutonomousExecutionOutcome.FAILED, scheduler, authority, tickKey: scheduler.tickKey, leaseAttempt, reasons: [reason, 'AUTONOMOUS_EXECUTION_FAILURE_PERSISTENCE_FAILED'] };
         }
       }
-      return { outcome: AutonomousExecutionOutcome.FAILED, scheduler, authority, tickKey: scheduler.tickKey, reasons: [reason] };
+      return { outcome: AutonomousExecutionOutcome.FAILED, scheduler, authority, tickKey: scheduler.tickKey, leaseAttempt, reasons: [reason] };
     }
   },
 });

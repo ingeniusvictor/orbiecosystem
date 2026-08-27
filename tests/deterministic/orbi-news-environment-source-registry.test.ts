@@ -9,7 +9,7 @@ const entry = {
   domain: 'openai.com',
   homepageUrl: 'https://openai.com/',
   feedUrl: 'https://openai.com/news/rss.xml',
-  sourceType: 'OFFICIAL_COMPANY',
+  sourceType: 'OFFICIAL',
   credibilityBand: 'HIGH',
   allowedOrigins: ['RSS'],
   categories: ['AI'],

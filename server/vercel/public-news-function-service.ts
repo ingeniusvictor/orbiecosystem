@@ -1,9 +1,9 @@
-import { ContentCategory } from '../../domain/common/enums';
-import type { OrganizationId } from '../../domain/common/types';
-import { createConfiguredFirestoreClient, type EditorialFirestoreEnvironment, type FirestoreSdkLoader } from '../editorial/firestore-sdk';
-import type { FirestoreClientLike } from '../editorial/firestore-persistence';
-import { createFirestorePublicNewsStore } from '../news/firestore-public-news-store';
-import { createPublicNewsService } from '../news/public-news-service';
+import { ContentCategory } from '../../domain/common/enums.js';
+import type { OrganizationId } from '../../domain/common/types.js';
+import { createConfiguredFirestoreClient, type EditorialFirestoreEnvironment, type FirestoreSdkLoader } from '../editorial/firestore-sdk.js';
+import type { FirestoreClientLike } from '../editorial/firestore-persistence.js';
+import { createFirestorePublicNewsStore } from '../news/firestore-public-news-store.js';
+import { createPublicNewsService } from '../news/public-news-service.js';
 
 export interface VercelPublicNewsEnvironment extends EditorialFirestoreEnvironment {
   readonly ORBI_NEWS_ORGANIZATION_ID?: string;

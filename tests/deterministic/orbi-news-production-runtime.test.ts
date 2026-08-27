@@ -31,7 +31,7 @@ class FakeCollectionReference implements FirestoreCollectionReferenceLike {
     return {
       docs: [...this.database.data.entries()]
         .filter(([path]) => path.startsWith(prefix) && !path.slice(prefix.length).includes('/'))
-        .map(([, value]) => ({ data: () => structuredClone(value) })),
+        .map(([, value]) => ({ exists: true, data: () => structuredClone(value) })),
     };
   }
 }
@@ -84,10 +84,7 @@ const authority = (): OperationalAuthoritySnapshot => ({
 });
 
 test('disabled production runtime returns null and does not require Firestore', () => {
-  const runtime = createProductionAutonomousRuntime({
-    environment: {},
-    handler: async () => undefined,
-  });
+  const runtime = createProductionAutonomousRuntime({ environment: {}, handler: async () => undefined });
   assert.equal(runtime, null);
 });
 

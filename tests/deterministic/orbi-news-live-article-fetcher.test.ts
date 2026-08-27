@@ -39,3 +39,31 @@ test('NA-15 live article fetcher rejects HTTP before network access', async () =
   await assert.rejects(() => fetcher.fetchArticle('http://example.com/article'), /HTTPS_REQUIRED/);
   assert.equal(calls, 0);
 });
+
+test('NA-15 live article fetcher rejects redirects to unregistered hosts', async () => {
+  let calls = 0;
+  const fetcher = createLiveArticleFetcher({
+    allowedHosts: ['example.com'],
+    fetchImpl: async () => {
+      calls += 1;
+      return new Response(null, { status: 302, headers: { location: 'https://evil.example.net/article' } });
+    },
+  });
+  await assert.rejects(() => fetcher.fetchArticle('https://example.com/article'), /HOST_NOT_ALLOWED/);
+  assert.equal(calls, 1);
+});
+
+test('NA-15 live article fetcher follows bounded redirects within the allowlist', async () => {
+  let calls = 0;
+  const fetcher = createLiveArticleFetcher({
+    allowedHosts: ['example.com'],
+    fetchImpl: async () => {
+      calls += 1;
+      if (calls === 1) return new Response(null, { status: 302, headers: { location: '/final' } });
+      return new Response(html, { status: 200, headers: { 'content-type': 'text/html' } });
+    },
+  });
+  const result = await fetcher.fetchArticle('https://example.com/article');
+  assert.equal(result.url, 'https://example.com/final');
+  assert.equal(calls, 2);
+});

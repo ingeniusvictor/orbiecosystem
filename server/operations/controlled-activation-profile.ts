@@ -6,6 +6,7 @@ import type { ProductionAuthorityEnvironment } from './production-authority-conf
 export enum ControlledActivationProfile {
   DISABLED = 'DISABLED',
   DISCOVERY_ONLY = 'DISCOVERY_ONLY',
+  EDITORIAL_ASSISTED = 'EDITORIAL_ASSISTED',
 }
 
 export interface ControlledActivationAssessment {
@@ -17,14 +18,59 @@ export interface ControlledActivationAssessment {
 export const ORBI_CONTROLLED_ACTIVATION_ACTIONS: Readonly<Record<ControlledActivationProfile, readonly OperationalAction[]>> = {
   [ControlledActivationProfile.DISABLED]: [],
   [ControlledActivationProfile.DISCOVERY_ONLY]: [OperationalAction.DISCOVER_NEWS],
+  [ControlledActivationProfile.EDITORIAL_ASSISTED]: [
+    OperationalAction.DISCOVER_NEWS,
+    OperationalAction.VERIFY_NEWS,
+    OperationalAction.GENERATE_DRAFT,
+  ],
 };
 
 const csv = (value: string | undefined): readonly string[] =>
   value?.split(',').map((item) => item.trim()).filter(Boolean) ?? [];
 
+const assessExactProfile = ({
+  prefix,
+  runtime,
+  authorityEnvironment,
+  autonomyLevel,
+  requiredToggles,
+  requiredCapabilities,
+}: {
+  readonly prefix: string;
+  readonly runtime: ProductionRuntimeConfiguration;
+  readonly authorityEnvironment: ProductionAuthorityEnvironment;
+  readonly autonomyLevel: AutonomyLevel;
+  readonly requiredToggles: readonly AutomationToggle[];
+  readonly requiredCapabilities: readonly SystemCapability[];
+}): readonly string[] => {
+  const reasons: string[] = [];
+  if (!runtime.enabled) reasons.push(`${prefix}_RUNTIME_DISABLED`);
+  if (runtime.systemMode !== SystemMode.NORMAL) reasons.push(`${prefix}_SYSTEM_MODE_MUST_BE_NORMAL`);
+  if (runtime.autonomyLevel !== autonomyLevel) reasons.push(`${prefix}_AUTONOMY_MUST_EQUAL_${autonomyLevel}`);
+  if (!runtime.firestore.enabled) reasons.push(`${prefix}_FIRESTORE_REQUIRED`);
+
+  const toggles = csv(authorityEnvironment.ORBI_NEWS_ENABLED_TOGGLES);
+  for (const required of requiredToggles) {
+    if (!toggles.includes(required)) reasons.push(`${prefix}_${required}_REQUIRED`);
+  }
+  for (const toggle of toggles) {
+    if (!requiredToggles.includes(toggle as AutomationToggle)) reasons.push(`${prefix}_FORBIDS_TOGGLE_${toggle}`);
+  }
+
+  const capabilities = csv(authorityEnvironment.ORBI_NEWS_AVAILABLE_CAPABILITIES);
+  for (const required of requiredCapabilities) {
+    if (!capabilities.includes(required)) reasons.push(`${prefix}_${required}_CAPABILITY_REQUIRED`);
+  }
+  for (const capability of capabilities) {
+    if (!requiredCapabilities.includes(capability as SystemCapability)) reasons.push(`${prefix}_FORBIDS_CAPABILITY_${capability}`);
+  }
+  return reasons;
+};
+
 /**
- * Enforces the first production activation profile. Discovery-only deliberately
- * forbids higher autonomy, publishing/social toggles and unrelated capabilities.
+ * Controlled activation is exact allow-list configuration, not a minimum.
+ * EDITORIAL_ASSISTED permits discovery, verification and draft generation only;
+ * publication, email and social automation remain forbidden.
  */
 export const assessControlledActivationProfile = ({
   profile,
@@ -39,23 +85,34 @@ export const assessControlledActivationProfile = ({
     return { profile, ready: !runtime.enabled, reasons: runtime.enabled ? ['ACTIVATION_PROFILE_DISABLED_RUNTIME_ENABLED'] : [] };
   }
 
-  const reasons: string[] = [];
-  if (!runtime.enabled) reasons.push('DISCOVERY_ONLY_RUNTIME_DISABLED');
-  if (runtime.systemMode !== SystemMode.NORMAL) reasons.push('DISCOVERY_ONLY_SYSTEM_MODE_MUST_BE_NORMAL');
-  if (runtime.autonomyLevel !== AutonomyLevel.LEVEL_1) reasons.push('DISCOVERY_ONLY_AUTONOMY_MUST_EQUAL_LEVEL_1');
-  if (!runtime.firestore.enabled) reasons.push('DISCOVERY_ONLY_FIRESTORE_REQUIRED');
-
-  const toggles = csv(authorityEnvironment.ORBI_NEWS_ENABLED_TOGGLES);
-  if (!toggles.includes(AutomationToggle.AUTO_DISCOVERY)) reasons.push('DISCOVERY_ONLY_AUTO_DISCOVERY_REQUIRED');
-  for (const toggle of toggles) {
-    if (toggle !== AutomationToggle.AUTO_DISCOVERY) reasons.push(`DISCOVERY_ONLY_FORBIDS_TOGGLE_${toggle}`);
-  }
-
-  const capabilities = csv(authorityEnvironment.ORBI_NEWS_AVAILABLE_CAPABILITIES);
-  if (!capabilities.includes(SystemCapability.NEWS_DISCOVERY)) reasons.push('DISCOVERY_ONLY_NEWS_DISCOVERY_CAPABILITY_REQUIRED');
-  for (const capability of capabilities) {
-    if (capability !== SystemCapability.NEWS_DISCOVERY) reasons.push(`DISCOVERY_ONLY_FORBIDS_CAPABILITY_${capability}`);
-  }
+  const reasons = profile === ControlledActivationProfile.DISCOVERY_ONLY
+    ? assessExactProfile({
+        prefix: 'DISCOVERY_ONLY',
+        runtime,
+        authorityEnvironment,
+        autonomyLevel: AutonomyLevel.LEVEL_1,
+        requiredToggles: [AutomationToggle.AUTO_DISCOVERY],
+        requiredCapabilities: [SystemCapability.NEWS_DISCOVERY],
+      })
+    : assessExactProfile({
+        prefix: 'EDITORIAL_ASSISTED',
+        runtime,
+        authorityEnvironment,
+        autonomyLevel: AutonomyLevel.LEVEL_3,
+        requiredToggles: [
+          AutomationToggle.AUTO_DISCOVERY,
+          AutomationToggle.AUTO_VERIFICATION,
+          AutomationToggle.AUTO_DRAFT,
+        ],
+        requiredCapabilities: [
+          SystemCapability.NEWS_DISCOVERY,
+          SystemCapability.WEB_RESEARCH,
+          SystemCapability.VERIFICATION,
+          SystemCapability.EVENT_INTELLIGENCE,
+          SystemCapability.SCORING,
+          SystemCapability.EDITORIAL_GENERATION,
+        ],
+      });
 
   return { profile, ready: reasons.length === 0, reasons };
 };

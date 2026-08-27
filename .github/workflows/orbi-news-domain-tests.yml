@@ -7,8 +7,10 @@ on:
     paths:
       - 'domain/**'
       - 'server/**'
+      - 'api/**'
       - 'server.ts'
       - 'orbi-news-runtime.ts'
+      - 'vercel.json'
       - 'src/news/**'
       - 'src/editorial/**'
       - 'src/App.tsx'

@@ -1,0 +1,33 @@
+# Template only. Substitute placeholders and manage secrets outside source control.
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: orbi-news-runtime
+  namespace: <PROJECT_ID>
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "0"
+        autoscaling.knative.dev/maxScale: "3"
+    spec:
+      containerConcurrency: 10
+      timeoutSeconds: 60
+      serviceAccountName: <RUNTIME_SERVICE_ACCOUNT_EMAIL>
+      containers:
+        - image: <REGION>-docker.pkg.dev/<PROJECT_ID>/<REPOSITORY>/orbi-news-runtime:<TAG>
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ORBI_NEWS_ACTIVATION_PROFILE
+              value: "DISABLED"
+            - name: ORBI_NEWS_RUNTIME_ENABLED
+              value: "false"
+            - name: ORBI_NEWS_SYSTEM_MODE
+              value: "MAINTENANCE"
+            - name: ORBI_NEWS_AUTONOMY_LEVEL
+              value: "LEVEL_0"
+          resources:
+            limits:
+              cpu: "1"
+              memory: "512Mi"

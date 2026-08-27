@@ -74,6 +74,7 @@ export const publishStoryAutonomouslyIfEligible = async ({
 
   const publishTransition = canTransitionCanonicalStory(CanonicalStoryStatus.APPROVED, CanonicalStoryStatus.PUBLISHED);
   if (!publishTransition.ok) throw new Error('AUTONOMOUS_WEB_PUBLISHED_TRANSITION_INVALID');
+  const publishedAt = (publication.record?.article.publishedAt ?? nowUtc) as IsoUtcDateTime;
   return {
     outcome: publication.outcome,
     reasons: publication.reasons,
@@ -81,8 +82,8 @@ export const publishStoryAutonomouslyIfEligible = async ({
     publishedStory: {
       ...approvedStory,
       status: CanonicalStoryStatus.PUBLISHED,
-      publishedAt: publication.record?.article.publishedAt ?? nowUtc,
-      updatedAt: publication.record?.article.publishedAt ?? nowUtc,
+      publishedAt,
+      updatedAt: publishedAt,
     },
   };
 };

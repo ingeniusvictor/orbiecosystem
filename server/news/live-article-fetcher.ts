@@ -13,11 +13,13 @@ export interface LiveArticleFetcherOptions {
   readonly allowedHosts: readonly string[];
   readonly timeoutMs?: number;
   readonly maxBytes?: number;
+  readonly maxRedirects?: number;
   readonly fetchImpl?: typeof fetch;
 }
 
 const DEFAULT_TIMEOUT_MS = 10_000;
 const DEFAULT_MAX_BYTES = 1_500_000;
+const DEFAULT_MAX_REDIRECTS = 3;
 
 const decodeEntities = (value: string): string => value
   .replace(/&nbsp;/gi, ' ')
@@ -67,34 +69,54 @@ const hostAllowed = (hostname: string, allowedHosts: readonly string[]): boolean
   });
 };
 
+const assertAllowedUrl = (url: URL, allowedHosts: readonly string[]): void => {
+  if (url.protocol !== 'https:') throw new Error('LIVE_ARTICLE_HTTPS_REQUIRED');
+  if (!hostAllowed(url.hostname, allowedHosts)) throw new Error('LIVE_ARTICLE_HOST_NOT_ALLOWED');
+};
+
+const isRedirect = (status: number): boolean => [301, 302, 303, 307, 308].includes(status);
+
 export const createLiveArticleFetcher = (options: LiveArticleFetcherOptions): LiveArticleFetcher => {
   const fetchImpl = options.fetchImpl ?? fetch;
   const timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
   const maxBytes = options.maxBytes ?? DEFAULT_MAX_BYTES;
+  const maxRedirects = options.maxRedirects ?? DEFAULT_MAX_REDIRECTS;
   const allowedHosts = [...new Set(options.allowedHosts.map(normalizeHost).filter(Boolean))];
 
   if (allowedHosts.length === 0) throw new RangeError('LIVE_ARTICLE_ALLOWED_HOSTS_REQUIRED');
   if (!Number.isInteger(timeoutMs) || timeoutMs <= 0) throw new RangeError('LIVE_ARTICLE_TIMEOUT_INVALID');
   if (!Number.isInteger(maxBytes) || maxBytes <= 0) throw new RangeError('LIVE_ARTICLE_MAX_BYTES_INVALID');
+  if (!Number.isInteger(maxRedirects) || maxRedirects < 0 || maxRedirects > 10) throw new RangeError('LIVE_ARTICLE_MAX_REDIRECTS_INVALID');
 
   return {
     async fetchArticle(rawUrl: string): Promise<LiveArticleDocument> {
-      const url = new URL(rawUrl);
-      if (url.protocol !== 'https:') throw new Error('LIVE_ARTICLE_HTTPS_REQUIRED');
-      if (!hostAllowed(url.hostname, allowedHosts)) throw new Error('LIVE_ARTICLE_HOST_NOT_ALLOWED');
+      let url = new URL(rawUrl);
+      assertAllowedUrl(url, allowedHosts);
 
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), timeoutMs);
       try {
-        const response = await fetchImpl(url, {
-          method: 'GET',
-          redirect: 'follow',
-          signal: controller.signal,
-          headers: {
-            accept: 'text/html,application/xhtml+xml;q=0.9',
-            'user-agent': 'ORBI-News-Research/1.0',
-          },
-        });
+        let response: Response | null = null;
+        for (let redirectCount = 0; redirectCount <= maxRedirects; redirectCount += 1) {
+          response = await fetchImpl(url, {
+            method: 'GET',
+            redirect: 'manual',
+            signal: controller.signal,
+            headers: {
+              accept: 'text/html,application/xhtml+xml;q=0.9',
+              'user-agent': 'ORBI-News-Research/1.0',
+            },
+          });
+          if (!isRedirect(response.status)) break;
+          if (redirectCount >= maxRedirects) throw new Error('LIVE_ARTICLE_REDIRECT_LIMIT_REACHED');
+          const location = response.headers.get('location');
+          if (!location) throw new Error('LIVE_ARTICLE_REDIRECT_LOCATION_REQUIRED');
+          const next = new URL(location, url);
+          assertAllowedUrl(next, allowedHosts);
+          url = next;
+        }
+
+        if (!response) throw new Error('LIVE_ARTICLE_FETCH_FAILED');
         if (!response.ok) throw new Error(`LIVE_ARTICLE_HTTP_${response.status}`);
         const contentType = response.headers.get('content-type')?.toLowerCase() ?? '';
         if (!contentType.includes('text/html') && !contentType.includes('application/xhtml+xml')) {
@@ -109,7 +131,7 @@ export const createLiveArticleFetcher = (options: LiveArticleFetcherOptions): Li
         if (text.length < 80) throw new Error('LIVE_ARTICLE_TEXT_INSUFFICIENT');
 
         return {
-          url: response.url || url.toString(),
+          url: url.toString(),
           title: tagContent(html, /<title\b[^>]*>([\s\S]*?)<\/title>/i),
           description: metaDescription(html),
           text,

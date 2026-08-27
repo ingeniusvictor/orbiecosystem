@@ -24,15 +24,9 @@ test('standalone runtime healthz is healthy and inert when activation profile is
   }
 });
 
-test('healthz reports 503 for malformed activation configuration instead of claiming ready', async () => {
-  const app = createOrbiNewsRuntimeApp({ NODE_ENV: 'test', ORBI_NEWS_ACTIVATION_PROFILE: 'BROKEN' } as NodeJS.ProcessEnv);
-  const { server, baseUrl } = await listen(app);
-  try {
-    const response = await fetch(`${baseUrl}/healthz`);
-    assert.equal(response.status, 503);
-    const body = await response.json() as any;
-    assert.equal(body.ready, false);
-  } finally {
-    server.close();
-  }
+test('malformed activation configuration fails fast during service construction', () => {
+  assert.throws(
+    () => createOrbiNewsRuntimeApp({ NODE_ENV: 'test', ORBI_NEWS_ACTIVATION_PROFILE: 'BROKEN' } as NodeJS.ProcessEnv),
+    /ORBI_NEWS_ACTIVATION_PROFILE_INVALID/,
+  );
 });

@@ -1,7 +1,7 @@
 # ADR-088 — Vercel Native Runtime Adaptation
 
 ## Status
-Accepted — NA-14 final gate candidate.
+Accepted — **NA-14 PASS / CLOSED**.
 
 ## Context
 The original ORBI News production goal is narrower than a permanently running autonomous backend: discover and process relevant news, publish approved articles on the ORBI website, and send one daily email digest to the operator.
@@ -61,5 +61,16 @@ NA-14 does not claim that a live Vercel production project is connected in the c
 
 NA-14 also does not treat raw RSS as publishable truth. Live autonomous publication still requires an upstream verification/editorial process to produce an approved CanonicalStory before the publication adapter can write it to `/news`.
 
-## Closure criterion
-NA-14 may be declared PASS when TypeScript validation, the full deterministic ORBI News suite and the production build pass with Vercel Cron auth, Discovery Function, public Firestore news store/API, daily digest and web-publication gate tests included.
+## Closure evidence
+GitHub Actions run `33093122104` completed successfully with:
+- dependency installation: PASS;
+- TypeScript validation: PASS;
+- complete deterministic ORBI News suite: PASS;
+- production build validation: PASS.
+
+The final gate includes Vercel Cron authentication, Discovery execution, Firestore public-news storage/API, daily digest idempotency and publication-authority tests.
+
+Therefore **NA-14 — Vercel Native Runtime Adaptation is CLOSED / PASS**.
+
+## Next phase
+The remaining functional gap is upstream live content processing: turning durable discovery candidates into verified, scored and approved CanonicalStories using real research/AI providers. That phase must not bypass NA-03 verification or NA-05 editorial authority and will feed the Vercel web-publication adapter only after approval.

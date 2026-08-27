@@ -17,6 +17,7 @@ import {
   buildVerificationResearchPlan,
   evaluateVerificationResearchProgress,
 } from '../../domain/verification/research-strategy';
+import { resolvePrimarySource } from '../../domain/verification/source-policy';
 import { verificationConfidenceFromScore } from '../../domain/verification/policy';
 import type { VerificationEvidence, VerificationRecord } from '../../domain/verification/verification';
 import type { VerifiedEditorialClaim, VerifiedEditorialSource } from '../../domain/editorial/canonical-story-builder';
@@ -119,9 +120,7 @@ const mapAssessment = async ({
       ? VerificationStatus.VERIFIED
       : VerificationStatus.PARTIALLY_VERIFIED;
 
-  const primary = acceptedEvidence.find(({ item, source }) =>
-    item.stance === 'SUPPORTING' && source.isPrimaryPreferred,
-  )?.source.id ?? acceptedEvidence.find(({ item }) => item.stance === 'SUPPORTING')?.source.id ?? null;
+  const primary = resolvePrimarySource(researchEvidence).primarySourceId;
 
   const claims = assessment.claims.map((claim) => {
     assertScore('LIVE_RESEARCH_CLAIM_CONFIDENCE', claim.confidenceScore);

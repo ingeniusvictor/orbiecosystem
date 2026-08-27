@@ -8,6 +8,7 @@ on:
       - 'domain/**'
       - 'server/**'
       - 'server.ts'
+      - 'orbi-news-runtime.ts'
       - 'src/news/**'
       - 'src/editorial/**'
       - 'src/App.tsx'
@@ -43,3 +44,6 @@ jobs:
 
       - name: Run ORBI News deterministic tests
         run: npm run test:orbi-news
+
+      - name: Production build validation
+        run: npm run build

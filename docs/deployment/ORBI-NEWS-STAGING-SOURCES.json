@@ -12,9 +12,9 @@
     "categories": ["AI", "TECH", "SOFTWARE"],
     "status": "ACTIVE",
     "isPrimaryPreferred": true,
-    "notes": "Official OpenAI news feed for staging discovery.",
+    "notes": "Official OpenAI news feed. HTTPS XML endpoint verified reachable for staging on 2026-08-27.",
     "createdAt": "2026-08-27T00:00:00.000Z",
-    "updatedAt": "2026-08-27T00:00:00.000Z"
+    "updatedAt": "2026-08-27T21:30:00.000Z"
   },
   {
     "id": "source-google-blog",
@@ -29,9 +29,9 @@
     "categories": ["AI", "TECH", "SOFTWARE", "HARDWARE"],
     "status": "ACTIVE",
     "isPrimaryPreferred": true,
-    "notes": "Official Google company and product feed for staging discovery.",
+    "notes": "Official Google company/product feed. HTTPS feed endpoint verified reachable for staging on 2026-08-27.",
     "createdAt": "2026-08-27T00:00:00.000Z",
-    "updatedAt": "2026-08-27T00:00:00.000Z"
+    "updatedAt": "2026-08-27T21:30:00.000Z"
   },
   {
     "id": "source-nvidia-newsroom",
@@ -46,8 +46,25 @@
     "categories": ["AI", "TECH", "HARDWARE", "ROBOTICS"],
     "status": "ACTIVE",
     "isPrimaryPreferred": true,
-    "notes": "Official NVIDIA press-release feed for staging discovery.",
+    "notes": "Official NVIDIA press-release feed. HTTPS XML endpoint verified reachable for staging on 2026-08-27.",
     "createdAt": "2026-08-27T00:00:00.000Z",
-    "updatedAt": "2026-08-27T00:00:00.000Z"
+    "updatedAt": "2026-08-27T21:30:00.000Z"
+  },
+  {
+    "id": "source-us-doe-energy-news",
+    "organizationId": "orbi-ecosystem-staging",
+    "name": "U.S. Department of Energy — Energy News",
+    "domain": "energy.gov",
+    "homepageUrl": "https://www.energy.gov/listings/energy-news",
+    "feedUrl": "https://www.energy.gov/listings/energy-news?view=rss",
+    "sourceType": "GOVERNMENT",
+    "credibilityBand": "AUTHORITATIVE",
+    "allowedOrigins": ["RSS"],
+    "categories": ["ENERGY", "TECH", "SCIENCE"],
+    "status": "ACTIVE",
+    "isPrimaryPreferred": true,
+    "notes": "Official U.S. Department of Energy news listing exposed through its RSS view; verified reachable with current 2026 news items on 2026-08-27.",
+    "createdAt": "2026-08-27T21:30:00.000Z",
+    "updatedAt": "2026-08-27T21:30:00.000Z"
   }
 ]

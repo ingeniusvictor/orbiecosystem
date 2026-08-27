@@ -1,6 +1,6 @@
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
-import type { FirestoreClientLike } from './firestore-persistence';
+import type { FirestoreClientLike } from './firestore-persistence.js';
 
 export interface EditorialFirestoreEnvironment {
   readonly ORBI_EDITORIAL_FIRESTORE_ENABLED?: string;

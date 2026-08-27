@@ -1,19 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "crons": [
-    {
-      "path": "/api/cron/orbi-news-discovery",
-      "schedule": "0 * * * *"
-    },
-    {
-      "path": "/api/cron/orbi-news-process",
-      "schedule": "10 * * * *"
-    },
-    {
-      "path": "/api/cron/orbi-news-digest",
-      "schedule": "15 * * * *"
-    }
-  ],
   "rewrites": [
     {
       "source": "/((?!api|assets|orbi-docs|.*\\..*).*)",

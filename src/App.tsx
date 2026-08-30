@@ -10,6 +10,7 @@ import LoaderScreen from "./components/LoaderScreen";
 import AtAGlance from "./components/AtAGlance";
 import SeasonOneEcosystem from "./components/SeasonOneEcosystem";
 import OrbiDivisionPresentations from "./components/OrbiDivisionPresentations";
+import OrbiBuildCapabilities from "./components/OrbiBuildCapabilities";
 import FotonPrimeSection from "./components/FotonPrimeSection";
 import FotonCompanion from "./components/FotonCompanion";
 import ProductGrid from "./components/ProductGrid";
@@ -161,7 +162,7 @@ export default function App() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["hero", "ecosystem-season-one", "orbi-presentaciones", "orbi-en-video", "ecosistema-mirada", "ecosistema", "foton-prime", "proyectos", "roadmap"];
+      const sections = ["hero", "ecosystem-season-one", "orbi-presentaciones", "orbi-en-video", "ecosistema-mirada", "ecosistema", "orbi-capacidades", "foton-prime", "proyectos", "roadmap"];
       const scrollPos = window.scrollY + 120;
 
       for (const sectionId of sections) {
@@ -228,6 +229,8 @@ export default function App() {
         <AtAGlance />
 
         <Differentiators />
+
+        <OrbiBuildCapabilities />
 
         <FotonPrimeSection onPlayVideo={handlePlayVideo} />
 

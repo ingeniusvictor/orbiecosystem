@@ -163,7 +163,7 @@ export default function App() {
   // Scroll active section tracking
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["hero", "ecosystem-season-one", "ecosistema-mirada", "ecosistema", "foton-prime", "proyectos", "orbi-en-video", "roadmap"];
+      const sections = ["hero", "ecosystem-season-one", "orbi-en-video", "ecosistema-mirada", "ecosistema", "foton-prime", "proyectos", "roadmap"];
       const scrollPos = window.scrollY + 120; // adding threshold buffer
 
       for (const sectionId of sections) {
@@ -229,6 +229,9 @@ export default function App() {
         {/* ORBI Platform Season 1 Map */}
         <SeasonOneEcosystem onNavigate={handleNavigate} onPlayVideo={handlePlayVideo} />
 
+        {/* ORBI video storytelling layer */}
+        <OrbiVideoSection />
+
         {/* Orbi Ecosystem en una mirada */}
         <AtAGlance />
 
@@ -243,9 +246,6 @@ export default function App() {
           initialDivisionFilter="all" 
           onResetDivisionFilter={handleResetDivisionFilter}
         />
-
-        {/* ORBI video storytelling layer */}
-        <OrbiVideoSection />
 
         {/* Development Roadmap schedule */}
         <Roadmap />

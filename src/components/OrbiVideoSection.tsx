@@ -1,4 +1,5 @@
-import { ArrowRight, ExternalLink, Film, Link, ListVideo, Play, Sparkles, Video } from "lucide-react";
+import { useState } from "react";
+import { ExternalLink, Film, Link, ListVideo, Play, Sparkles, Video } from "lucide-react";
 
 interface VideoCard {
   id: string;
@@ -90,26 +91,26 @@ const sleepFrequencyLinks = [
   { label: "S6", url: "https://youtube.com/shorts/tXQNUJ3g22s", id: "tXQNUJ3g22s" },
 ];
 
-function getCardActionLabel(card: VideoCard) {
-  return card.id === "sleep" ? "Ver serie" : "Ver en YouTube";
-}
-
-function YoutubeActionLink({ card, primary = false }: { card: VideoCard; primary?: boolean }) {
-  const className = primary
-    ? "orbitron-primary-action"
-    : "mt-5 inline-flex items-center gap-2 rounded-full bg-red-500/10 px-4 py-2 font-mono text-[10px] font-black uppercase tracking-[0.16em] text-red-100 ring-1 ring-red-300/18 transition hover:bg-red-500/16";
-
-  return (
-    <a href={card.youtubeUrl} target="_blank" rel="noreferrer" className={className} aria-label={`Abrir ${card.title} en YouTube`}>
-      {primary ? getCardActionLabel(card) : <Film className="h-3.5 w-3.5" aria-hidden="true" />}
-      {primary ? <ArrowRight className="h-4 w-4" aria-hidden="true" /> : getCardActionLabel(card)}
-    </a>
-  );
+function getEmbedUrl(videoId: string) {
+  return `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&playsinline=1`;
 }
 
 export default function OrbiVideoSection() {
-  const featured = videoCards[0];
-  const secondaryCards = videoCards.slice(1);
+  const [selectedVideo, setSelectedVideo] = useState<VideoCard>(videoCards[0]);
+  const secondaryCards = videoCards.filter((card) => card.id !== selectedVideo.id);
+
+  const selectSleepVideo = (link: (typeof sleepFrequencyLinks)[number]) => {
+    setSelectedVideo({
+      id: `sleep-${link.label.toLowerCase()}`,
+      title: `ORBI Sleep Frequencies ${link.label}`,
+      description: "Short de la serie ORBI Sleep Frequencies publicado en el canal oficial.",
+      badge: "Bienestar digital",
+      youtubeUrl: link.url,
+      youtubeSearchLabel: "ORBI Sleep Frequencies",
+      youtubeId: link.id,
+      note: "Parte de la serie ORBI Sleep Frequencies.",
+    });
+  };
 
   return (
     <section id="orbi-en-video" className="relative overflow-hidden py-24 sm:py-28">
@@ -121,68 +122,64 @@ export default function OrbiVideoSection() {
         <div className="mx-auto max-w-3xl text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-cyan-300/20 bg-cyan-300/[0.06] px-4 py-2 font-mono text-[10px] font-black uppercase tracking-[0.24em] text-cyan-100 shadow-[0_0_35px_rgba(34,211,238,0.12)] backdrop-blur-2xl">
             <Video className="h-3.5 w-3.5" aria-hidden="true" />
-            ORBI en Video / YouTube
+            ORBI en Video / YouTube Embed
           </div>
           <h2 className="mt-6 font-space text-4xl font-black tracking-tight text-white sm:text-5xl">
-            Mira ORBI desde el canal oficial.
+            Mira ORBI sin salir de la web.
           </h2>
           <p className="mt-5 text-base leading-8 text-slate-300 sm:text-lg">
-            Los videos viven en YouTube para mantener la web liviana, aumentar reproducciones del canal y conectar cada división con contenido real publicado por ORBI Ecosystem.
+            Los videos se reproducen directamente desde YouTube dentro de la página. La web se mantiene liviana, el canal gana visualización y el visitante no pierde el contexto de ORBI.
           </p>
         </div>
 
-        <div className="mt-14 grid gap-6 lg:grid-cols-[1.08fr_0.92fr] lg:items-stretch">
-          <article className="group relative overflow-hidden rounded-[2rem] border border-cyan-300/18 bg-white/[0.045] p-6 shadow-[0_22px_90px_rgba(8,47,73,0.22)] backdrop-blur-2xl sm:p-8">
+        <div className="mt-14 grid gap-6 lg:grid-cols-[1.18fr_0.82fr] lg:items-start">
+          <article className="group relative overflow-hidden rounded-[2rem] border border-cyan-300/18 bg-white/[0.045] p-5 shadow-[0_22px_90px_rgba(8,47,73,0.22)] backdrop-blur-2xl sm:p-6">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_16%_18%,rgba(34,211,238,0.16),transparent_36%),linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))]" aria-hidden="true" />
-            <div className="relative z-10 flex h-full flex-col justify-between gap-8">
-              <div>
-                <div className="flex flex-wrap items-center gap-3">
-                  <span className="inline-flex items-center gap-2 rounded-full bg-cyan-300/10 px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-[0.18em] text-cyan-100 ring-1 ring-cyan-200/15">
-                    <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
-                    {featured.badge}
-                  </span>
-                  <span className="rounded-full bg-red-500/10 px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-[0.18em] text-red-100 ring-1 ring-red-300/15">
-                    Fuente YouTube
-                  </span>
-                  <span className="rounded-full bg-emerald-400/10 px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-[0.18em] text-emerald-200 ring-1 ring-emerald-300/15">
-                    ID: {featured.youtubeId}
-                  </span>
-                </div>
+            <div className="relative z-10">
+              <div className="mb-5 flex flex-wrap items-center gap-3">
+                <span className="inline-flex items-center gap-2 rounded-full bg-cyan-300/10 px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-[0.18em] text-cyan-100 ring-1 ring-cyan-200/15">
+                  <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+                  {selectedVideo.badge}
+                </span>
+                <span className="rounded-full bg-red-500/10 px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-[0.18em] text-red-100 ring-1 ring-red-300/15">
+                  YouTube embed
+                </span>
+                <span className="rounded-full bg-emerald-400/10 px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-[0.18em] text-emerald-200 ring-1 ring-emerald-300/15">
+                  ID: {selectedVideo.youtubeId}
+                </span>
+              </div>
 
-                <a
-                  href={featured.youtubeUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-10 block aspect-video overflow-hidden rounded-[1.5rem] border border-white/10 bg-slate-950/60 shadow-2xl shadow-cyan-950/30 transition hover:scale-[1.01] hover:border-red-200/25"
-                  aria-label={`Abrir ${featured.title} en YouTube`}
-                >
-                  <div className="relative flex h-full items-center justify-center bg-[radial-gradient(circle_at_50%_35%,rgba(34,211,238,0.26),transparent_33%),linear-gradient(135deg,rgba(15,23,42,0.98),rgba(30,41,59,0.72),rgba(8,47,73,0.78))]">
-                    <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(180deg,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:42px_42px] opacity-35" aria-hidden="true" />
-                    <div className="absolute left-5 top-5 rounded-full bg-slate-950/45 px-3 py-1.5 font-mono text-[9px] font-black uppercase tracking-[0.18em] text-white/70 ring-1 ring-white/10 backdrop-blur-2xl">
-                      Link directo: {featured.youtubeId}
-                    </div>
-                    <span className="group/play relative flex h-24 w-24 items-center justify-center rounded-full bg-red-500/15 text-white ring-1 ring-red-200/25 backdrop-blur-2xl transition hover:scale-105 hover:bg-red-500/22">
-                      <span className="absolute inset-0 rounded-full bg-red-500/20 blur-2xl transition group-hover/play:bg-red-400/30" aria-hidden="true" />
-                      <Play className="relative z-10 ml-1 h-10 w-10 fill-current" aria-hidden="true" />
-                    </span>
-                  </div>
-                </a>
-
-                <h3 className="mt-8 font-space text-3xl font-black text-white">{featured.title}</h3>
-                <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">{featured.description}</p>
-
-                <div className="mt-5 rounded-2xl border border-white/10 bg-slate-950/35 p-4 backdrop-blur-2xl">
-                  <div className="flex items-start gap-3">
-                    <Link className="mt-0.5 h-4 w-4 shrink-0 text-cyan-100" aria-hidden="true" />
-                    <p className="text-xs leading-6 text-slate-300">
-                      Esta sección ya no usa VideoModal ni videos locales. Cada tarjeta abre un enlace real distinto de YouTube.
-                    </p>
-                  </div>
+              <div className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-slate-950/80 shadow-2xl shadow-cyan-950/30">
+                <div className="aspect-video">
+                  <iframe
+                    key={selectedVideo.youtubeId}
+                    src={getEmbedUrl(selectedVideo.youtubeId)}
+                    title={selectedVideo.title}
+                    className="h-full w-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    loading="lazy"
+                  />
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-3">
-                <YoutubeActionLink card={featured} primary />
+              <h3 className="mt-7 font-space text-3xl font-black text-white">{selectedVideo.title}</h3>
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">{selectedVideo.description}</p>
+
+              <div className="mt-5 rounded-2xl border border-white/10 bg-slate-950/35 p-4 backdrop-blur-2xl">
+                <div className="flex items-start gap-3">
+                  <Link className="mt-0.5 h-4 w-4 shrink-0 text-cyan-100" aria-hidden="true" />
+                  <p className="text-xs leading-6 text-slate-300">
+                    Puedes reproducir aquí mismo. Para verlo en grande, usar comentarios o compartirlo, abre el video directamente en YouTube.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-6 flex flex-wrap gap-3">
+                <a href={selectedVideo.youtubeUrl} target="_blank" rel="noreferrer" className="orbitron-primary-action">
+                  Abrir en YouTube
+                  <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                </a>
                 <a href={YOUTUBE_CHANNEL_URL} target="_blank" rel="noreferrer" className="orbitron-secondary-action">
                   Canal YouTube
                   <ExternalLink className="h-4 w-4" aria-hidden="true" />
@@ -215,23 +212,29 @@ export default function OrbiVideoSection() {
                       {card.note}
                     </div>
                   )}
-                  <div className="mt-4 rounded-2xl bg-slate-950/25 px-3 py-2 font-mono text-[9px] font-black uppercase tracking-[0.14em] text-slate-400 ring-1 ring-white/[0.06]">
-                    Buscar: {card.youtubeSearchLabel}
-                  </div>
-                  <YoutubeActionLink card={card} />
+                  <button
+                    type="button"
+                    onClick={() => setSelectedVideo(card)}
+                    className="mt-5 inline-flex items-center gap-2 rounded-full bg-red-500/10 px-4 py-2 font-mono text-[10px] font-black uppercase tracking-[0.16em] text-red-100 ring-1 ring-red-300/18 transition hover:bg-red-500/16"
+                  >
+                    <Film className="h-3.5 w-3.5" aria-hidden="true" />
+                    Reproducir aquí
+                  </button>
+                  <a href={card.youtubeUrl} target="_blank" rel="noreferrer" className="ml-2 mt-5 inline-flex items-center gap-2 rounded-full bg-white/[0.045] px-4 py-2 font-mono text-[10px] font-black uppercase tracking-[0.16em] text-slate-300 ring-1 ring-white/[0.08] transition hover:bg-white/[0.08] hover:text-white">
+                    YouTube
+                    <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+                  </a>
                   {card.id === "sleep" && (
                     <div className="mt-3 flex flex-wrap gap-2">
-                      {sleepFrequencyLinks.map((item) => (
-                        <a
-                          key={item.url}
-                          href={item.url}
-                          target="_blank"
-                          rel="noreferrer"
+                      {sleepFrequencyLinks.map((link) => (
+                        <button
+                          key={link.id}
+                          type="button"
+                          onClick={() => selectSleepVideo(link)}
                           className="rounded-full bg-white/[0.045] px-2.5 py-1 font-mono text-[8px] font-black uppercase tracking-[0.12em] text-slate-300 ring-1 ring-white/[0.08] transition hover:bg-white/[0.08] hover:text-white"
-                          title={item.id}
                         >
-                          {item.label}
-                        </a>
+                          {link.label}
+                        </button>
                       ))}
                     </div>
                   )}

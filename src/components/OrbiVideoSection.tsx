@@ -1,7 +1,7 @@
 import { ArrowRight, ExternalLink, Film, Link, ListVideo, Play, Sparkles, Video } from "lucide-react";
 
 interface OrbiVideoSectionProps {
-  onPlayVideo: (compId: string) => void;
+  onPlayVideo?: (compId: string) => void;
 }
 
 interface VideoCard {
@@ -11,7 +11,6 @@ interface VideoCard {
   badge: string;
   youtubeUrl: string;
   youtubeSearchLabel: string;
-  status: "youtube-ready";
   note?: string;
 }
 
@@ -26,7 +25,6 @@ const videoCards: VideoCard[] = [
     badge: "Video principal",
     youtubeUrl: "https://youtu.be/wNcZ1Nwsdmw",
     youtubeSearchLabel: "ORBI Ecosystem",
-    status: "youtube-ready",
   },
   {
     id: "corporate",
@@ -35,7 +33,6 @@ const videoCards: VideoCard[] = [
     badge: "División empresarial",
     youtubeUrl: "https://youtube.com/shorts/IweGvQzgJ74",
     youtubeSearchLabel: "ORBI Corporate System",
-    status: "youtube-ready",
   },
   {
     id: "development",
@@ -44,7 +41,6 @@ const videoCards: VideoCard[] = [
     badge: "Software + agentes",
     youtubeUrl: "https://youtube.com/shorts/OBx8K2szN2w",
     youtubeSearchLabel: "ORBI Development System",
-    status: "youtube-ready",
   },
   {
     id: "game",
@@ -53,7 +49,6 @@ const videoCards: VideoCard[] = [
     badge: "Gaming + mundos",
     youtubeUrl: "https://youtube.com/shorts/LbBord2Zyzg",
     youtubeSearchLabel: "ORBI Game System",
-    status: "youtube-ready",
   },
   {
     id: "radar",
@@ -62,7 +57,6 @@ const videoCards: VideoCard[] = [
     badge: "Noticias + análisis",
     youtubeUrl: "https://youtube.com/shorts/KF5PcJTaDt4",
     youtubeSearchLabel: "ORBI Radar IA Tecnología",
-    status: "youtube-ready",
   },
   {
     id: "academy",
@@ -71,7 +65,6 @@ const videoCards: VideoCard[] = [
     badge: "Educación solar",
     youtubeUrl: "https://youtube.com/shorts/hIjzC7QPmks",
     youtubeSearchLabel: "ORBI Solar Academy",
-    status: "youtube-ready",
   },
   {
     id: "sleep",
@@ -80,7 +73,6 @@ const videoCards: VideoCard[] = [
     badge: "Bienestar digital",
     youtubeUrl: "https://youtube.com/shorts/rPgN-aqTwjI",
     youtubeSearchLabel: "ORBI Sleep Frequencies",
-    status: "youtube-ready",
     note: "Serie publicada con 6 shorts disponibles en el canal.",
   },
 ];
@@ -94,21 +86,26 @@ const sleepFrequencyLinks = [
   "https://youtube.com/shorts/tXQNUJ3g22s",
 ];
 
-function openExternalUrl(url: string) {
-  window.open(url, "_blank", "noopener,noreferrer");
-}
-
 function getCardActionLabel(card: VideoCard) {
   return card.id === "sleep" ? "Ver serie" : "Ver en YouTube";
+}
+
+function YoutubeActionLink({ card, primary = false }: { card: VideoCard; primary?: boolean }) {
+  const className = primary
+    ? "orbitron-primary-action"
+    : "mt-5 inline-flex items-center gap-2 rounded-full bg-red-500/10 px-4 py-2 font-mono text-[10px] font-black uppercase tracking-[0.16em] text-red-100 ring-1 ring-red-300/18 transition hover:bg-red-500/16";
+
+  return (
+    <a href={card.youtubeUrl} target="_blank" rel="noreferrer" className={className} aria-label={`Abrir ${card.title} en YouTube`}>
+      {primary ? getCardActionLabel(card) : <Film className="h-3.5 w-3.5" aria-hidden="true" />}
+      {primary ? <ArrowRight className="h-4 w-4" aria-hidden="true" /> : getCardActionLabel(card)}
+    </a>
+  );
 }
 
 export default function OrbiVideoSection({ onPlayVideo: _onPlayVideo }: OrbiVideoSectionProps) {
   const featured = videoCards[0];
   const secondaryCards = videoCards.slice(1);
-
-  const handleOpenCard = (card: VideoCard) => {
-    openExternalUrl(card.youtubeUrl);
-  };
 
   return (
     <section id="orbi-en-video" className="relative overflow-hidden py-24 sm:py-28">
@@ -148,23 +145,24 @@ export default function OrbiVideoSection({ onPlayVideo: _onPlayVideo }: OrbiVide
                   </span>
                 </div>
 
-                <div className="mt-10 aspect-video overflow-hidden rounded-[1.5rem] border border-white/10 bg-slate-950/60 shadow-2xl shadow-cyan-950/30">
+                <a
+                  href={featured.youtubeUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-10 block aspect-video overflow-hidden rounded-[1.5rem] border border-white/10 bg-slate-950/60 shadow-2xl shadow-cyan-950/30 transition hover:scale-[1.01] hover:border-red-200/25"
+                  aria-label={`Abrir ${featured.title} en YouTube`}
+                >
                   <div className="relative flex h-full items-center justify-center bg-[radial-gradient(circle_at_50%_35%,rgba(34,211,238,0.26),transparent_33%),linear-gradient(135deg,rgba(15,23,42,0.98),rgba(30,41,59,0.72),rgba(8,47,73,0.78))]">
                     <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(180deg,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:42px_42px] opacity-35" aria-hidden="true" />
                     <div className="absolute left-5 top-5 rounded-full bg-slate-950/45 px-3 py-1.5 font-mono text-[9px] font-black uppercase tracking-[0.18em] text-white/70 ring-1 ring-white/10 backdrop-blur-2xl">
                       YouTube source layer
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => handleOpenCard(featured)}
-                      className="group/play relative flex h-24 w-24 items-center justify-center rounded-full bg-red-500/15 text-white ring-1 ring-red-200/25 backdrop-blur-2xl transition hover:scale-105 hover:bg-red-500/22"
-                      aria-label={`Abrir ${featured.title} en YouTube`}
-                    >
+                    <span className="group/play relative flex h-24 w-24 items-center justify-center rounded-full bg-red-500/15 text-white ring-1 ring-red-200/25 backdrop-blur-2xl transition hover:scale-105 hover:bg-red-500/22">
                       <span className="absolute inset-0 rounded-full bg-red-500/20 blur-2xl transition group-hover/play:bg-red-400/30" aria-hidden="true" />
                       <Play className="relative z-10 ml-1 h-10 w-10 fill-current" aria-hidden="true" />
-                    </button>
+                    </span>
                   </div>
-                </div>
+                </a>
 
                 <h3 className="mt-8 font-space text-3xl font-black text-white">{featured.title}</h3>
                 <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">{featured.description}</p>
@@ -173,17 +171,14 @@ export default function OrbiVideoSection({ onPlayVideo: _onPlayVideo }: OrbiVide
                   <div className="flex items-start gap-3">
                     <Link className="mt-0.5 h-4 w-4 shrink-0 text-cyan-100" aria-hidden="true" />
                     <p className="text-xs leading-6 text-slate-300">
-                      Cada clic abre el video directamente desde YouTube. La web se mantiene liviana y cada reproducción suma visibilidad al canal oficial de ORBI.
+                      Cada tarjeta usa un enlace real distinto de YouTube. La web se mantiene liviana y cada reproducción suma visibilidad al canal oficial de ORBI.
                     </p>
                   </div>
                 </div>
               </div>
 
               <div className="flex flex-wrap gap-3">
-                <button type="button" onClick={() => handleOpenCard(featured)} className="orbitron-primary-action">
-                  {getCardActionLabel(featured)}
-                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                </button>
+                <YoutubeActionLink card={featured} primary />
                 <a href={YOUTUBE_CHANNEL_URL} target="_blank" rel="noreferrer" className="orbitron-secondary-action">
                   Canal YouTube
                   <ExternalLink className="h-4 w-4" aria-hidden="true" />
@@ -219,25 +214,19 @@ export default function OrbiVideoSection({ onPlayVideo: _onPlayVideo }: OrbiVide
                   <div className="mt-4 rounded-2xl bg-slate-950/25 px-3 py-2 font-mono text-[9px] font-black uppercase tracking-[0.14em] text-slate-400 ring-1 ring-white/[0.06]">
                     Buscar: {card.youtubeSearchLabel}
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => handleOpenCard(card)}
-                    className="mt-5 inline-flex items-center gap-2 rounded-full bg-red-500/10 px-4 py-2 font-mono text-[10px] font-black uppercase tracking-[0.16em] text-red-100 ring-1 ring-red-300/18 transition hover:bg-red-500/16"
-                  >
-                    <Film className="h-3.5 w-3.5" aria-hidden="true" />
-                    {getCardActionLabel(card)}
-                  </button>
+                  <YoutubeActionLink card={card} />
                   {card.id === "sleep" && (
                     <div className="mt-3 flex flex-wrap gap-2">
                       {sleepFrequencyLinks.map((link, index) => (
-                        <button
+                        <a
                           key={link}
-                          type="button"
-                          onClick={() => openExternalUrl(link)}
+                          href={link}
+                          target="_blank"
+                          rel="noreferrer"
                           className="rounded-full bg-white/[0.045] px-2.5 py-1 font-mono text-[8px] font-black uppercase tracking-[0.12em] text-slate-300 ring-1 ring-white/[0.08] transition hover:bg-white/[0.08] hover:text-white"
                         >
                           S{index + 1}
-                        </button>
+                        </a>
                       ))}
                     </div>
                   )}

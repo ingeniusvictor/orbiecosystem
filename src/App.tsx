@@ -246,7 +246,7 @@ export default function App() {
         />
 
         {/* ORBI video storytelling layer */}
-        <OrbiVideoSection onPlayVideo={handlePlayVideo} />
+        <OrbiVideoSection />
 
         {/* Development Roadmap schedule */}
         <Roadmap />

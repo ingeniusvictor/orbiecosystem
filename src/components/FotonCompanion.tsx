@@ -65,7 +65,7 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
     return (
       <div className={`relative flex shrink-0 items-center justify-center ${modelClassName}`}>
         <span className="absolute inset-2 rounded-full bg-yellow-300/15 blur-2xl" aria-hidden="true" />
-        <span className="absolute inset-4 rounded-full border border-yellow-300/20" aria-hidden="true" />
+        <span className="absolute inset-4 rounded-full border border-yellow-300/15" aria-hidden="true" />
 
         {modelViewerReady && !modelFailed ? (
           React.createElement("model-viewer", {
@@ -84,7 +84,7 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
             onError: () => setModelFailed(true),
           })
         ) : (
-          <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full border border-yellow-300/30 bg-slate-950/90 text-yellow-200 shadow-2xl shadow-yellow-950/40">
+          <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full border border-yellow-300/20 bg-slate-950/70 text-yellow-200 shadow-2xl shadow-yellow-950/25">
             <Bot className="h-8 w-8" aria-hidden="true" />
           </div>
         )}
@@ -95,7 +95,7 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-[60] hidden w-[min(390px,calc(100vw-2rem))] select-none lg:block">
+    <div className="fixed bottom-5 right-5 z-[60] hidden w-[min(380px,calc(100vw-2rem))] select-none lg:block">
       <style>{`
         @keyframes orbi-foton-float {
           0%, 100% { transform: translateY(0) scale(1); }
@@ -104,11 +104,12 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
       `}</style>
 
       {!isMinimized && (
-        <div className="mb-4 overflow-hidden rounded-[2rem] border border-yellow-300/20 bg-slate-950/90 shadow-2xl shadow-yellow-950/30 backdrop-blur-2xl">
+        <div className="mb-4 overflow-hidden rounded-[2rem] bg-slate-950/38 shadow-[0_22px_90px_rgba(0,0,0,0.42)] ring-1 ring-white/[0.06] backdrop-blur-2xl">
           <div className="relative overflow-hidden p-5">
-            <div className="absolute -right-12 -top-16 h-40 w-40 rounded-full bg-yellow-300/20 blur-3xl" aria-hidden="true" />
-            <div className="absolute -bottom-16 -left-12 h-36 w-36 rounded-full bg-cyan-500/15 blur-3xl" aria-hidden="true" />
-            <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-yellow-200/50 to-transparent" aria-hidden="true" />
+            <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-yellow-200/[0.08] via-cyan-300/[0.025] to-violet-500/[0.08]" aria-hidden="true" />
+            <div className="absolute inset-0 rounded-[2rem] bg-slate-950/[0.18]" aria-hidden="true" />
+            <div className="absolute -right-12 -top-16 h-40 w-40 rounded-full bg-yellow-300/14 blur-3xl" aria-hidden="true" />
+            <div className="absolute -bottom-16 -left-12 h-36 w-36 rounded-full bg-cyan-500/10 blur-3xl" aria-hidden="true" />
 
             <div className="relative z-10 flex items-start gap-4">
               {renderFotonModel("panel")}
@@ -116,20 +117,20 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
               <div className="min-w-0 flex-1 pt-2">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="font-mono text-[9px] font-black uppercase tracking-[0.28em] text-yellow-200">ORBI FOTON ONLINE</p>
-                    <h3 className="mt-1 font-space text-lg font-black leading-tight text-white">Guía IA visual del ecosistema.</h3>
+                    <p className="font-mono text-[9px] font-black uppercase tracking-[0.28em] text-yellow-100/90">ORBI FOTON ONLINE</p>
+                    <h3 className="mt-1 font-space text-lg font-black leading-tight text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.5)]">Guía IA visual del ecosistema.</h3>
                   </div>
                   <button
                     type="button"
                     onClick={() => setIsMinimized(true)}
-                    className="rounded-full border border-white/10 bg-white/[0.03] p-1.5 text-slate-500 transition hover:text-white"
+                    className="rounded-full bg-white/[0.04] p-1.5 text-slate-400 transition hover:bg-white/[0.08] hover:text-white"
                     aria-label="Minimizar ORBI FOTON"
                   >
                     <X className="h-3.5 w-3.5" />
                   </button>
                 </div>
 
-                <p className="mt-3 text-sm leading-6 text-slate-300">
+                <p className="mt-3 text-sm leading-6 text-slate-200/92 drop-shadow-[0_2px_16px_rgba(0,0,0,0.55)]">
                   Hola, soy ORBI FOTON. Puedo guiarte por las divisiones, soluciones, videos y próximos lanzamientos de ORBI Ecosystem.
                 </p>
 
@@ -143,27 +144,33 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
                   </button>
 
                   <div className="grid grid-cols-3 gap-2">
-                    <button type="button" onClick={goToEcosystem} className="orbitron-secondary-action !min-h-10 !px-3 !py-2 !text-[10px]">
-                      <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
-                      ORBI
+                    <button type="button" onClick={goToEcosystem} className="rounded-2xl bg-white/[0.055] px-3 py-2 font-mono text-[10px] font-black uppercase tracking-[0.12em] text-slate-100 transition hover:bg-white/[0.1] hover:text-white">
+                      <span className="inline-flex items-center justify-center gap-1.5">
+                        <Sparkles className="h-3.5 w-3.5 text-yellow-100" aria-hidden="true" />
+                        ORBI
+                      </span>
                     </button>
-                    <button type="button" onClick={goToSolutions} className="orbitron-secondary-action !min-h-10 !px-3 !py-2 !text-[10px]">
-                      <Compass className="h-3.5 w-3.5" aria-hidden="true" />
-                      Soluciones
+                    <button type="button" onClick={goToSolutions} className="rounded-2xl bg-white/[0.055] px-3 py-2 font-mono text-[10px] font-black uppercase tracking-[0.12em] text-slate-100 transition hover:bg-white/[0.1] hover:text-white">
+                      <span className="inline-flex items-center justify-center gap-1.5">
+                        <Compass className="h-3.5 w-3.5 text-cyan-100" aria-hidden="true" />
+                        Soluciones
+                      </span>
                     </button>
                     <button
                       type="button"
                       onClick={() => onPlayVideo?.("eco-general")}
-                      className="orbitron-ghost-action !min-h-10 !px-3 !py-2 !text-[10px]"
+                      className="rounded-2xl bg-white/[0.055] px-3 py-2 font-mono text-[10px] font-black uppercase tracking-[0.12em] text-slate-100 transition hover:bg-white/[0.1] hover:text-white"
                     >
-                      <Play className="h-3.5 w-3.5" aria-hidden="true" />
-                      Video
+                      <span className="inline-flex items-center justify-center gap-1.5">
+                        <Play className="h-3.5 w-3.5 text-cyan-100" aria-hidden="true" />
+                        Video
+                      </span>
                     </button>
                   </div>
                 </div>
 
-                <div className="mt-4 flex items-center gap-2 border-t border-white/10 pt-3 font-mono text-[9px] font-black uppercase tracking-[0.2em] text-slate-500">
-                  <Zap className="h-3 w-3 text-yellow-200" aria-hidden="true" />
+                <div className="mt-4 flex items-center gap-2 border-t border-white/[0.07] pt-3 font-mono text-[9px] font-black uppercase tracking-[0.2em] text-slate-400/80">
+                  <Zap className="h-3 w-3 text-yellow-100" aria-hidden="true" />
                   <span>3D companion layer / GLB ready</span>
                 </div>
               </div>
@@ -176,10 +183,10 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
         <button
           type="button"
           onClick={() => setIsMinimized((value) => !value)}
-          className="group relative flex h-24 w-24 items-center justify-center rounded-full border border-yellow-300/30 bg-slate-950/90 text-yellow-100 shadow-2xl shadow-yellow-950/40 backdrop-blur-2xl transition hover:scale-105 hover:border-yellow-200/60"
+          className="group relative flex h-24 w-24 items-center justify-center rounded-full bg-slate-950/52 text-yellow-100 shadow-[0_20px_70px_rgba(0,0,0,0.42)] ring-1 ring-yellow-100/10 backdrop-blur-2xl transition hover:scale-105 hover:ring-yellow-100/25"
           aria-label={isMinimized ? "Abrir ORBI FOTON" : "Minimizar ORBI FOTON"}
         >
-          <span className="absolute inset-0 rounded-full bg-yellow-300/10 blur-xl transition group-hover:bg-yellow-200/20" />
+          <span className="absolute inset-0 rounded-full bg-yellow-300/10 blur-xl transition group-hover:bg-yellow-200/18" />
           {renderFotonModel("compact")}
         </button>
       </div>

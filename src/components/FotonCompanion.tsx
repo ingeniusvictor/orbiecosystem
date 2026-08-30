@@ -7,12 +7,15 @@ interface FotonCompanionProps {
 }
 
 const FOTON_MODEL_SRC = "/assets/models/orbi-foton.glb";
+const LEFT_LOOK_ORBIT = -85;
+const RIGHT_LOOK_ORBIT = 85;
 
 export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompanionProps) {
   const [isOpen, setIsOpen] = useState(true);
   const [isMinimized, setIsMinimized] = useState(false);
   const [modelViewerReady, setModelViewerReady] = useState(false);
   const [modelFailed, setModelFailed] = useState(false);
+  const [orbitAngle, setOrbitAngle] = useState(LEFT_LOOK_ORBIT);
 
   useEffect(() => {
     const customElementsRegistry = window.customElements;
@@ -38,6 +41,18 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
     script.onerror = () => setModelFailed(true);
     document.head.appendChild(script);
   }, []);
+
+  useEffect(() => {
+    if (!modelViewerReady || modelFailed) {
+      return;
+    }
+
+    const lookAroundTimer = window.setInterval(() => {
+      setOrbitAngle((currentAngle) => (currentAngle < 0 ? RIGHT_LOOK_ORBIT : LEFT_LOOK_ORBIT));
+    }, 4200);
+
+    return () => window.clearInterval(lookAroundTimer);
+  }, [modelViewerReady, modelFailed]);
 
   if (!isOpen) {
     return null;
@@ -74,10 +89,12 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
           React.createElement("model-viewer", {
             src: FOTON_MODEL_SRC,
             alt: "Modelo 3D de ORBI FOTON",
-            className: "relative z-10 h-full w-full animate-[orbi-foton-lookaround_7.2s_ease-in-out_infinite]",
-            "camera-orbit": "0deg 72deg 105%",
-            "min-camera-orbit": "auto auto 105%",
-            "max-camera-orbit": "auto auto 105%",
+            className: "relative z-10 h-full w-full animate-[orbi-foton-float_5.4s_ease-in-out_infinite] transition-transform duration-700",
+            "camera-orbit": `${orbitAngle}deg 72deg 105%`,
+            "min-camera-orbit": "-90deg 62deg 105%",
+            "max-camera-orbit": "90deg 82deg 105%",
+            "field-of-view": "30deg",
+            "interpolation-decay": "95",
             "camera-controls": false,
             "disable-zoom": true,
             "interaction-prompt": "none",
@@ -101,9 +118,9 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
   return (
     <div className="fixed bottom-5 right-5 z-[60] hidden w-[min(380px,calc(100vw-2rem))] select-none lg:block">
       <style>{`
-        @keyframes orbi-foton-lookaround {
-          0%, 100% { transform: translateY(0) rotateY(-38deg) scale(1); }
-          50% { transform: translateY(-7px) rotateY(38deg) scale(1.025); }
+        @keyframes orbi-foton-float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-7px); }
         }
       `}</style>
 

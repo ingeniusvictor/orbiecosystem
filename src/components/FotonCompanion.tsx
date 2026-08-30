@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ArrowRight, Bot, Compass, MessageCircle, Play, Sparkles, X, Zap } from "lucide-react";
+import { ArrowRight, Bot, Compass, Mail, MessageCircle, Play, Sparkles, X, Zap } from "lucide-react";
 
 interface FotonCompanionProps {
   onNavigate: (sectionId: string) => void;
@@ -11,12 +11,54 @@ const LEFT_LOOK_ORBIT = -82;
 const CENTER_LOOK_ORBIT = 0;
 const RIGHT_LOOK_ORBIT = 82;
 
+const SECTION_MESSAGES = [
+  {
+    id: "hero",
+    label: "Visión ORBI",
+    title: "Bienvenido a ORBI Ecosystem.",
+    message: "Te puedo guiar por la visión general, las divisiones y las soluciones que estamos construyendo.",
+  },
+  {
+    id: "ecosystem-season-one",
+    label: "Mapa del ecosistema",
+    title: "Estás viendo la arquitectura ORBI.",
+    message: "Aquí se conectan IA, software, energía, educación, automatización, bienestar y contenido tecnológico.",
+  },
+  {
+    id: "proyectos",
+    label: "Soluciones",
+    title: "Estas son las soluciones activas.",
+    message: "Puedo ayudarte a revisar qué división o producto encaja mejor con una necesidad real.",
+  },
+  {
+    id: "foton-prime",
+    label: "FOTON Prime",
+    title: "Esta es mi zona principal.",
+    message: "Aquí comienza la capa conversacional que más adelante podrá evolucionar hacia una experiencia IA completa.",
+  },
+  {
+    id: "roadmap",
+    label: "Roadmap",
+    title: "Estás viendo la evolución futura.",
+    message: "ORBI no es una página estática: es una plataforma que irá creciendo por módulos y lanzamientos.",
+  },
+  {
+    id: "contacto",
+    label: "Contacto",
+    title: "Listo para conversar.",
+    message: "Desde aquí puedes conectar con ORBI Ecosystem y explorar una colaboración, piloto o solución a medida.",
+  },
+] as const;
+
+const DEFAULT_MESSAGE = SECTION_MESSAGES[0];
+
 export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompanionProps) {
   const [isOpen, setIsOpen] = useState(true);
   const [isMinimized, setIsMinimized] = useState(false);
   const [modelViewerReady, setModelViewerReady] = useState(false);
   const [modelFailed, setModelFailed] = useState(false);
   const [orbitAngle, setOrbitAngle] = useState(CENTER_LOOK_ORBIT);
+  const [activeSectionId, setActiveSectionId] = useState(DEFAULT_MESSAGE.id);
 
   useEffect(() => {
     const customElementsRegistry = window.customElements;
@@ -59,9 +101,42 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
     return () => window.clearInterval(lookAroundTimer);
   }, [modelViewerReady, modelFailed]);
 
+  useEffect(() => {
+    const sectionElements = SECTION_MESSAGES.map((section) => document.getElementById(section.id)).filter(
+      (element): element is HTMLElement => Boolean(element),
+    );
+
+    if (sectionElements.length === 0) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntry = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((first, second) => second.intersectionRatio - first.intersectionRatio)[0];
+
+        if (visibleEntry?.target.id) {
+          setActiveSectionId(visibleEntry.target.id);
+        }
+      },
+      {
+        root: null,
+        rootMargin: "-25% 0px -45% 0px",
+        threshold: [0.18, 0.32, 0.5, 0.68],
+      },
+    );
+
+    sectionElements.forEach((element) => observer.observe(element));
+
+    return () => observer.disconnect();
+  }, []);
+
   if (!isOpen) {
     return null;
   }
+
+  const activeMessage = SECTION_MESSAGES.find((section) => section.id === activeSectionId) ?? DEFAULT_MESSAGE;
 
   const goToFoton = () => {
     setIsMinimized(true);
@@ -78,12 +153,16 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
     onNavigate("ecosystem-season-one");
   };
 
+  const goToContact = () => {
+    window.location.href = "mailto:ing.vmlp.chile@gmail.com?subject=Contacto%20desde%20ORBI%20Ecosystem&body=Hola%20ORBI%20Ecosystem%2C%20quiero%20conversar%20sobre%20una%20soluci%C3%B3n%20o%20colaboraci%C3%B3n.";
+  };
+
   const glassActionClass =
     "min-w-0 rounded-2xl bg-white/[0.065] px-2 py-2 font-mono text-[8.5px] font-black uppercase tracking-[0.035em] text-slate-50 ring-1 ring-white/[0.09] backdrop-blur-xl transition hover:bg-white/[0.13] hover:text-white";
 
   const renderFotonModel = (mode: "compact" | "panel") => {
     const isCompact = mode === "compact";
-    const modelClassName = isCompact ? "h-20 w-20" : "h-32 w-32";
+    const modelClassName = isCompact ? "h-16 w-16 lg:h-20 lg:w-20" : "h-32 w-32";
 
     return (
       <div className={`relative flex shrink-0 items-center justify-center ${modelClassName}`}>
@@ -110,18 +189,18 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
             onError: () => setModelFailed(true),
           })
         ) : (
-          <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full bg-white/[0.07] text-yellow-200 shadow-2xl shadow-yellow-950/20 ring-1 ring-yellow-100/10 backdrop-blur-2xl">
-            <Bot className="h-8 w-8" aria-hidden="true" />
+          <div className="relative z-10 flex h-14 w-14 items-center justify-center rounded-full bg-white/[0.07] text-yellow-200 shadow-2xl shadow-yellow-950/20 ring-1 ring-yellow-100/10 backdrop-blur-2xl lg:h-16 lg:w-16">
+            <Bot className="h-7 w-7 lg:h-8 lg:w-8" aria-hidden="true" />
           </div>
         )}
 
-        <span className="absolute right-3 top-3 z-20 h-3.5 w-3.5 rounded-full border-2 border-slate-950 bg-emerald-400 shadow-lg shadow-emerald-500/40" />
+        <span className="absolute right-2 top-2 z-20 h-3 w-3 rounded-full border-2 border-slate-950 bg-emerald-400 shadow-lg shadow-emerald-500/40 lg:right-3 lg:top-3 lg:h-3.5 lg:w-3.5" />
       </div>
     );
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-[60] hidden w-[min(380px,calc(100vw-2rem))] select-none lg:block">
+    <div className="fixed bottom-4 right-4 z-[60] w-[min(380px,calc(100vw-2rem))] select-none lg:bottom-5 lg:right-5">
       <style>{`
         @keyframes orbi-foton-float {
           0%, 100% { transform: translateY(0); }
@@ -130,7 +209,7 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
       `}</style>
 
       {!isMinimized && (
-        <div className="mb-4 overflow-hidden rounded-[2rem] bg-white/[0.026] shadow-[0_18px_48px_rgba(0,0,0,0.22)] ring-1 ring-white/[0.10] backdrop-blur-[40px]">
+        <div className="mb-4 hidden overflow-hidden rounded-[2rem] bg-white/[0.026] shadow-[0_18px_48px_rgba(0,0,0,0.22)] ring-1 ring-white/[0.10] backdrop-blur-[40px] lg:block">
           <div className="relative overflow-hidden p-5">
             <div className="absolute inset-0 rounded-[2rem] bg-[linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.012)_48%,rgba(34,211,238,0.035)_100%)]" aria-hidden="true" />
             <div className="absolute inset-0 rounded-[2rem] bg-[radial-gradient(circle_at_18%_12%,rgba(255,255,255,0.14),transparent_32%),radial-gradient(circle_at_90%_10%,rgba(250,204,21,0.08),transparent_28%),radial-gradient(circle_at_0%_100%,rgba(34,211,238,0.075),transparent_38%)]" aria-hidden="true" />
@@ -143,8 +222,12 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
               <div className="min-w-0 flex-1 pt-2">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <p className="font-mono text-[8.5px] font-black uppercase tracking-[0.22em] text-yellow-100/95 drop-shadow-[0_2px_10px_rgba(0,0,0,0.72)]">ORBI FOTON ONLINE</p>
-                    <h3 className="mt-1 font-space text-lg font-black leading-tight text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.78)]">Guía IA visual del ecosistema.</h3>
+                    <p className="font-mono text-[8.5px] font-black uppercase tracking-[0.22em] text-yellow-100/95 drop-shadow-[0_2px_10px_rgba(0,0,0,0.72)]">
+                      ORBI FOTON / {activeMessage.label}
+                    </p>
+                    <h3 className="mt-1 font-space text-lg font-black leading-tight text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.78)]">
+                      {activeMessage.title}
+                    </h3>
                   </div>
                   <button
                     type="button"
@@ -157,7 +240,7 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
                 </div>
 
                 <p className="mt-3 text-sm leading-6 text-slate-100/94 drop-shadow-[0_2px_16px_rgba(0,0,0,0.74)]">
-                  Hola, soy ORBI FOTON. Puedo guiarte por las divisiones, soluciones, videos y próximos lanzamientos de ORBI Ecosystem.
+                  {activeMessage.message}
                 </p>
 
                 <div className="mt-4 grid gap-2">
@@ -172,7 +255,7 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
                     </span>
                   </button>
 
-                  <div className="grid grid-cols-[0.82fr_1.18fr_0.82fr] gap-1.5">
+                  <div className="grid grid-cols-[0.78fr_1.12fr_0.82fr_0.88fr] gap-1.5">
                     <button type="button" onClick={goToEcosystem} className={glassActionClass}>
                       <span className="flex min-w-0 items-center justify-center gap-1 truncate">
                         <Sparkles className="h-3 w-3 shrink-0 text-yellow-100" aria-hidden="true" />
@@ -195,12 +278,18 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
                         <span className="truncate">Video</span>
                       </span>
                     </button>
+                    <button type="button" onClick={goToContact} className={glassActionClass}>
+                      <span className="flex min-w-0 items-center justify-center gap-1 truncate">
+                        <Mail className="h-3 w-3 shrink-0 text-yellow-100" aria-hidden="true" />
+                        <span className="truncate">Contacto</span>
+                      </span>
+                    </button>
                   </div>
                 </div>
 
                 <div className="mt-4 flex items-center gap-2 border-t border-white/[0.09] pt-3 font-mono text-[8.5px] font-black uppercase tracking-[0.16em] text-slate-200/62 drop-shadow-[0_2px_12px_rgba(0,0,0,0.65)]">
                   <Zap className="h-3 w-3 shrink-0 text-yellow-100" aria-hidden="true" />
-                  <span>3D companion layer / GLB ready</span>
+                  <span>Contextual guide / GLB companion</span>
                 </div>
               </div>
             </div>
@@ -212,11 +301,14 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
         <button
           type="button"
           onClick={() => setIsMinimized((value) => !value)}
-          className="group relative flex h-24 w-24 items-center justify-center rounded-full bg-white/[0.048] text-yellow-100 shadow-[0_18px_54px_rgba(0,0,0,0.24)] ring-1 ring-white/12 backdrop-blur-[34px] transition hover:scale-105 hover:bg-white/[0.08] hover:ring-yellow-100/25"
+          className="group relative flex h-20 w-20 items-center justify-center rounded-full bg-white/[0.048] text-yellow-100 shadow-[0_18px_54px_rgba(0,0,0,0.24)] ring-1 ring-white/12 backdrop-blur-[34px] transition hover:scale-105 hover:bg-white/[0.08] hover:ring-yellow-100/25 lg:h-24 lg:w-24"
           aria-label={isMinimized ? "Abrir ORBI FOTON" : "Minimizar ORBI FOTON"}
         >
           <span className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.16),rgba(250,204,21,0.075)_42%,transparent_70%)] transition group-hover:opacity-90" aria-hidden="true" />
           {renderFotonModel("compact")}
+          <span className="absolute -left-28 top-1/2 hidden -translate-y-1/2 rounded-full bg-slate-950/35 px-3 py-1.5 font-mono text-[8px] font-black uppercase tracking-[0.16em] text-white/80 ring-1 ring-white/10 backdrop-blur-2xl sm:block lg:hidden">
+            ORBI FOTON
+          </span>
         </button>
       </div>
     </div>

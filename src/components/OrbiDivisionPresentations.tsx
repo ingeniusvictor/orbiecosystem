@@ -265,23 +265,25 @@ export default function OrbiDivisionPresentations() {
               id={`orbi-presentation-${division.id}`}
               className="orbitron-panel scroll-mt-28 overflow-hidden p-0"
             >
-              <div className="grid gap-0 xl:grid-cols-[1.08fr_0.92fr]">
+              <div className="grid gap-0 xl:grid-cols-[0.95fr_1.05fr]">
                 <div className={`relative overflow-hidden border-b border-white/10 bg-slate-950 shadow-2xl ${division.glow} xl:border-b-0 xl:border-r`}>
                   <div className={`absolute inset-0 bg-gradient-to-br ${division.accent} opacity-18`} aria-hidden="true" />
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_14%,rgba(255,255,255,0.22),transparent_24%),linear-gradient(180deg,rgba(2,6,23,0.02),rgba(2,6,23,0.72))]" aria-hidden="true" />
-                  <img
-                    src={division.imagePath}
-                    alt={division.imageAlt}
-                    loading={index < 2 ? "eager" : "lazy"}
-                    className="relative z-10 aspect-[16/9] h-full w-full object-cover object-center opacity-95 transition duration-500 hover:scale-[1.015]"
-                  />
-                  <div className="absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-slate-950 via-slate-950/55 to-transparent p-5 sm:p-7">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_14%,rgba(255,255,255,0.18),transparent_24%),linear-gradient(180deg,rgba(2,6,23,0.02),rgba(2,6,23,0.82))]" aria-hidden="true" />
+                  <div className="relative z-10 flex min-h-[280px] items-center justify-center p-3 sm:min-h-[360px] sm:p-4 lg:min-h-[430px] xl:min-h-full xl:p-5">
+                    <img
+                      src={division.imagePath}
+                      alt={division.imageAlt}
+                      loading={index < 2 ? "eager" : "lazy"}
+                      className="mx-auto h-auto w-full max-w-[94%] max-h-[260px] object-contain opacity-95 drop-shadow-2xl transition duration-500 hover:scale-[1.01] sm:max-h-[340px] lg:max-h-[410px] xl:max-h-[520px]"
+                    />
+                  </div>
+                  <div className="absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-slate-950 via-slate-950/55 to-transparent p-4 sm:p-6">
                     <div className="flex flex-wrap items-center gap-3">
                       <span className="rounded-full border border-white/15 bg-slate-950/55 px-3 py-1.5 font-mono text-[9px] font-black uppercase tracking-[0.2em] text-white/80 backdrop-blur-2xl">
                         {division.imageLabel}
                       </span>
                       <span className="rounded-full border border-cyan-300/15 bg-cyan-300/[0.08] px-3 py-1.5 font-mono text-[9px] font-black uppercase tracking-[0.2em] text-cyan-100 backdrop-blur-2xl">
-                        Visual dossier
+                        Visual completo
                       </span>
                     </div>
                   </div>

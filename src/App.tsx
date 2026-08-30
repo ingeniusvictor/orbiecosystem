@@ -12,6 +12,7 @@ import SeasonOneEcosystem from "./components/SeasonOneEcosystem";
 import FotonPrimeSection from "./components/FotonPrimeSection";
 import FotonCompanion from "./components/FotonCompanion";
 import ProductGrid from "./components/ProductGrid";
+import OrbiVideoSection from "./components/OrbiVideoSection";
 import Differentiators from "./components/Differentiators";
 import Roadmap from "./components/Roadmap";
 import FinalCTA from "./components/FinalCTA";
@@ -162,7 +163,7 @@ export default function App() {
   // Scroll active section tracking
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["hero", "ecosystem-season-one", "ecosistema-mirada", "ecosistema", "foton-prime", "proyectos", "roadmap"];
+      const sections = ["hero", "ecosystem-season-one", "ecosistema-mirada", "ecosistema", "foton-prime", "proyectos", "orbi-en-video", "roadmap"];
       const scrollPos = window.scrollY + 120; // adding threshold buffer
 
       for (const sectionId of sections) {
@@ -243,6 +244,9 @@ export default function App() {
           onResetDivisionFilter={handleResetDivisionFilter} 
           onPlayVideo={handlePlayVideo}
         />
+
+        {/* ORBI video storytelling layer */}
+        <OrbiVideoSection onPlayVideo={handlePlayVideo} />
 
         {/* Development Roadmap schedule */}
         <Roadmap />

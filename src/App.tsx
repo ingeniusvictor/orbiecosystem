@@ -9,6 +9,7 @@ import HeroSection from "./components/HeroSection";
 import LoaderScreen from "./components/LoaderScreen";
 import AtAGlance from "./components/AtAGlance";
 import SeasonOneEcosystem from "./components/SeasonOneEcosystem";
+import OrbiDivisionPresentations from "./components/OrbiDivisionPresentations";
 import FotonPrimeSection from "./components/FotonPrimeSection";
 import FotonCompanion from "./components/FotonCompanion";
 import ProductGrid from "./components/ProductGrid";
@@ -113,17 +114,15 @@ export default function App() {
   const [isModalAdminMode, setIsModalAdminMode] = useState<boolean>(false);
   const prefersReducedMotion = usePrefersReducedMotion();
 
-  // Standard client watcher video trigger
   const handlePlayVideo = (compId: string = "eco-general") => {
     setInitialComponentId(compId);
-    setIsModalAdminMode(false); // Spectator view
+    setIsModalAdminMode(false);
     setIsVideoModalOpen(true);
   };
 
-  // Dedicated admin developer console trigger
   const handleOpenDevPanel = () => {
     setInitialComponentId("eco-general");
-    setIsModalAdminMode(true); // Full developer control panel view
+    setIsModalAdminMode(true);
     setIsVideoModalOpen(true);
   };
 
@@ -132,7 +131,7 @@ export default function App() {
     
     const element = document.getElementById(sectionId);
     if (element) {
-      const headerOffset = 80; // height of fixed header approx
+      const headerOffset = 80;
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
@@ -160,11 +159,10 @@ export default function App() {
     requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: "auto" }));
   }, [isHomeRoute]);
 
-  // Scroll active section tracking
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["hero", "ecosystem-season-one", "orbi-en-video", "ecosistema-mirada", "ecosistema", "foton-prime", "proyectos", "roadmap"];
-      const scrollPos = window.scrollY + 120; // adding threshold buffer
+      const sections = ["hero", "ecosystem-season-one", "orbi-presentaciones", "orbi-en-video", "ecosistema-mirada", "ecosistema", "foton-prime", "proyectos", "roadmap"];
+      const scrollPos = window.scrollY + 120;
 
       for (const sectionId of sections) {
         const el = document.getElementById(sectionId);
@@ -207,15 +205,11 @@ export default function App() {
 
   return (
     <div id="orbi-root-canvas" className="min-h-screen bg-slate-950 text-slate-100 selection:bg-purple-500/30 selection:text-white antialiased">
-      {/* Premium Loader Overlay */}
       <LoaderScreen />
 
-      {/* Header navbar */}
       <Header onNavigate={handleNavigate} activeSection={activeSection} onOpenDevPanel={shouldShowDevPanel ? handleOpenDevPanel : undefined} />
 
-      {/* Main Page Blocks wrapper */}
       <main className="relative">
-        {/* Decorative corner indicator labels */}
         <div className="hidden xl:block fixed left-6 bottom-10 z-40 transform -rotate-90 origin-left select-none text-[9px] font-mono tracking-[0.3em] text-slate-600 leading-none">
           SYSTEM: ACTIVE // ORB-NET-GRID
         </div>
@@ -223,43 +217,34 @@ export default function App() {
           LATENCY: OPTIMAL // DIRECT_NEXUS
         </div>
 
-        {/* Hero Section */}
         <HeroSection onNavigate={handleNavigate} onPlayVideo={handlePlayVideo} />
 
-        {/* ORBI Platform Season 1 Map */}
         <SeasonOneEcosystem onNavigate={handleNavigate} onPlayVideo={handlePlayVideo} />
 
-        {/* ORBI video storytelling layer */}
+        <OrbiDivisionPresentations />
+
         <OrbiVideoSection />
 
-        {/* Orbi Ecosystem en una mirada */}
         <AtAGlance />
 
-        {/* What is Orbi / Differentiators section */}
         <Differentiators />
 
-        {/* Orbi Foton Prime - Invisible AI mother core with real chatbot */}
         <FotonPrimeSection onPlayVideo={handlePlayVideo} />
 
-        {/* Dynamic products catalogs */}
         <ProductGrid 
           initialDivisionFilter="all" 
           onResetDivisionFilter={handleResetDivisionFilter}
         />
 
-        {/* Development Roadmap schedule */}
         <Roadmap />
 
-        {/* Final Interactive CTA Banner */}
         <FinalCTA onNavigate={handleNavigate} />
       </main>
 
       <FotonCompanion onNavigate={handleNavigate} onPlayVideo={handlePlayVideo} />
 
-      {/* Footer legal & navigation coordinates */}
       <Footer onNavigate={handleNavigate} />
 
-      {/* Unified ecosystem video presentation controller */}
       <VideoModal
         isOpen={isVideoModalOpen}
         onClose={() => setIsVideoModalOpen(false)}

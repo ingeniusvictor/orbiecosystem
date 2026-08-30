@@ -1,4 +1,4 @@
-import { ArrowRight, Briefcase, Code2, Gamepad2, GraduationCap, Moon, Newspaper, Play, Sparkles, Zap } from "lucide-react";
+import { ArrowRight, Briefcase, Code2, Gamepad2, GraduationCap, Moon, Newspaper, Sparkles, Zap } from "lucide-react";
 import { orbiSeasonOneMetrics, orbiSeasonOnePortals, type OrbiSeasonOnePortal } from "../content/orbiSeasonOne";
 
 interface SeasonOneEcosystemProps {
@@ -39,20 +39,18 @@ function PortalIcon({ icon }: { icon: OrbiSeasonOnePortal["icon"] }) {
   }
 }
 
-function videoComponentId(portalId: string) {
+function presentationSectionId(portalId: string) {
   switch (portalId) {
-    case "development":
-      return "orbi-development";
-    case "corporate":
-      return "orbi-corp";
+    case "instalaciones-servicios":
+      return "orbi-presentation-services";
     case "games":
-      return "orbi-games";
+      return "orbi-presentation-games";
     default:
-      return "eco-general";
+      return `orbi-presentation-${portalId}`;
   }
 }
 
-export default function SeasonOneEcosystem({ onNavigate, onPlayVideo }: SeasonOneEcosystemProps) {
+export default function SeasonOneEcosystem({ onNavigate }: SeasonOneEcosystemProps) {
   const newsPortal = orbiSeasonOnePortals.find((portal) => portal.id === "news");
   const corePortals = orbiSeasonOnePortals.filter((portal) => portal.id !== "news");
 
@@ -133,7 +131,7 @@ export default function SeasonOneEcosystem({ onNavigate, onPlayVideo }: SeasonOn
 
         <div className="mt-7 flex items-center justify-between gap-4 border-y border-white/10 py-4 text-[10px] font-black uppercase tracking-[0.22em] text-slate-500">
           <span>Divisiones principales</span>
-          <span className="text-cyan-200">Video-ready / Producto-ready / Servicio-ready</span>
+          <span className="text-cyan-200">Presentación-ready / Producto-ready / Servicio-ready</span>
         </div>
 
         <div className="mt-7 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -166,17 +164,17 @@ export default function SeasonOneEcosystem({ onNavigate, onPlayVideo }: SeasonOn
 
                   <div className="rounded-2xl border border-white/10 bg-slate-950/70 p-4">
                     <div className="mb-3 flex items-center justify-between gap-3">
-                      <span className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500">Video Slot</span>
-                      <span className={`rounded-full border px-2 py-1 text-[9px] font-black uppercase tracking-[0.18em] ${portal.videoStatus === "ready" ? "border-cyan-400/25 text-cyan-200" : "border-amber-300/25 text-amber-100"}`}>
-                        {portal.videoStatus === "ready" ? "Ready" : "Pending"}
+                      <span className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500">Presentation Slot</span>
+                      <span className="rounded-full border border-cyan-400/25 px-2 py-1 text-[9px] font-black uppercase tracking-[0.18em] text-cyan-200">
+                        Ready
                       </span>
                     </div>
                     <button
                       type="button"
-                      onClick={() => onPlayVideo?.(videoComponentId(portal.id))}
+                      onClick={() => onNavigate(presentationSectionId(portal.id))}
                       className="flex w-full items-center justify-center gap-2 rounded-xl border border-cyan-400/20 bg-cyan-400/5 px-4 py-3 text-[10px] font-black uppercase tracking-[0.24em] text-cyan-200 transition hover:border-cyan-300/50 hover:bg-cyan-400/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-950"
                     >
-                      <Play className="h-3.5 w-3.5" />
+                      <Sparkles className="h-3.5 w-3.5" />
                       Ver presentación
                     </button>
                   </div>

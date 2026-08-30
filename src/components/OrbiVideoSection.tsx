@@ -1,9 +1,5 @@
 import { ArrowRight, ExternalLink, Film, Link, ListVideo, Play, Sparkles, Video } from "lucide-react";
 
-interface OrbiVideoSectionProps {
-  onPlayVideo?: (compId: string) => void;
-}
-
 interface VideoCard {
   id: string;
   title: string;
@@ -11,6 +7,7 @@ interface VideoCard {
   badge: string;
   youtubeUrl: string;
   youtubeSearchLabel: string;
+  youtubeId: string;
   note?: string;
 }
 
@@ -25,6 +22,7 @@ const videoCards: VideoCard[] = [
     badge: "Video principal",
     youtubeUrl: "https://youtu.be/wNcZ1Nwsdmw",
     youtubeSearchLabel: "ORBI Ecosystem",
+    youtubeId: "wNcZ1Nwsdmw",
   },
   {
     id: "corporate",
@@ -33,6 +31,7 @@ const videoCards: VideoCard[] = [
     badge: "División empresarial",
     youtubeUrl: "https://youtube.com/shorts/IweGvQzgJ74",
     youtubeSearchLabel: "ORBI Corporate System",
+    youtubeId: "IweGvQzgJ74",
   },
   {
     id: "development",
@@ -41,6 +40,7 @@ const videoCards: VideoCard[] = [
     badge: "Software + agentes",
     youtubeUrl: "https://youtube.com/shorts/OBx8K2szN2w",
     youtubeSearchLabel: "ORBI Development System",
+    youtubeId: "OBx8K2szN2w",
   },
   {
     id: "game",
@@ -49,6 +49,7 @@ const videoCards: VideoCard[] = [
     badge: "Gaming + mundos",
     youtubeUrl: "https://youtube.com/shorts/LbBord2Zyzg",
     youtubeSearchLabel: "ORBI Game System",
+    youtubeId: "LbBord2Zyzg",
   },
   {
     id: "radar",
@@ -57,6 +58,7 @@ const videoCards: VideoCard[] = [
     badge: "Noticias + análisis",
     youtubeUrl: "https://youtube.com/shorts/KF5PcJTaDt4",
     youtubeSearchLabel: "ORBI Radar IA Tecnología",
+    youtubeId: "KF5PcJTaDt4",
   },
   {
     id: "academy",
@@ -65,6 +67,7 @@ const videoCards: VideoCard[] = [
     badge: "Educación solar",
     youtubeUrl: "https://youtube.com/shorts/hIjzC7QPmks",
     youtubeSearchLabel: "ORBI Solar Academy",
+    youtubeId: "hIjzC7QPmks",
   },
   {
     id: "sleep",
@@ -73,17 +76,18 @@ const videoCards: VideoCard[] = [
     badge: "Bienestar digital",
     youtubeUrl: "https://youtube.com/shorts/rPgN-aqTwjI",
     youtubeSearchLabel: "ORBI Sleep Frequencies",
+    youtubeId: "rPgN-aqTwjI",
     note: "Serie publicada con 6 shorts disponibles en el canal.",
   },
 ];
 
 const sleepFrequencyLinks = [
-  "https://youtube.com/shorts/rPgN-aqTwjI",
-  "https://youtube.com/shorts/NWV4r8MWOCM",
-  "https://youtube.com/shorts/3AT6ja7XXLY",
-  "https://youtube.com/shorts/HAiGOQfxfUc",
-  "https://youtube.com/shorts/XFvN0VrzBck",
-  "https://youtube.com/shorts/tXQNUJ3g22s",
+  { label: "S1", url: "https://youtube.com/shorts/rPgN-aqTwjI", id: "rPgN-aqTwjI" },
+  { label: "S2", url: "https://youtube.com/shorts/NWV4r8MWOCM", id: "NWV4r8MWOCM" },
+  { label: "S3", url: "https://youtube.com/shorts/3AT6ja7XXLY", id: "3AT6ja7XXLY" },
+  { label: "S4", url: "https://youtube.com/shorts/HAiGOQfxfUc", id: "HAiGOQfxfUc" },
+  { label: "S5", url: "https://youtube.com/shorts/XFvN0VrzBck", id: "XFvN0VrzBck" },
+  { label: "S6", url: "https://youtube.com/shorts/tXQNUJ3g22s", id: "tXQNUJ3g22s" },
 ];
 
 function getCardActionLabel(card: VideoCard) {
@@ -103,7 +107,7 @@ function YoutubeActionLink({ card, primary = false }: { card: VideoCard; primary
   );
 }
 
-export default function OrbiVideoSection({ onPlayVideo: _onPlayVideo }: OrbiVideoSectionProps) {
+export default function OrbiVideoSection() {
   const featured = videoCards[0];
   const secondaryCards = videoCards.slice(1);
 
@@ -141,7 +145,7 @@ export default function OrbiVideoSection({ onPlayVideo: _onPlayVideo }: OrbiVide
                     Fuente YouTube
                   </span>
                   <span className="rounded-full bg-emerald-400/10 px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-[0.18em] text-emerald-200 ring-1 ring-emerald-300/15">
-                    Publicado
+                    ID: {featured.youtubeId}
                   </span>
                 </div>
 
@@ -155,7 +159,7 @@ export default function OrbiVideoSection({ onPlayVideo: _onPlayVideo }: OrbiVide
                   <div className="relative flex h-full items-center justify-center bg-[radial-gradient(circle_at_50%_35%,rgba(34,211,238,0.26),transparent_33%),linear-gradient(135deg,rgba(15,23,42,0.98),rgba(30,41,59,0.72),rgba(8,47,73,0.78))]">
                     <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(180deg,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:42px_42px] opacity-35" aria-hidden="true" />
                     <div className="absolute left-5 top-5 rounded-full bg-slate-950/45 px-3 py-1.5 font-mono text-[9px] font-black uppercase tracking-[0.18em] text-white/70 ring-1 ring-white/10 backdrop-blur-2xl">
-                      YouTube source layer
+                      Link directo: {featured.youtubeId}
                     </div>
                     <span className="group/play relative flex h-24 w-24 items-center justify-center rounded-full bg-red-500/15 text-white ring-1 ring-red-200/25 backdrop-blur-2xl transition hover:scale-105 hover:bg-red-500/22">
                       <span className="absolute inset-0 rounded-full bg-red-500/20 blur-2xl transition group-hover/play:bg-red-400/30" aria-hidden="true" />
@@ -171,7 +175,7 @@ export default function OrbiVideoSection({ onPlayVideo: _onPlayVideo }: OrbiVide
                   <div className="flex items-start gap-3">
                     <Link className="mt-0.5 h-4 w-4 shrink-0 text-cyan-100" aria-hidden="true" />
                     <p className="text-xs leading-6 text-slate-300">
-                      Cada tarjeta usa un enlace real distinto de YouTube. La web se mantiene liviana y cada reproducción suma visibilidad al canal oficial de ORBI.
+                      Esta sección ya no usa VideoModal ni videos locales. Cada tarjeta abre un enlace real distinto de YouTube.
                     </p>
                   </div>
                 </div>
@@ -201,7 +205,7 @@ export default function OrbiVideoSection({ onPlayVideo: _onPlayVideo }: OrbiVide
                       {card.badge}
                     </span>
                     <span className="rounded-full bg-red-500/10 px-2.5 py-1 font-mono text-[8px] font-black uppercase tracking-[0.14em] text-red-100 ring-1 ring-red-300/15">
-                      YouTube
+                      ID: {card.youtubeId}
                     </span>
                   </div>
                   <h3 className="mt-5 font-space text-xl font-black leading-tight text-white">{card.title}</h3>
@@ -217,15 +221,16 @@ export default function OrbiVideoSection({ onPlayVideo: _onPlayVideo }: OrbiVide
                   <YoutubeActionLink card={card} />
                   {card.id === "sleep" && (
                     <div className="mt-3 flex flex-wrap gap-2">
-                      {sleepFrequencyLinks.map((link, index) => (
+                      {sleepFrequencyLinks.map((item) => (
                         <a
-                          key={link}
-                          href={link}
+                          key={item.url}
+                          href={item.url}
                           target="_blank"
                           rel="noreferrer"
                           className="rounded-full bg-white/[0.045] px-2.5 py-1 font-mono text-[8px] font-black uppercase tracking-[0.12em] text-slate-300 ring-1 ring-white/[0.08] transition hover:bg-white/[0.08] hover:text-white"
+                          title={item.id}
                         >
-                          S{index + 1}
+                          {item.label}
                         </a>
                       ))}
                     </div>

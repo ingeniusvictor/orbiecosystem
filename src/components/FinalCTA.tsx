@@ -1,9 +1,14 @@
-import { ArrowRight, Compass, MessageCircle, Play, Sparkles } from "lucide-react";
+import { ArrowRight, Compass, Mail, MessageCircle, Play, Sparkles } from "lucide-react";
 import { competitionContent } from "../content/competition";
 
 interface FinalCTAProps {
   onNavigate: (sectionId: string) => void;
 }
+
+const contactSubject = encodeURIComponent("Contacto ORBI Ecosystem");
+const contactBody = encodeURIComponent(
+  "Hola ORBI Ecosystem, quiero conversar sobre una solución, proyecto o colaboración."
+);
 
 export default function FinalCTA({ onNavigate }: FinalCTAProps) {
   return (
@@ -18,21 +23,25 @@ export default function FinalCTA({ onNavigate }: FinalCTAProps) {
             <div className="space-y-7">
               <div className="orbitron-chip inline-flex">
                 <Sparkles className="h-3.5 w-3.5" />
-                <span>ORBI SEASON 1 / LAUNCH READY</span>
+                <span>ORBI SEASON 1 / CONVERSATION READY</span>
               </div>
 
               <div className="space-y-5">
                 <h2 className="orbitron-title max-w-5xl">
-                  ORBI no es solo una idea. Es una plataforma en movimiento.
+                  ¿Tienes una idea, un negocio o un proceso que podría mejorar con tecnología?
                 </h2>
                 <p className="orbitron-subtitle max-w-4xl">
-                  Aplicaciones, inteligencia artificial, contenido educativo, energía, automatización, videojuegos, bienestar y noticias se ordenan bajo una misma visión: construir tecnología útil, visual y accionable.
+                  ORBI existe para transformar ideas en sistemas: desde una automatización simple hasta una solución con IA, una experiencia educativa, una herramienta energética o una plataforma digital completa.
                 </p>
               </div>
 
               <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                <a href="/climate-recovery" className="orbitron-primary-action">
-                  <span>{competitionContent.home.cta}</span>
+                <a
+                  href={`mailto:ing.vmlp.chile@gmail.com?subject=${contactSubject}&body=${contactBody}`}
+                  className="orbitron-primary-action"
+                >
+                  <Mail className="h-4 w-4" aria-hidden="true" />
+                  <span>Contactar a ORBI</span>
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </a>
 
@@ -43,17 +52,21 @@ export default function FinalCTA({ onNavigate }: FinalCTAProps) {
 
                 <button type="button" onClick={() => onNavigate("foton-prime")} className="orbitron-ghost-action">
                   <Play className="h-4 w-4" aria-hidden="true" />
-                  <span>Probar Foton Prime</span>
+                  <span>Explorar Foton Prime</span>
                 </button>
+              </div>
+
+              <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-4 text-sm leading-7 text-slate-400">
+                También puedes explorar nuestra línea Climate Recovery: <a href="/climate-recovery" className="font-semibold text-cyan-200 underline-offset-4 hover:underline">{competitionContent.home.cta}</a>.
               </div>
             </div>
 
             <div className="grid gap-4">
               <div className="rounded-3xl border border-cyan-400/15 bg-cyan-400/[0.06] p-5">
-                <p className="font-mono text-[10px] font-black uppercase tracking-[0.24em] text-cyan-300">Próximo paso</p>
-                <h3 className="mt-3 font-space text-2xl font-black text-white">Convertir visitas en conversación.</h3>
+                <p className="font-mono text-[10px] font-black uppercase tracking-[0.24em] text-cyan-300">Cómo podemos ayudarte</p>
+                <h3 className="mt-3 font-space text-2xl font-black text-white">Ideas → prototipos → soluciones.</h3>
                 <p className="mt-3 text-sm leading-7 text-slate-400">
-                  La web queda preparada para mostrar productos, recibir interés y evolucionar hacia ORBI ChatBox IA sin mezclar desarrollos internos en la vitrina pública.
+                  Automatización de procesos, documentación inteligente, contenido educativo, soluciones solares, domótica, asistentes IA, landing pages, herramientas internas y vitrinas digitales.
                 </p>
               </div>
 
@@ -63,16 +76,16 @@ export default function FinalCTA({ onNavigate }: FinalCTAProps) {
                     <MessageCircle className="h-5 w-5" aria-hidden="true" />
                   </div>
                   <div>
-                    <p className="font-space text-lg font-black text-white">Contacto y comunidad</p>
+                    <p className="font-space text-lg font-black text-white">Primer paso simple</p>
                     <p className="mt-2 text-sm leading-6 text-slate-400">
-                      Season 1 prioriza claridad, confianza y demostraciones. La capa comercial puede activarse después con canales verificados.
+                      Cuéntanos qué quieres mejorar, automatizar, enseñar o construir. ORBI puede ayudarte a ordenar la idea y convertirla en un primer plan ejecutable.
                     </p>
                   </div>
                 </div>
               </div>
 
               <div className="font-mono text-[10px] font-black uppercase tracking-[0.22em] text-slate-600">
-                Welcome to the ORBI Ecosystem // Portal Up // Season 1
+                Welcome to the ORBI Ecosystem // Build With Purpose // Season 1
               </div>
             </div>
           </div>

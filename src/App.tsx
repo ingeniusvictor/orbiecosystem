@@ -241,8 +241,7 @@ export default function App() {
         {/* Dynamic products catalogs */}
         <ProductGrid 
           initialDivisionFilter="all" 
-          onResetDivisionFilter={handleResetDivisionFilter} 
-          onPlayVideo={handlePlayVideo}
+          onResetDivisionFilter={handleResetDivisionFilter}
         />
 
         {/* ORBI video storytelling layer */}

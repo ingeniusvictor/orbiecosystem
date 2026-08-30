@@ -258,12 +258,32 @@ export default function OrbiDivisionPresentations() {
           </p>
         </div>
 
-        <div className="mt-16 space-y-12">
+        <nav aria-label="Navegación rápida de dossiers ORBI" className="sticky top-24 z-30 mx-auto mt-10 max-w-6xl rounded-[1.75rem] border border-white/10 bg-slate-950/72 p-3 shadow-2xl shadow-cyan-950/20 backdrop-blur-2xl">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-3 px-2">
+            <span className="font-mono text-[9px] font-black uppercase tracking-[0.24em] text-cyan-200">Acceso rápido</span>
+            <span className="font-mono text-[9px] font-black uppercase tracking-[0.22em] text-slate-500">Selecciona una división</span>
+          </div>
+          <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-thin">
+            {divisionPresentations.map((division, index) => (
+              <a
+                key={division.id}
+                href={`#orbi-presentation-${division.id}`}
+                className="group inline-flex shrink-0 items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.035] px-3.5 py-2.5 font-mono text-[9px] font-black uppercase tracking-[0.16em] text-slate-300 transition hover:border-cyan-300/35 hover:bg-cyan-300/[0.08] hover:text-white focus:outline-none focus:ring-2 focus:ring-cyan-300 focus:ring-offset-2 focus:ring-offset-slate-950"
+              >
+                <span className={`h-2 w-2 rounded-full bg-gradient-to-r ${division.accent} shadow-lg`} aria-hidden="true" />
+                <span className="text-slate-500 group-hover:text-cyan-200">{String(index + 1).padStart(2, "0")}</span>
+                <span>{division.title}</span>
+              </a>
+            ))}
+          </div>
+        </nav>
+
+        <div className="mt-12 space-y-12">
           {divisionPresentations.map((division, index) => (
             <article
               key={division.id}
               id={`orbi-presentation-${division.id}`}
-              className="orbitron-panel scroll-mt-28 overflow-hidden p-0"
+              className="orbitron-panel scroll-mt-44 overflow-hidden p-0"
             >
               <div className="grid gap-0 xl:grid-cols-[0.95fr_1.05fr]">
                 <div className={`relative overflow-hidden border-b border-white/10 bg-slate-950 shadow-2xl ${division.glow} xl:border-b-0 xl:border-r`}>

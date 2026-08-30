@@ -24,8 +24,8 @@ import {
   statusAndLimitations,
   targetUsers,
   type ProductListItem,
-} from "./OrbiPBMetricsData";
-import { ProductBadge, ProductCard, ProductLinkButton, ProductSection, ProductStateBadge } from "./OrbiPBMetricsPrimitives";
+} from "./OrbiPVMetricsData";
+import { ProductBadge, ProductCard, ProductLinkButton, ProductSection, ProductStateBadge } from "./OrbiPVMetricsPrimitives";
 
 function FeatureCard({ item }: { item: ProductListItem }) {
   const Icon = item.icon ?? CircleDot;
@@ -259,7 +259,7 @@ function ClimateCTASection() {
   );
 }
 
-export default function OrbiPBMetricsPage() {
+export default function OrbiPVMetricsPage() {
   return (
     <main className="min-h-screen bg-slate-950 text-slate-100 selection:bg-cyan-400/30 selection:text-white">
       <ProductHero />

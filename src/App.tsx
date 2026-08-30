@@ -8,8 +8,8 @@ import Header from "./components/Header";
 import HeroSection from "./components/HeroSection";
 import LoaderScreen from "./components/LoaderScreen";
 import AtAGlance from "./components/AtAGlance";
+import SeasonOneEcosystem from "./components/SeasonOneEcosystem";
 import FotonPrimeSection from "./components/FotonPrimeSection";
-import DivisionCards from "./components/DivisionCards";
 import ProductGrid from "./components/ProductGrid";
 import Differentiators from "./components/Differentiators";
 import Roadmap from "./components/Roadmap";
@@ -17,7 +17,7 @@ import FinalCTA from "./components/FinalCTA";
 import Footer from "./components/Footer";
 import VideoModal from "./components/VideoModal";
 import ClimateRecoveryLanding from "./components/ClimateRecoveryLanding";
-import OrbiPBMetricsPage from "./components/projects/OrbiPBMetricsPage";
+import OrbiPVMetricsPage from "./components/projects/OrbiPVMetricsPage";
 import type { ClimateLocale } from "./content/competition";
 import { getSeoRouteMetadata, type SeoRouteMetadata } from "./seoMetadata";
 import { usePrefersReducedMotion } from "./hooks/usePrefersReducedMotion";
@@ -102,10 +102,10 @@ export default function App() {
   const isClimateRecoveryEnglishRoute = normalizedPath === "/climate-recovery/en";
   const isClimateRecoveryRoute = isClimateRecoverySpanishRoute || isClimateRecoveryEnglishRoute;
   const climateRecoveryLocale: ClimateLocale = isClimateRecoveryEnglishRoute ? "en" : "es";
-  const isPBMetricsRoute = normalizedPath === "/projects/orbi-pbmetrics";
+  const isPVMetricsRoute = normalizedPath === "/projects/orbi-pvmetrics";
+  const isHomeRoute = normalizedPath === "/";
   const shouldShowDevPanel = Boolean((import.meta as unknown as { env?: { DEV?: boolean } }).env?.DEV);
   const [activeSection, setActiveSection] = useState("hero");
-  const [initialDivisionFilter, setInitialDivisionFilter] = useState<"all" | "games" | "corporate" | "development">("all");
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [initialComponentId, setInitialComponentId] = useState<string>("eco-general");
   const [isModalAdminMode, setIsModalAdminMode] = useState<boolean>(false);
@@ -141,19 +141,27 @@ export default function App() {
     }
   };
 
-  const handleSelectDivisionFromCard = (divisionId: "games" | "corporate" | "development") => {
-    // Select division filter and navigate
-    setInitialDivisionFilter(divisionId);
+  const handleResetDivisionFilter = () => {
+    // ProductGrid keeps this callback for its internal "all divisions" reset action.
   };
 
-  const handleResetDivisionFilter = () => {
-    setInitialDivisionFilter("all");
-  };
+  useEffect(() => {
+    if (!isHomeRoute || window.location.hash) {
+      return;
+    }
+
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: "auto" }));
+  }, [isHomeRoute]);
 
   // Scroll active section tracking
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["hero", "ecosistema-mirada", "ecosistema", "foton-prime", "divisiones", "proyectos", "roadmap"];
+      const sections = ["hero", "ecosystem-season-one", "ecosistema-mirada", "ecosistema", "foton-prime", "proyectos", "roadmap"];
       const scrollPos = window.scrollY + 120; // adding threshold buffer
 
       for (const sectionId of sections) {
@@ -179,20 +187,20 @@ export default function App() {
       return;
     }
 
-    if (isPBMetricsRoute) {
-      applyRouteMetadata(getSeoRouteMetadata("pbmetrics"));
+    if (isPVMetricsRoute) {
+      applyRouteMetadata(getSeoRouteMetadata("PVMetrics"));
       return;
     }
 
     applyRouteMetadata(getSeoRouteMetadata("home"));
-  }, [climateRecoveryLocale, isClimateRecoveryRoute, isPBMetricsRoute]);
+  }, [climateRecoveryLocale, isClimateRecoveryRoute, isPVMetricsRoute]);
 
   if (isClimateRecoveryRoute) {
     return <ClimateRecoveryLanding locale={climateRecoveryLocale} />;
   }
 
-  if (isPBMetricsRoute) {
-    return <OrbiPBMetricsPage />;
+  if (isPVMetricsRoute) {
+    return <OrbiPVMetricsPage />;
   }
 
   return (
@@ -216,6 +224,9 @@ export default function App() {
         {/* Hero Section */}
         <HeroSection onNavigate={handleNavigate} onPlayVideo={handlePlayVideo} />
 
+        {/* ORBI Platform Season 1 Map */}
+        <SeasonOneEcosystem onNavigate={handleNavigate} onPlayVideo={handlePlayVideo} />
+
         {/* Orbi Ecosystem en una mirada */}
         <AtAGlance />
 
@@ -225,12 +236,9 @@ export default function App() {
         {/* Orbi Foton Prime - Invisible AI mother core with real chatbot */}
         <FotonPrimeSection onPlayVideo={handlePlayVideo} />
 
-        {/* 3 Divisions cards */}
-        <DivisionCards onSelectDivision={handleSelectDivisionFromCard} onPlayVideo={handlePlayVideo} />
-
         {/* Dynamic products catalogs */}
         <ProductGrid 
-          initialDivisionFilter={initialDivisionFilter} 
+          initialDivisionFilter="all" 
           onResetDivisionFilter={handleResetDivisionFilter} 
           onPlayVideo={handlePlayVideo}
         />

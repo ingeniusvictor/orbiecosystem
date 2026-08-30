@@ -16,7 +16,7 @@ If analytics is approved later, possible privacy-safe events could include:
 
 - `climate_recovery_page_view`
 - `climate_recovery_cta_click`
-- `pbmetrics_project_view`
+- `PVMetrics_project_view`
 - `language_switch_click`
 - `demo_section_view`
 - `download_pitch_deck_click` only if a public approved deck exists

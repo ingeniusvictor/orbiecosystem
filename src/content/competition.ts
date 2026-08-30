@@ -61,12 +61,12 @@ export const competitionContent = {
       "ORBI Ecosystem SpA fue fundada por Víctor Marcel León Pacheco, ingeniero eléctrico con experiencia práctica en operación y mantenimiento de plantas fotovoltaicas.",
   },
   product: {
-    name: "ORBI PBMetrics IA",
+    name: "ORBI PVMetrics IA",
     edition: "Climate Recovery Edition",
     positioning: "Inteligencia operacional para recuperar más energía renovable",
     statusLabel: "Competition Edition",
     productStatus:
-      "ORBI PBMetrics IA cuenta con una base funcional previamente desarrollada. Climate Recovery Edition representa su siguiente evolución, orientada a identificar, priorizar y verificar oportunidades de recuperación de energía renovable.",
+      "ORBI PVMetrics IA cuenta con una base funcional previamente desarrollada. Climate Recovery Edition representa su siguiente evolución, orientada a identificar, priorizar y verificar oportunidades de recuperación de energía renovable.",
     productStatusWarning:
       "Este estado debe confirmarse contra la auditoría real del baseline antes de publicarse.",
     humanPrinciple: "The AI recommends; the operator decides",
@@ -104,7 +104,7 @@ export const competitionContent = {
       plannedMetadata: "English title, description, canonical and hreflang relationship.",
     },
     {
-      path: "/projects/orbi-pbmetrics",
+      path: "/projects/orbi-PVMetrics",
       objective: "Ficha técnica reutilizable del producto.",
       audience: "Technical evaluators and product reviewers.",
       status: "existing",
@@ -116,19 +116,19 @@ export const competitionContent = {
     headline: "El futuro no es una sola aplicación. Es un ecosistema conectado.",
     supportText:
       "ORBI Ecosystem SpA desarrolla software, inteligencia artificial y experiencias digitales para transformar datos, energía y creatividad en soluciones útiles para las personas y las organizaciones.",
-    featuredCard: "ORBI PBMetrics IA — Climate Recovery Edition",
+    featuredCard: "ORBI PVMetrics IA — Climate Recovery Edition",
     subtext: "Inteligencia operacional para recuperar más energía renovable.",
     cta: "Conocer Climate Recovery",
   },
   climateRecovery: {
-    title: "ORBI PBMetrics IA — Climate Recovery Edition",
+    title: "ORBI PVMetrics IA — Climate Recovery Edition",
     phrase: "Recover Clean Energy. Intelligently.",
     description:
       "Una plataforma de inteligencia operacional que ayuda a identificar pérdidas recuperables en plantas fotovoltaicas, explicar su evidencia, priorizar acciones de mantenimiento y verificar la energía limpia recuperada.",
     problem:
       "Las plantas fotovoltaicas generan grandes volúmenes de datos, alarmas y registros operacionales. Sin embargo, convertir esa información en acciones oportunas continúa siendo un desafío. Cuando una pérdida de rendimiento permanece sin identificar o sin priorizar, no solo existe un impacto económico: también se deja de entregar energía limpia a la red.",
     explainableAI:
-      "ORBI PBMetrics IA no presenta sus hipótesis como certezas. Cada recomendación debe mostrar la evidencia utilizada, el nivel de confianza y las limitaciones del análisis. El conocimiento técnico y la decisión final permanecen en manos del equipo de operación y mantenimiento.",
+      "ORBI PVMetrics IA no presenta sus hipótesis como certezas. Cada recomendación debe mostrar la evidencia utilizada, el nivel de confianza y las limitaciones del análisis. El conocimiento técnico y la decisión final permanecen en manos del equipo de operación y mantenimiento.",
     climateImpact:
       "La propuesta conecta la identificación de pérdidas recuperables con acciones operacionales y con la verificación posterior de generación limpia recuperada. Las mediciones reales, estimaciones, simulaciones y proyecciones deben mostrarse como categorías distintas.",
   },
@@ -143,7 +143,7 @@ export const competitionContent = {
       },
       seo: {
         lang: "es",
-        title: "ORBI PBMetrics IA | Climate Recovery Intelligence",
+        title: "ORBI PVMetrics IA | Climate Recovery Intelligence",
         description:
           "IA explicable para identificar pérdidas fotovoltaicas recuperables, priorizar mantenimiento y verificar energía limpia recuperada.",
         canonical: "https://orbiecosystem.vercel.app/climate-recovery",
@@ -151,7 +151,7 @@ export const competitionContent = {
       product: {
         statusLabel: "Competition Edition",
         productStatus:
-          "ORBI PBMetrics IA cuenta con una base funcional previamente desarrollada. Climate Recovery Edition representa su siguiente evolución, orientada a identificar, priorizar y verificar oportunidades de recuperación de energía renovable.",
+          "ORBI PVMetrics IA cuenta con una base funcional previamente desarrollada. Climate Recovery Edition representa su siguiente evolución, orientada a identificar, priorizar y verificar oportunidades de recuperación de energía renovable.",
         productStatusWarning:
           "Este estado debe confirmarse contra la auditoría real del baseline antes de publicarse.",
       },
@@ -161,14 +161,14 @@ export const competitionContent = {
         founderDescription:
           "ORBI Ecosystem SpA fue fundada por Víctor Marcel León Pacheco, ingeniero eléctrico con experiencia práctica en operación y mantenimiento de plantas fotovoltaicas.",
       },
-      title: "ORBI PBMetrics IA — Climate Recovery Edition",
+      title: "ORBI PVMetrics IA — Climate Recovery Edition",
       phrase: "Recover Clean Energy. Intelligently.",
       description:
         "Una plataforma de inteligencia operacional que ayuda a identificar pérdidas recuperables en plantas fotovoltaicas, explicar su evidencia, priorizar acciones de mantenimiento y verificar la energía limpia recuperada.",
       problem:
         "Las plantas fotovoltaicas generan grandes volúmenes de datos, alarmas y registros operacionales. Sin embargo, convertir esa información en acciones oportunas continúa siendo un desafío. Cuando una pérdida de rendimiento permanece sin identificar o sin priorizar, no solo existe un impacto económico: también se deja de entregar energía limpia a la red.",
       explainableAI:
-        "ORBI PBMetrics IA no presenta sus hipótesis como certezas. Cada recomendación debe mostrar la evidencia utilizada, el nivel de confianza y las limitaciones del análisis. El conocimiento técnico y la decisión final permanecen en manos del equipo de operación y mantenimiento.",
+        "ORBI PVMetrics IA no presenta sus hipótesis como certezas. Cada recomendación debe mostrar la evidencia utilizada, el nivel de confianza y las limitaciones del análisis. El conocimiento técnico y la decisión final permanecen en manos del equipo de operación y mantenimiento.",
       climateImpact:
         "La propuesta conecta la identificación de pérdidas recuperables con acciones operacionales y con la verificación posterior de generación limpia recuperada. Las mediciones reales, estimaciones, simulaciones y proyecciones deben mostrarse como categorías distintas.",
       hero: {
@@ -213,7 +213,7 @@ export const competitionContent = {
         groups: [
           {
             label: "Existing Foundation",
-            items: ["Base funcional de PBMetrics sujeta a confirmación del baseline.", "Registro centralizado de contenido y claims."],
+            items: ["Base funcional de PVMetrics sujeta a confirmación del baseline.", "Registro centralizado de contenido y claims."],
           },
           {
             label: "Competition Edition",
@@ -221,7 +221,7 @@ export const competitionContent = {
           },
           {
             label: "Planned",
-            items: ["Command Center para priorización operativa.", "Ruta reusable para ficha técnica de PBMetrics."],
+            items: ["Command Center para priorización operativa.", "Ruta reusable para ficha técnica de PVMetrics."],
           },
           {
             label: "Prototype",
@@ -250,7 +250,7 @@ export const competitionContent = {
       },
       seo: {
         lang: "en",
-        title: "ORBI PBMetrics IA | Climate Recovery Intelligence",
+        title: "ORBI PVMetrics IA | Climate Recovery Intelligence",
         description:
           "Explainable AI for identifying recoverable photovoltaic losses, prioritizing maintenance and verifying recovered clean energy.",
         canonical: "https://orbiecosystem.vercel.app/climate-recovery/en",
@@ -258,7 +258,7 @@ export const competitionContent = {
       product: {
         statusLabel: "Competition Edition",
         productStatus:
-          "ORBI PBMetrics IA has a previously developed functional foundation. Climate Recovery Edition represents its next evolution, focused on identifying, prioritizing and verifying renewable energy recovery opportunities.",
+          "ORBI PVMetrics IA has a previously developed functional foundation. Climate Recovery Edition represents its next evolution, focused on identifying, prioritizing and verifying renewable energy recovery opportunities.",
         productStatusWarning:
           "This status must be confirmed against the real baseline audit before publication.",
       },
@@ -268,14 +268,14 @@ export const competitionContent = {
         founderDescription:
           "ORBI Ecosystem SpA was founded by Victor Marcel Leon Pacheco, an electrical engineer with practical experience in operation and maintenance of photovoltaic plants.",
       },
-      title: "ORBI PBMetrics IA — Climate Recovery Edition",
+      title: "ORBI PVMetrics IA — Climate Recovery Edition",
       phrase: "Recover Clean Energy. Intelligently.",
       description:
         "An operational intelligence platform that helps identify recoverable losses in photovoltaic plants, explain the evidence behind them, prioritize maintenance actions and verify recovered clean energy.",
       problem:
         "Photovoltaic plants generate large volumes of operational data, alarms and maintenance records. However, turning that information into timely action remains a challenge. When a performance loss is not identified or prioritized, the impact is not only economic: clean energy that could be delivered to the grid can remain unrealized.",
       explainableAI:
-        "ORBI PBMetrics IA does not present its hypotheses as certainties. Each recommendation must show the evidence used, the confidence level and the limitations of the analysis. Technical knowledge and the final decision remain in the hands of the operation and maintenance team.",
+        "ORBI PVMetrics IA does not present its hypotheses as certainties. Each recommendation must show the evidence used, the confidence level and the limitations of the analysis. Technical knowledge and the final decision remain in the hands of the operation and maintenance team.",
       climateImpact:
         "The proposal connects recoverable-loss identification with operational actions and later verification of recovered clean generation. Real measurements, estimates, simulations and projections must be shown as distinct categories.",
       hero: {
@@ -320,7 +320,7 @@ export const competitionContent = {
         groups: [
           {
             label: "Existing Foundation",
-            items: ["PBMetrics functional foundation subject to baseline confirmation.", "Centralized content and claims registry."],
+            items: ["PVMetrics functional foundation subject to baseline confirmation.", "Centralized content and claims registry."],
           },
           {
             label: "Competition Edition",
@@ -328,7 +328,7 @@ export const competitionContent = {
           },
           {
             label: "Planned",
-            items: ["Command Center for operational prioritization.", "Reusable route for the PBMetrics technical product profile."],
+            items: ["Command Center for operational prioritization.", "Reusable route for the PVMetrics technical product profile."],
           },
           {
             label: "Prototype",
@@ -359,7 +359,7 @@ export const competitionContent = {
     climateRecovery: {
       es: {
         lang: "es",
-        title: "ORBI PBMetrics IA | Climate Recovery Intelligence",
+        title: "ORBI PVMetrics IA | Climate Recovery Intelligence",
         description:
           "IA explicable para identificar pérdidas fotovoltaicas recuperables, priorizar mantenimiento y verificar energía limpia recuperada.",
         canonical: "https://orbiecosystem.vercel.app/climate-recovery",
@@ -371,7 +371,7 @@ export const competitionContent = {
       },
       en: {
         lang: "en",
-        title: "ORBI PBMetrics IA | Climate Recovery Intelligence",
+        title: "ORBI PVMetrics IA | Climate Recovery Intelligence",
         description:
           "Explainable AI for identifying recoverable photovoltaic losses, prioritizing maintenance and verifying recovered clean energy.",
         canonical: "https://orbiecosystem.vercel.app/climate-recovery/en",
@@ -382,12 +382,12 @@ export const competitionContent = {
         ],
       },
     },
-    pbmetrics: {
+    PVMetrics: {
       lang: "es",
-      title: "ORBI PBMetrics IA | Technical Product Profile",
+      title: "ORBI PVMetrics IA | Technical Product Profile",
       description:
-        "Ficha técnica pública de ORBI PBMetrics IA para evaluación técnica, límites de IA y relación con Climate Recovery Edition.",
-      canonical: "https://orbiecosystem.vercel.app/projects/orbi-pbmetrics",
+        "Ficha técnica pública de ORBI PVMetrics IA para evaluación técnica, límites de IA y relación con Climate Recovery Edition.",
+      canonical: "https://orbiecosystem.vercel.app/projects/orbi-PVMetrics",
     },
   },
   claims: [
@@ -412,8 +412,8 @@ export const competitionContent = {
       notes: 'Usar "Rancagua, Región de O\'Higgins, Chile" cuando haya espacio.',
     },
     {
-      id: "pbmetrics-functional-base",
-      statement: "PBMetrics cuenta con una base funcional.",
+      id: "PVMetrics-functional-base",
+      statement: "PVMetrics cuenta con una base funcional.",
       kind: "product-status",
       status: "pending_baseline_confirmation",
       evidence: "CONTENT_CANON; requiere confirmación técnica.",
@@ -422,8 +422,8 @@ export const competitionContent = {
       notes: "Mantener advertencia junto al estado.",
     },
     {
-      id: "climate-recovery-pbmetrics-evolution",
-      statement: "Climate Recovery es una evolución de PBMetrics.",
+      id: "climate-recovery-PVMetrics-evolution",
+      statement: "Climate Recovery es una evolución de PVMetrics.",
       kind: "roadmap",
       status: "approved_as_plan",
       evidence: "Contexto canónico de la candidatura.",

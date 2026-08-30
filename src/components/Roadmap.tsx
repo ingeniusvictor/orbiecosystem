@@ -1,147 +1,120 @@
 import { ROADMAP } from "../data";
-import { CheckCircle2, Clock, Calendar, ShieldCheck, Play, ArrowUpRight } from "lucide-react";
+import { ArrowRight, CheckCircle2, Clock, Play, Rocket, Sparkles } from "lucide-react";
 
 export default function Roadmap() {
   const getStatusBadge = (status: "completo" | "actual" | "siguiente" | "futuro") => {
     switch (status) {
       case "completo":
         return (
-          <span className="inline-flex items-center space-x-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 px-2.5 py-1 rounded-full text-[10px] font-bold font-mono tracking-wider uppercase">
-            <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-            <span>COMPLETO</span>
+          <span className="inline-flex items-center gap-1 rounded-full border border-emerald-400/25 bg-emerald-400/10 px-2.5 py-1 font-mono text-[10px] font-black uppercase tracking-wider text-emerald-300">
+            <CheckCircle2 className="h-3.5 w-3.5" />
+            <span>Completo</span>
           </span>
         );
       case "actual":
         return (
-          <span className="inline-flex items-center space-x-1 bg-blue-500/10 text-blue-400 border border-blue-500/25 px-2.5 py-1 rounded-full text-[10px] font-bold font-mono tracking-wider uppercase animate-pulse">
-            <Clock className="w-3 h-3 text-blue-400" />
-            <span>FASE ACTUAL</span>
+          <span className="inline-flex items-center gap-1 rounded-full border border-cyan-400/25 bg-cyan-400/10 px-2.5 py-1 font-mono text-[10px] font-black uppercase tracking-wider text-cyan-300">
+            <Clock className="h-3.5 w-3.5" />
+            <span>Fase actual</span>
           </span>
         );
       case "siguiente":
         return (
-          <span className="inline-flex items-center space-x-1 bg-purple-500/10 text-purple-400 border border-purple-500/25 px-2.5 py-1 rounded-full text-[10px] font-bold font-mono tracking-wider uppercase">
-            <Play className="w-3 h-3 text-purple-400" />
-            <span>SIGUIENTE</span>
+          <span className="inline-flex items-center gap-1 rounded-full border border-violet-400/25 bg-violet-400/10 px-2.5 py-1 font-mono text-[10px] font-black uppercase tracking-wider text-violet-300">
+            <Play className="h-3.5 w-3.5" />
+            <span>Siguiente</span>
           </span>
         );
       case "futuro":
         return (
-          <span className="inline-flex items-center space-x-1 bg-slate-800 border border-slate-700 text-slate-500 px-2.5 py-1 rounded-full text-[10px] font-bold font-mono tracking-wider uppercase">
-            <span>PLANIFICADO</span>
+          <span className="inline-flex items-center gap-1 rounded-full border border-slate-700 bg-slate-900/80 px-2.5 py-1 font-mono text-[10px] font-black uppercase tracking-wider text-slate-400">
+            <span>Planificado</span>
           </span>
         );
     }
   };
 
-  const getTimelineIndicatorStyles = (status: "completo" | "actual" | "siguiente" | "futuro") => {
+  const getAccent = (status: "completo" | "actual" | "siguiente" | "futuro") => {
     switch (status) {
       case "completo":
-        return {
-          bullet: "bg-emerald-500 ring-4 ring-emerald-900/40 border-slate-900",
-          border: "border-emerald-500/40"
-        };
+        return "from-emerald-400/60 via-emerald-300/20 to-transparent border-emerald-300/20";
       case "actual":
-        return {
-          bullet: "bg-blue-500 ring-4 ring-blue-900/40 border-slate-900",
-          border: "border-blue-500/40"
-        };
+        return "from-cyan-400/70 via-cyan-300/20 to-transparent border-cyan-300/25";
       case "siguiente":
-        return {
-          bullet: "bg-purple-500 ring-4 ring-purple-900/40 border-slate-900",
-          border: "border-purple-500/20"
-        };
+        return "from-violet-400/70 via-violet-300/20 to-transparent border-violet-300/25";
       case "futuro":
-        return {
-          bullet: "bg-slate-800 ring-4 ring-slate-900 border-slate-950",
-          border: "border-slate-800/40"
-        };
+        return "from-slate-500/35 via-slate-400/10 to-transparent border-slate-700/60";
     }
   };
 
   return (
-    <section id="roadmap" className="py-24 bg-slate-900 border-t border-slate-800 font-sans">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* Section Heading */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4 select-none">
-          <div className="inline-flex items-center space-x-1 bg-slate-950 border border-slate-800 px-3 py-1 rounded-full text-xs font-semibold text-purple-400 tracking-wider">
-            <span>HOJA DE RUTA // ROADMAP</span>
+    <section id="roadmap" className="relative overflow-hidden border-t border-white/5 bg-[#050816] py-24 font-sans">
+      <div className="absolute inset-0 grid-overlay opacity-[0.04]" aria-hidden="true" />
+      <div className="absolute left-0 top-10 h-[34rem] w-[34rem] rounded-full bg-cyan-500/10 blur-3xl" aria-hidden="true" />
+      <div className="absolute bottom-0 right-0 h-[34rem] w-[34rem] rounded-full bg-violet-500/10 blur-3xl" aria-hidden="true" />
+
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-14 grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-end">
+          <div className="space-y-5">
+            <div className="orbitron-chip inline-flex">
+              <Sparkles className="h-3.5 w-3.5" />
+              <span>ORBI ROADMAP / SEASON 1</span>
+            </div>
+            <div className="space-y-4">
+              <h2 className="orbitron-title max-w-4xl">Construcción rápida, evolución visible.</h2>
+              <p className="orbitron-subtitle max-w-3xl">
+                La hoja de ruta ordena el crecimiento de ORBI sin prometer todo de una vez: primero una web fuerte, luego productos más claros, automatización, contenido y capas inteligentes conectadas.
+              </p>
+            </div>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Roadmap del Universo ORBI
-          </h2>
-          <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
-            Progreso evolutivo secuencial. Desarrollamos la infraestructura central paso a paso para garantizar que cada módulo interconectado sea óptimo, escalable y confiable.
-          </p>
+
+          <div className="orbitron-panel p-5 md:p-6">
+            <div className="flex items-start gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-cyan-400/20 bg-cyan-400/10 text-cyan-200">
+                <Rocket className="h-5 w-5" aria-hidden="true" />
+              </div>
+              <div>
+                <p className="font-mono text-[10px] font-black uppercase tracking-[0.24em] text-cyan-300">Launch discipline</p>
+                <p className="mt-2 text-sm leading-7 text-slate-300">
+                  Season 1 prioriza mostrar ejecución real: una vitrina clara, productos comprensibles, videos disponibles y una narrativa lista para crecer por iteraciones.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Roadmap Timeline Layout (Left-Aligned timeline on responsive, centered conceptually) */}
-        <div className="max-w-4xl mx-auto relative">
-          
-          {/* Vertical central path line */}
-          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[2px] bg-slate-850 -translate-x-1/2 pointer-events-none" />
-
-          {/* Timeline Cards */}
-          <div className="space-y-12 relative">
-            {ROADMAP.map((item, index) => {
-              const indicator = getTimelineIndicatorStyles(item.status);
-              const isEven = index % 2 === 0;
-
-              return (
-                <div 
-                  key={index} 
-                  className={`flex flex-col md:flex-row items-stretch relative ${
-                    isEven ? "md:flex-row-reverse" : ""
-                  }`}
-                >
-                  {/* Left Column Spacer/Node */}
-                  <div className="w-full md:w-1/2 flex items-center justify-end px-0 md:px-8" />
-                  
-                  {/* Timeline bullet dot marker */}
-                  <div className="absolute left-4 md:left-1/2 w-4.5 h-4.5 rounded-full border-2 border-slate-950 top-1.5 md:top-1/2 -translate-y-1/2 -translate-x-1/2 z-20 flex items-center justify-center">
-                    <div className={`w-2 h-2 rounded-full ${item.status === 'completo' ? 'bg-emerald-400' : item.status === 'actual' ? 'bg-blue-400 animate-ping' : item.status === 'siguiente' ? 'bg-purple-400' : 'bg-slate-600'}`} />
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          {ROADMAP.map((item, index) => (
+            <article
+              key={`${item.phase}-${item.title}`}
+              className={`orbitron-panel group flex min-h-[310px] flex-col justify-between border p-6 transition duration-300 hover:-translate-y-1 ${getAccent(item.status)}`}
+            >
+              <div className="space-y-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="font-mono text-[10px] font-black uppercase tracking-[0.22em] text-slate-500">{item.phase}</p>
+                    <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-slate-400">{item.subtitle}</p>
                   </div>
-
-                  {/* Card Content Column */}
-                  <div className="w-full md:w-1/2 pl-12 md:pl-0 md:px-8">
-                    <div className={`bg-slate-950 border border-slate-800/80 rounded-2xl p-6 md:p-7 shadow-xl hover:border-slate-700 transition-all duration-300 relative group`}>
-                      
-                      {/* Sub-indicator overlay glow */}
-                      <div className={`absolute top-0 right-4 w-12 h-[2px] bg-gradient-to-l opacity-20 group-hover:opacity-60 transition-opacity`} />
-
-                      {/* Info & Status row */}
-                      <div className="flex flex-wrap items-center justify-between gap-2.5 mb-4 select-none">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-xs font-mono font-bold text-slate-500 bg-slate-900 border border-slate-850 px-2 py-0.5 rounded">
-                            {item.phase}
-                          </span>
-                          <span className="text-xs font-semibold text-slate-400 font-mono">
-                            {item.subtitle}
-                          </span>
-                        </div>
-                        {getStatusBadge(item.status)}
-                      </div>
-
-                      {/* Main Titles */}
-                      <h3 className="text-xl font-bold text-white tracking-wide mb-3">
-                        {item.title}
-                      </h3>
-
-                      {/* Description */}
-                      <p className="text-slate-400 text-sm leading-relaxed">
-                        {item.description}
-                      </p>
-
-                    </div>
-                  </div>
+                  {getStatusBadge(item.status)}
                 </div>
-              );
-            })}
-          </div>
 
+                <div>
+                  <h3 className="font-space text-2xl font-black leading-tight text-white group-hover:text-cyan-100">
+                    {item.title}
+                  </h3>
+                  <p className="mt-4 text-sm leading-7 text-slate-400">
+                    {item.description}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-8 flex items-center justify-between border-t border-white/10 pt-4 font-mono text-[10px] font-black uppercase tracking-[0.2em] text-cyan-300">
+                <span>Bloque {String(index + 1).padStart(2, "0")}</span>
+                <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-1" aria-hidden="true" />
+              </div>
+            </article>
+          ))}
         </div>
-
       </div>
     </section>
   );

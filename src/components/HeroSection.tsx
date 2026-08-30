@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { ArrowRight, Play, Compass, Grid, Sparkles, ChevronDown } from "lucide-react";
-import { competitionContent } from "../content/competition";
+import { ArrowRight, Play, Compass, Sparkles, ChevronDown, ShieldCheck } from "lucide-react";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 
 interface HeroSectionProps {
@@ -15,9 +14,8 @@ export default function HeroSection({ onNavigate, onPlayVideo }: HeroSectionProp
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#050816] font-sans"
+      className="relative flex min-h-screen flex-col items-center justify-start overflow-hidden bg-[#050816] font-sans"
     >
-      {/* Background Cinematic Video */}
       {!prefersReducedMotion && (
         <video
           className="hero-video pointer-events-none"
@@ -35,121 +33,98 @@ export default function HeroSection({ onNavigate, onPlayVideo }: HeroSectionProp
         </video>
       )}
 
-      {/* Cinematic Dark Grid Overlay */}
       <div className="hero-overlay pointer-events-none" />
-      <div className="absolute inset-0 grid-overlay opacity-[0.08] pointer-events-none z-1" />
+      <div className="pointer-events-none absolute inset-0 z-1 grid-overlay opacity-[0.08]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-40 bg-gradient-to-b from-slate-950 via-slate-950/75 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-44 bg-gradient-to-t from-slate-950 via-slate-950/82 to-transparent" />
 
-      {/* Hero Content Container */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 flex flex-col items-center justify-center text-center space-y-8 select-none py-28 w-full">
-        
-        {/* Animated Cybernetic Badge */}
-        <div className="inline-flex items-center space-x-2 bg-[#0B1026]/80 border border-cyan-500/20 px-4 py-1.5 rounded-full text-[10px] font-bold text-energy-cyan tracking-widest shadow-lg shadow-black/80 animate-pulse-slow">
-          <Sparkles className="w-3.5 h-3.5 text-energy-cyan animate-spin-slow" />
-          <span className="uppercase font-mono">ENERGY • INTELLIGENCE • GAMES • PRODUCTIVITY</span>
-        </div>
+      <div className="orbitron-shell relative z-20 grid min-h-[calc(100vh-5rem)] items-start pb-28 pt-28 sm:pt-32 lg:pt-36 xl:pt-36">
+        <div className="orbitron-reveal flex max-w-5xl flex-col items-start text-left">
+          <div className="orbitron-chip mb-7">
+            <Sparkles className="h-3.5 w-3.5 text-energy-cyan" aria-hidden="true" />
+            <span>ORBI Universe · Season 1</span>
+          </div>
 
-        {/* Brand Official Logo with smooth interactive error handler */}
-        <div className="relative py-4 flex items-center justify-center min-h-[140px] w-full max-w-[540px]">
-          <h1 className="flex items-center justify-center">
-            {!logoFailed ? (
-              <img
-                src="/assets/logo.jpeg"
-                alt="ORBI Ecosystem"
-                className="hero-logo cursor-pointer object-contain transition-transform duration-500 hover:scale-[1.03]"
-                onError={() => setLogoFailed(true)}
-                referrerPolicy="no-referrer"
-              />
-            ) : (
-              <span className="flex flex-col items-center justify-center animate-[logoReveal_1.2s_ease-out_both]" aria-label="ORBI Ecosystem">
-                <span className="text-6xl sm:text-8xl font-black tracking-[0.2em] font-orbitron gradient-text-accessible bg-gradient-to-r from-cyan-400 via-purple-500 to-emerald-400 drop-shadow-[0_0_35px_rgba(0,195,255,0.8)] leading-none select-none">
-                  ORBI
-                </span>
-                <span className="text-sm sm:text-lg font-bold font-mono tracking-[0.6em] text-cyan-400/80 drop-shadow-[0_0_12px_rgba(168,85,247,0.4)] mt-3">
-                  ECOSYSTEM
-                </span>
-              </span>
-            )}
+          <div className="mb-6 flex items-center gap-4">
+            <div className="relative flex h-16 w-16 items-center justify-center rounded-3xl border border-cyan-400/20 bg-slate-950/60 shadow-2xl shadow-cyan-950/30 sm:h-20 sm:w-20">
+              {!logoFailed ? (
+                <img
+                  src="/assets/logo.jpeg"
+                  alt="ORBI Ecosystem"
+                  className="h-14 w-14 object-contain drop-shadow-[0_0_18px_rgba(0,229,255,0.55)] transition-transform duration-500 hover:scale-[1.04] sm:h-16 sm:w-16"
+                  onError={() => setLogoFailed(true)}
+                  referrerPolicy="no-referrer"
+                />
+              ) : (
+                <span className="font-orbitron text-2xl font-black tracking-[0.08em] text-white">Ø</span>
+              )}
+            </div>
+            <div>
+              <p className="font-mono text-[10px] font-black uppercase tracking-[0.34em] text-cyan-300/80">ORBI Ecosystem</p>
+              <p className="mt-1 text-sm font-semibold text-slate-300">Sede digital de una empresa AI-native</p>
+            </div>
+          </div>
+
+          <h1 className="orbitron-title max-w-5xl text-5xl leading-[0.96] sm:text-6xl lg:text-7xl xl:text-8xl">
+            Transformamos ideas en soluciones inteligentes.
           </h1>
-        </div>
 
-        {/* High impact slogan and subtitle */}
-        <div className="space-y-4 max-w-3xl">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-wide font-space">
-            El futuro no es una sola aplicación. <br className="hidden sm:inline" />
-            <span className="gradient-text-accessible bg-gradient-to-r from-energy-cyan to-purple-400">
-              Es un ecosistema conectado.
-            </span>
-          </h2>
-          <p className="text-slate-300 text-sm sm:text-base md:text-md max-w-2xl mx-auto leading-relaxed font-light">
-            {competitionContent.home.supportText}
+          <p className="orbitron-subtitle mt-7 max-w-3xl text-base sm:text-lg">
+            ORBI Ecosystem integra inteligencia artificial, ingeniería, educación, energía, automatización, medios y desarrollo para construir soluciones útiles para personas y empresas.
           </p>
-          <a
-            href="/climate-recovery"
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-cyan-500/25 bg-cyan-950/20 px-4 py-2 font-mono text-[10px] font-black uppercase tracking-widest text-cyan-300 transition hover:border-cyan-400/60 hover:bg-cyan-500/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-950"
-          >
-            {competitionContent.home.cta}
-            <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-          </a>
+
+          <div className="mt-9 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+            <button
+              onClick={() => onNavigate("ecosistema-mirada")}
+              className="orbitron-primary-action"
+            >
+              <Compass className="h-4 w-4 text-cyan-100" aria-hidden="true" />
+              <span>Explorar ORBI</span>
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </button>
+
+            <button
+              onClick={() => onNavigate("divisiones")}
+              className="orbitron-secondary-action"
+            >
+              <ShieldCheck className="h-4 w-4 text-purple-300" aria-hidden="true" />
+              <span>Ver soluciones</span>
+            </button>
+
+            <button
+              onClick={() => onPlayVideo && onPlayVideo("eco-general")}
+              className="orbitron-ghost-action"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-300" />
+              </span>
+              <Play className="h-4 w-4" aria-hidden="true" />
+              <span>Ver presentación</span>
+            </button>
+          </div>
         </div>
-
-        {/* Action Buttons Box */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto pt-4">
-          
-          {/* Button 1: Explorar Ecosistema */}
-          <button
-            onClick={() => onNavigate("ecosistema-mirada")}
-            className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-500 hover:from-blue-500 hover:via-purple-500 hover:to-cyan-400 text-white font-extrabold tracking-widest text-xs rounded-full shadow-lg shadow-blue-500/20 transition-all duration-300 transform hover:-translate-y-[2.5px] hover:shadow-cyan-500/10 flex items-center justify-center space-x-2 group cursor-pointer border border-cyan-500/20 uppercase animate-in fade-in duration-500"
-          >
-            <Compass className="w-4 h-4 text-cyan-200 group-hover:rotate-45 transition-transform" />
-            <span>Explorar Ecosistema</span>
-          </button>
-
-          {/* Button 2: Ver Proyectos */}
-          <button
-            onClick={() => onNavigate("proyectos")}
-            className="w-full sm:w-auto px-8 py-4 bg-slate-900 hover:bg-slate-850 text-slate-100 hover:text-white border border-slate-800 hover:border-slate-700 font-extrabold tracking-widest text-xs rounded-full transition-all duration-300 transform hover:-translate-y-[2px] flex items-center justify-center space-x-2 cursor-pointer shadow-md shadow-black/80 uppercase animate-in fade-in duration-500"
-          >
-            <Grid className="w-4 h-4 text-purple-400" />
-            <span>Ver Proyectos</span>
-          </button>
-
-          {/* Button 3: Reproducir Presentación (Calls global play event) */}
-          <button
-            onClick={() => onPlayVideo && onPlayVideo("eco-general")}
-            className="w-full sm:w-auto px-8 py-4 bg-slate-950 hover:bg-slate-900 text-energy-cyan hover:text-white border border-cyan-500/30 hover:border-cyan-500/50 font-extrabold tracking-widest text-xs rounded-full transition-all duration-300 transform hover:-translate-y-[2px] flex items-center justify-center space-x-2 cursor-pointer shadow-lg shadow-cyan-950/20 uppercase animate-in fade-in duration-500"
-          >
-            <span className="relative flex h-2 w-2 mr-0.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
-            </span>
-            <Play className="w-4 h-4 text-energy-cyan" />
-            <span>Reproducir Presentación</span>
-          </button>
-        </div>
-
       </div>
 
-      {/* Cinematic HUD details */}
-      <div className="absolute left-6 bottom-22 z-20 hidden lg:flex flex-col text-[8px] font-mono tracking-widest text-slate-500 space-y-1">
-        <span>RESOLVER: SEC_ORB_CHNL</span>
-        <span>LATENCY: ZERO_LOSS</span>
+      <div className="absolute bottom-22 left-6 z-20 hidden flex-col space-y-1 font-mono text-[8px] tracking-widest text-slate-500 lg:flex">
+        <span>SEASON: ONE</span>
+        <span>MISSION: WOW</span>
       </div>
-      <div className="absolute right-6 bottom-22 z-20 hidden lg:flex flex-col text-right text-[8px] font-mono tracking-widest text-slate-500 space-y-1">
-        <span>FPS: AUTO_PRESETS</span>
-        <span>RESOLUTION: MAX_READY</span>
+      <div className="absolute bottom-22 right-6 z-20 hidden flex-col space-y-1 text-right font-mono text-[8px] tracking-widest text-slate-500 lg:flex">
+        <span>BUILD: FAST</span>
+        <span>QUALITY: PREMIUM</span>
       </div>
 
-      {/* Scroll indicator with click navigation */}
       <button
         type="button"
         onClick={() => onNavigate("ecosistema-mirada")}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center space-y-2 cursor-pointer rounded-xl px-3 py-2 text-slate-400 transition-colors hover:text-energy-cyan focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-950"
+        className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 cursor-pointer flex-col items-center space-y-2 rounded-xl px-3 py-2 text-slate-400 transition-colors hover:text-energy-cyan focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-950"
         aria-label="Ir a la mirada del ecosistema"
       >
-        <span className="text-[10px] font-mono tracking-[0.25em] uppercase font-bold">
-          Desliza para explorar
+        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.25em]">
+          Desliza para descubrir
         </span>
-        <ChevronDown className="w-5 h-5 {animate-bounce} text-cyan-400 animate-bounce" />
+        <ChevronDown className="h-5 w-5 animate-bounce text-cyan-400" />
       </button>
     </section>
   );

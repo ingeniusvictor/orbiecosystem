@@ -42,9 +42,9 @@ The repository currently uses a React SPA with Vite and section-based navigation
 - Dependencies: Manual route detection in `src/App.tsx`; no external i18n dependency.
 - Acceptance criteria: English copy approved, `hreflang` relationship documented, no unsupported claims, one H1, accessible ES/EN selector.
 
-## `/projects/orbi-pbmetrics`
+## `/projects/orbi-PVMetrics`
 
-- Objective: Reusable technical product profile for ORBI PBMetrics IA.
+- Objective: Reusable technical product profile for ORBI PVMetrics IA.
 - Audience: Technical evaluators, potential partners and internal product reviewers.
 - Expected sections: Product overview, status, intended users, functional scope, AI boundaries, evidence requirements, competition edition relationship, future roadmap labels.
 - Content source: `src/content/competition.ts`, `CLAIMS_REGISTER.md` and future product evidence.

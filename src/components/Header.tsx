@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Gamepad2, Briefcase, Code, Menu, X, ArrowRight, Settings } from "lucide-react";
+import { Menu, X, ArrowRight, Settings } from "lucide-react";
 
 interface HeaderProps {
   onNavigate: (sectionId: string) => void;
@@ -13,23 +13,19 @@ export default function Header({ onNavigate, activeSection, onOpenDevPanel }: He
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const navLinks = [
-    { name: "Ecosistema", href: "ecosistema", type: "section" },
-    { name: "Foton Prime", href: "foton-prime", type: "section" },
-    { name: "Divisiones", href: "divisiones", type: "section" },
-    { name: "Proyectos", href: "proyectos", type: "section" },
-    { name: "Roadmap", href: "roadmap", type: "section" },
-    { name: "Climate Recovery", href: "/climate-recovery", type: "route" }
+    { name: "Explore", href: "ecosistema-mirada", type: "section" },
+    { name: "Solutions", href: "ecosystem-season-one", type: "section" },
+    { name: "Academy", href: "ecosistema-mirada", type: "section" },
+    { name: "Innovation", href: "roadmap", type: "section" },
+    { name: "News", href: "proyectos", type: "section" },
+    { name: "Contact", href: "season-one-final-cta", type: "section" }
   ] as const;
 
   const handleLinkClick = (id: string) => {
@@ -42,24 +38,27 @@ export default function Header({ onNavigate, activeSection, onOpenDevPanel }: He
       id="orbi-nav-header"
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? "bg-slate-950/85 backdrop-blur-md border-b border-slate-800/60 py-3 shadow-lg shadow-black/30"
+          ? "border-b border-cyan-500/10 bg-slate-950/84 py-3 shadow-2xl shadow-black/40 backdrop-blur-2xl"
           : "bg-transparent py-5"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
-          {/* Logo */}
+      <div className="mx-auto w-[min(1180px,calc(100vw-2rem))]">
+        <div className={`flex items-center justify-between rounded-full border transition-all duration-300 ${
+          isScrolled
+            ? "border-white/10 bg-white/[0.03] px-3 py-2"
+            : "border-transparent px-0 py-0"
+        }`}>
           <button
             type="button"
             onClick={() => handleLinkClick("hero")}
-            className="flex items-center space-x-3 cursor-pointer group select-none rounded-full focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-950"
+            className="group flex items-center gap-3 rounded-full focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-950"
             aria-label="Ir al inicio de ORBI Ecosystem"
           >
-            <div className="relative w-8 h-8 flex items-center justify-center">
+            <div className="relative flex h-10 w-10 items-center justify-center rounded-full border border-cyan-400/20 bg-slate-950/70 shadow-lg shadow-cyan-950/20">
               <img
                 src="/assets/logo.jpeg"
                 alt="ORBI Ecosystem Logo"
-                className="w-7 h-7 object-contain filter drop-shadow-[0_0_8px_rgba(0,229,255,0.5)] transition-transform duration-300 group-hover:scale-110"
+                className="h-8 w-8 object-contain drop-shadow-[0_0_10px_rgba(0,229,255,0.55)] transition-transform duration-300 group-hover:scale-110"
                 onError={(e) => {
                   e.currentTarget.style.display = "none";
                   const fallback = e.currentTarget.nextElementSibling as HTMLElement;
@@ -70,135 +69,110 @@ export default function Header({ onNavigate, activeSection, onOpenDevPanel }: He
                 }}
                 referrerPolicy="no-referrer"
               />
-              {/* Zero-pixelation vector circular fallback */}
-              <div className="hidden w-7 h-7 rounded-full bg-gradient-to-tr from-blue-600 via-purple-600 to-emerald-500 p-[2px] shadow-lg shadow-purple-500/10 transition-transform duration-300 group-hover:scale-110 items-center justify-center">
-                <div className="w-full h-full bg-slate-950 rounded-full flex items-center justify-center">
-                  <span className="text-white font-extrabold text-[10px] tracking-widest pl-[1px]">Ø</span>
+              <div className="hidden h-8 w-8 items-center justify-center rounded-full bg-gradient-to-tr from-blue-600 via-purple-600 to-emerald-500 p-[2px] transition-transform duration-300 group-hover:scale-110">
+                <div className="flex h-full w-full items-center justify-center rounded-full bg-slate-950">
+                  <span className="pl-[1px] text-[10px] font-extrabold tracking-widest text-white">Ø</span>
                 </div>
               </div>
             </div>
-            <div>
-              <span className="text-white font-extrabold text-sm sm:text-md tracking-wider font-orbitron">
-                ORBI <span className="text-energy-cyan font-light text-[10px] sm:text-xs tracking-[0.2em] pl-1 font-sans">ECOSYSTEM</span>
+            <div className="leading-none">
+              <span className="block font-orbitron text-sm font-black tracking-[0.18em] text-white sm:text-base">
+                ORBI
+              </span>
+              <span className="block pt-1 font-mono text-[8px] font-bold uppercase tracking-[0.34em] text-cyan-300/80 sm:text-[9px]">
+                Ecosystem
               </span>
             </div>
           </button>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-1 lg:space-x-2">
-            {navLinks.map((link) =>
-              link.type === "route" ? (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="px-4 py-2 rounded-full text-sm font-medium tracking-wide transition-all duration-200 text-cyan-300 hover:text-white hover:bg-cyan-500/10 border border-cyan-500/20 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-950"
-                >
-                  {link.name}
-                </a>
-              ) : (
-                <button
-                  key={link.href}
-                  onClick={() => handleLinkClick(link.href)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium tracking-wide transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-950 ${
-                    activeSection === link.href
-                      ? "text-blue-400 bg-blue-500/10 border border-blue-500/20"
-                      : "text-slate-300 hover:text-white hover:bg-slate-800/30 border border-transparent"
-                  }`}
-                >
-                  {link.name}
-                </button>
-              )
-            )}
+          <nav className="hidden items-center gap-1 lg:flex">
+            {navLinks.map((link) => (
+              <button
+                key={link.href}
+                onClick={() => handleLinkClick(link.href)}
+                className={`rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-950 ${
+                  activeSection === link.href
+                    ? "border-cyan-400/30 bg-cyan-400/10 text-cyan-200"
+                    : "border-transparent text-slate-300 hover:border-white/10 hover:bg-white/[0.04] hover:text-white"
+                }`}
+              >
+                {link.name}
+              </button>
+            ))}
           </nav>
 
-          {/* Dev Mode Panel & Explorar CTA */}
-          <div className="hidden lg:flex items-center">
+          <div className="hidden items-center gap-3 lg:flex">
             {onOpenDevPanel && (
               <button
                 onClick={() => {
                   onOpenDevPanel();
                   setIsOpen(false);
                 }}
-                className="mr-3 p-2 px-3.5 bg-slate-900 hover:bg-slate-850 text-cyan-400 hover:text-[#00E5FF] border border-cyan-500/20 hover:border-cyan-500/60 rounded-full transition-all duration-300 cursor-pointer shadow-md hover:shadow-cyan-500/10 flex items-center gap-2 group text-xs font-mono tracking-widest font-extrabold uppercase select-none"
+                className="inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-slate-950/70 px-3.5 py-2 font-mono text-[10px] font-black uppercase tracking-widest text-cyan-300 transition-all duration-300 hover:border-cyan-400/60 hover:text-white"
                 title="Consola de Control del Ecosistema Orbi"
               >
-                <Settings className="w-3.5 h-3.5 group-hover:rotate-45 transition-transform duration-500" />
-                <span>DEV PANEL</span>
+                <Settings className="h-3.5 w-3.5 transition-transform duration-500 group-hover:rotate-45" />
+                <span>DEV</span>
               </button>
             )}
             <button
-              onClick={() => handleLinkClick("proyectos")}
-              className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-medium text-sm tracking-wide rounded-full shadow-lg shadow-blue-500/15 hover:shadow-blue-500/25 transition-all duration-300 flex items-center space-x-2 group cursor-pointer"
+              onClick={() => handleLinkClick("ecosystem-season-one")}
+              className="orbitron-primary-action !min-h-11 !px-5 !py-2.5 !text-[11px]"
             >
               <span>Explorar ORBI</span>
-              <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
+              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
             </button>
           </div>
 
-          {/* Mobile Menu Button */}
           <div className="lg:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2.5 text-slate-400 hover:text-white hover:bg-slate-800/40 rounded-lg transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-950"
+              className="rounded-full border border-white/10 bg-slate-950/70 p-2.5 text-slate-300 transition-colors hover:text-white focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-950"
               aria-label={isOpen ? "Cerrar menu principal" : "Abrir menu principal"}
               aria-expanded={isOpen}
               aria-controls="orbi-mobile-menu"
             >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Navigation Panel */}
       {isOpen && (
-        <div id="orbi-mobile-menu" className="lg:hidden absolute top-full left-0 right-0 bg-slate-950 border-b border-slate-800/80 shadow-2xl backdrop-blur-lg animate-in fade-in slide-in-from-top-4 duration-200">
-          <div className="px-4 pt-3 pb-6 space-y-2">
-            {navLinks.map((link) =>
-              link.type === "route" ? (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className="block w-full px-4 py-3 rounded-xl text-base font-medium tracking-wide transition-colors text-cyan-300 bg-cyan-500/10 border border-cyan-500/20 hover:text-white focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-950"
-                >
-                  {link.name}
-                </a>
-              ) : (
-                <button
-                  key={link.href}
-                  onClick={() => handleLinkClick(link.href)}
-                  className={`w-full text-left px-4 py-3 rounded-xl text-base font-medium tracking-wide transition-colors focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-950 ${
-                    activeSection === link.href
-                      ? "text-blue-400 bg-blue-500/10 border-l-2 border-blue-500"
-                      : "text-slate-300 hover:text-white hover:bg-slate-800/30"
-                  }`}
-                >
-                  {link.name}
-                </button>
-              )
-            )}
-            <div className="pt-4 px-2 space-y-2">
-              {onOpenDevPanel && (
-                <button
-                  onClick={() => {
-                    onOpenDevPanel();
-                    setIsOpen(false);
-                  }}
-                  className="w-full py-2.5 bg-slate-900 border border-cyan-500/20 text-cyan-400 hover:text-white rounded-xl font-mono text-xs uppercase tracking-widest font-black flex items-center justify-center space-x-2 cursor-pointer transition-colors"
-                >
-                  <Settings className="w-4 h-4" />
-                  <span>MODO DESARROLLADOR</span>
-                </button>
-              )}
+        <div id="orbi-mobile-menu" className="absolute left-0 right-0 top-full border-b border-cyan-500/10 bg-slate-950/96 shadow-2xl shadow-black/50 backdrop-blur-2xl lg:hidden">
+          <div className="mx-auto w-[min(100vw-2rem,680px)] space-y-2 px-2 pb-6 pt-4">
+            {navLinks.map((link) => (
               <button
-                onClick={() => handleLinkClick("proyectos")}
-                className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-center font-medium rounded-xl shadow-lg flex items-center justify-center space-x-2"
+                key={link.href}
+                onClick={() => handleLinkClick(link.href)}
+                className={`w-full rounded-2xl border px-4 py-3 text-left text-sm font-bold uppercase tracking-[0.16em] transition-colors focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-950 ${
+                  activeSection === link.href
+                    ? "border-cyan-400/30 bg-cyan-400/10 text-cyan-200"
+                    : "border-white/5 bg-white/[0.03] text-slate-300 hover:text-white"
+                }`}
               >
-                <span>Explorar ORBI</span>
-                <ArrowRight className="w-4 h-4" />
+                {link.name}
               </button>
-            </div>
+            ))}
+            {onOpenDevPanel && (
+              <button
+                onClick={() => {
+                  onOpenDevPanel();
+                  setIsOpen(false);
+                }}
+                className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border border-cyan-500/20 bg-slate-900 py-3 font-mono text-xs font-black uppercase tracking-widest text-cyan-300"
+              >
+                <Settings className="h-4 w-4" />
+                <span>MODO DESARROLLADOR</span>
+              </button>
+            )}
+            <button
+              onClick={() => handleLinkClick("ecosystem-season-one")}
+              className="orbitron-primary-action mt-3 w-full"
+            >
+              <span>Explorar ORBI</span>
+              <ArrowRight className="h-4 w-4" />
+            </button>
           </div>
         </div>
       )}

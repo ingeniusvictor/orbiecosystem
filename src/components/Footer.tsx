@@ -1,163 +1,109 @@
-import { Gamepad2, Briefcase, Code, Cpu, Github, Linkedin, Twitter, Globe } from "lucide-react";
+import { Briefcase, Code2, Gamepad2, GraduationCap, Home, Linkedin, Moon, Newspaper, Rss, SunMedium, Youtube } from "lucide-react";
 
 interface FooterProps {
   onNavigate: (sectionId: string) => void;
 }
 
+const ecosystemLinks = [
+  { label: "Development System", icon: Code2 },
+  { label: "Corporate System", icon: Briefcase },
+  { label: "Academy", icon: GraduationCap },
+  { label: "Instalaciones y Servicios", icon: SunMedium },
+  { label: "Sleep Frequencies", icon: Moon },
+  { label: "Game System", icon: Gamepad2 },
+  { label: "ORBI News", icon: Newspaper }
+];
+
 export default function Footer({ onNavigate }: FooterProps) {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-slate-950 text-slate-400 font-sans border-t border-slate-900 pt-16 pb-12 select-none">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 pb-12 border-b border-slate-900">
-          
-          {/* Column 1: Brand presentation */}
-          <div className="md:col-span-4 space-y-4">
+    <footer className="relative overflow-hidden border-t border-white/10 bg-slate-950 py-14 font-sans text-slate-400 select-none">
+      <div className="absolute inset-0 grid-overlay opacity-[0.025]" aria-hidden="true" />
+      <div className="absolute -bottom-32 left-1/2 h-[26rem] w-[40rem] -translate-x-1/2 rounded-full bg-cyan-500/5 blur-3xl" aria-hidden="true" />
+
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid gap-10 border-b border-white/10 pb-10 lg:grid-cols-[1.1fr_1.1fr_0.8fr]">
+          <div className="space-y-5">
             <button
               type="button"
               onClick={() => onNavigate("hero")}
-              className="flex items-center space-x-3 cursor-pointer group w-fit rounded-full focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-950"
+              className="flex w-fit items-center gap-3 rounded-full focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-950"
               aria-label="Volver al inicio de ORBI Ecosystem"
             >
-              <div className="relative w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 via-purple-600 to-emerald-500 p-[1.5px]">
-                <div className="w-full h-full bg-slate-950 rounded-full flex items-center justify-center">
-                  <span className="text-white font-black text-[10px] tracking-widest pl-[0.5px]">Ø</span>
-                </div>
+              <div className="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-cyan-400/20 bg-cyan-400/10">
+                <span className="font-orbitron text-lg font-black text-white">Ø</span>
               </div>
-              <span className="text-white font-bold tracking-wider text-base">
-                ORBI <span className="text-slate-500 font-medium text-xs tracking-widest pl-0.5">ECOSYSTEM</span>
-              </span>
+              <div className="text-left">
+                <div className="font-orbitron text-sm font-black uppercase tracking-[0.22em] text-white">ORBI</div>
+                <div className="font-mono text-[9px] font-black uppercase tracking-[0.28em] text-cyan-300">Ecosystem</div>
+              </div>
             </button>
-            
-            <p className="text-xs sm:text-sm text-slate-500 leading-relaxed max-w-sm">
-              Un universo digital interconectado que combina el poder operacional de la Inteligencia Artificial corporativa, la sinergia de los videojuegos y la robustez de APIs de integración segura.
+
+            <p className="max-w-md text-sm leading-7 text-slate-500">
+              Ecosistema tecnológico chileno que desarrolla soluciones de inteligencia artificial, software, educación, energía, automatización, bienestar, videojuegos y contenido de innovación.
             </p>
 
-            <p className="text-xs text-slate-500 font-semibold tracking-wide flex items-center space-x-1">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse mr-1" />
-              <span>Designed as a modular intelligent ecosystem.</span>
-            </p>
-          </div>
-
-          {/* Column 2: System Division links */}
-          <div className="md:col-span-3 space-y-4">
-            <h4 className="text-xs uppercase text-white font-mono tracking-widest font-bold">ORBI Systems</h4>
-            <ul className="space-y-2.5 text-sm">
-              <li>
-                <button 
-                  onClick={() => onNavigate("divisiones")}
-                  className="hover:text-blue-400 flex items-center space-x-1.5 transition-colors cursor-pointer text-slate-400"
-                >
-                  <Gamepad2 className="w-3.5 h-3.5 text-blue-400" />
-                  <span>Orbi Games System</span>
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => onNavigate("divisiones")}
-                  className="hover:text-emerald-400 flex items-center space-x-1.5 transition-colors cursor-pointer text-slate-400"
-                >
-                  <Briefcase className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Orbi Corporate System</span>
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => onNavigate("divisiones")}
-                  className="hover:text-purple-400 flex items-center space-x-1.5 transition-colors cursor-pointer text-slate-400"
-                >
-                  <Code className="w-3.5 h-3.5 text-purple-400" />
-                  <span>Orbi Development System</span>
-                </button>
-              </li>
-            </ul>
-          </div>
-
-          {/* Column 3: Intelligent core links */}
-          <div className="md:col-span-2 space-y-4">
-            <h4 className="text-xs uppercase text-white font-mono tracking-widest font-bold">Inteligencia Core</h4>
-            <ul className="space-y-2.5 text-sm">
-              <li>
-                <button 
-                  onClick={() => onNavigate("foton-prime")}
-                  className="hover:text-purple-300 flex items-center space-x-2 transition-colors cursor-pointer text-slate-400"
-                >
-                  <Cpu className="w-3.5 h-3.5 text-purple-400" />
-                  <span>Orbi Foton Prime</span>
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => onNavigate("roadmap")}
-                  className="hover:text-slate-200 transition-colors cursor-pointer text-slate-400"
-                >
-                  <span>Hoja de Ruta</span>
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => onNavigate("ecosistema")}
-                  className="hover:text-slate-200 transition-colors cursor-pointer text-slate-400"
-                >
-                  <span>Diferenciadores</span>
-                </button>
-              </li>
-            </ul>
-          </div>
-
-          {/* Column 4: Links & Social */}
-          <div className="md:col-span-3 space-y-4">
-            <h4 className="text-xs uppercase text-white font-mono tracking-widest font-bold font-sans">Redes y Canales</h4>
-            <p className="text-xs text-slate-500 leading-normal">
-              Sigue el desarrollo técnico del ecosistema modular de ORBI.
-            </p>
-            <div className="flex flex-wrap items-center gap-3 pt-1">
-              <span
-                aria-disabled="true"
-                className="p-2.5 bg-slate-900 border border-slate-850 rounded-xl text-slate-500"
-                title="Sigue el código en GitHub"
-              >
-                <Github className="w-4.5 h-4.5" />
-              </span>
-              <span
-                aria-disabled="true"
-                className="p-2.5 bg-slate-900 border border-slate-850 rounded-xl text-slate-500"
-                title="LinkedIn Corporativo"
-              >
-                <Linkedin className="w-4.5 h-4.5" />
-              </span>
-              <span
-                aria-disabled="true"
-                className="p-2.5 bg-slate-900 border border-slate-850 rounded-xl text-slate-500"
-                title="Canal Twitter / X"
-              >
-                <Twitter className="w-4.5 h-4.5" />
-              </span>
-              <span
-                aria-disabled="true"
-                className="p-2.5 bg-slate-900 border border-slate-850 rounded-xl text-slate-500"
-                title="Portal Público Web"
-              >
-                <Globe className="w-4.5 h-4.5" />
-              </span>
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-[0.18em] text-emerald-300">
+              <span className="h-2 w-2 rounded-full bg-emerald-400" />
+              Season 1 Active
             </div>
           </div>
 
-        </div>
+          <div>
+            <h4 className="mb-5 font-mono text-xs font-black uppercase tracking-[0.24em] text-white">ORBI Platform Season 1</h4>
+            <div className="grid gap-2 sm:grid-cols-2">
+              {ecosystemLinks.map(({ label, icon: Icon }) => (
+                <button
+                  key={label}
+                  type="button"
+                  onClick={() => onNavigate(label === "ORBI News" ? "roadmap" : "ecosystem-season-one")}
+                  className="flex items-center gap-2 rounded-xl border border-white/5 bg-white/[0.025] px-3 py-2 text-left text-xs font-semibold text-slate-400 transition hover:border-cyan-400/20 hover:text-white"
+                >
+                  <Icon className="h-3.5 w-3.5 text-cyan-300" aria-hidden="true" />
+                  <span>{label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
 
-        {/* Closing details legal area */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-          <p>© {currentYear} ORBI ECOSYSTEM. Todos los derechos reservados.</p>
-          <div className="flex space-x-4 items-center">
-            <span className="text-slate-600">Términos de Servicio</span>
-            <span className="text-slate-800">•</span>
-            <span className="text-slate-600">Políticas de Privacidad</span>
-            <span className="text-slate-800">•</span>
-            <span className="text-slate-600 font-mono">HASH: FOTON_SEC_P_0x{currentYear}</span>
+          <div>
+            <h4 className="mb-5 font-mono text-xs font-black uppercase tracking-[0.24em] text-white">Canales</h4>
+            <p className="mb-4 text-sm leading-7 text-slate-500">
+              Sigue la construcción de ORBI y sus contenidos educativos, técnicos y de innovación.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-slate-500" title="YouTube">
+                <Youtube className="h-4.5 w-4.5" />
+              </span>
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-slate-500" title="LinkedIn">
+                <Linkedin className="h-4.5 w-4.5" />
+              </span>
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-slate-500" title="Noticias ORBI">
+                <Rss className="h-4.5 w-4.5" />
+              </span>
+              <button
+                type="button"
+                onClick={() => onNavigate("hero")}
+                className="flex h-11 w-11 items-center justify-center rounded-xl border border-cyan-400/20 bg-cyan-400/10 text-cyan-200 transition hover:border-cyan-300/40 hover:text-white"
+                title="Volver arriba"
+              >
+                <Home className="h-4.5 w-4.5" />
+              </button>
+            </div>
           </div>
         </div>
 
+        <div className="flex flex-col gap-4 pt-7 text-xs text-slate-600 sm:flex-row sm:items-center sm:justify-between">
+          <p>© {currentYear} ORBI Ecosystem SpA. Todos los derechos reservados.</p>
+          <div className="flex flex-wrap items-center gap-3 font-mono text-[10px] uppercase tracking-[0.18em]">
+            <span>Rancagua · Chile</span>
+            <span className="text-slate-800">//</span>
+            <span>AI Native</span>
+            <span className="text-slate-800">//</span>
+            <span>Season 1</span>
+          </div>
+        </div>
       </div>
     </footer>
   );

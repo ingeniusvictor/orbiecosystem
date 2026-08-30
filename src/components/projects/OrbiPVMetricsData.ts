@@ -83,12 +83,12 @@ export const existingVerifiedCapabilities: ProductListItem[] = [
   },
   {
     title: "Fallback SPA para rutas públicas",
-    description: "La aplicación cuenta con fallback SPA para abrir rutas como /climate-recovery y /projects/orbi-pbmetrics directamente.",
+    description: "La aplicación cuenta con fallback SPA para abrir rutas como /climate-recovery y /projects/orbi-PVMetrics directamente.",
     state: "complete",
     icon: Layers,
   },
   {
-    title: "Base funcional de PBMetrics",
+    title: "Base funcional de PVMetrics",
     description: competitionContent.product.productStatusWarning,
     state: "pending baseline confirmation",
     icon: FileQuestion,
@@ -122,7 +122,7 @@ export const statusAndLimitations: ProductListItem[] = [
   },
   {
     title: "Lo pendiente",
-    description: "La afirmación sobre una base funcional de PBMetrics permanece sujeta a confirmación contra evidencia técnica del baseline.",
+    description: "La afirmación sobre una base funcional de PVMetrics permanece sujeta a confirmación contra evidencia técnica del baseline.",
     state: "pending baseline confirmation",
   },
   {
@@ -148,7 +148,7 @@ export const productRoadmap: RoadmapStage[] = [
 
 export const faqItems: FAQItem[] = [
   {
-    question: "¿Qué es ORBI PBMetrics IA?",
+    question: "¿Qué es ORBI PVMetrics IA?",
     answer: "Es el producto presentado por ORBI Ecosystem SpA para la edición Climate Recovery, descrito como una capa de inteligencia operacional para operación fotovoltaica.",
   },
   {
@@ -173,7 +173,7 @@ export const faqItems: FAQItem[] = [
   },
   {
     question: "¿Qué capacidades existen actualmente?",
-    answer: "El repositorio confirma baseline técnico, registro de claims y estructura pública. La base funcional de PBMetrics sigue pendiente de confirmación antes de publicarse como hecho productivo.",
+    answer: "El repositorio confirma baseline técnico, registro de claims y estructura pública. La base funcional de PVMetrics sigue pendiente de confirmación antes de publicarse como hecho productivo.",
   },
   {
     question: "¿Qué capacidades están planificadas?",

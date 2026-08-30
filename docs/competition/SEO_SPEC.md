@@ -4,14 +4,14 @@ This document defines SEO requirements and the WEB-07 implementation scope.
 
 ## Primary Metadata ES
 
-- Title: `ORBI PBMetrics IA | Climate Recovery Intelligence`
+- Title: `ORBI PVMetrics IA | Climate Recovery Intelligence`
 - Meta description: `Explainable AI for identifying recoverable photovoltaic losses, prioritizing maintenance and verifying recovered clean energy.`
 - Canonical: `https://orbiecosystem.vercel.app/climate-recovery`
 - HTML language: `es`
 
 ## Primary Metadata EN
 
-- Title: `ORBI PBMetrics IA | Climate Recovery Intelligence`
+- Title: `ORBI PVMetrics IA | Climate Recovery Intelligence`
 - Meta description: `Explainable AI for identifying recoverable photovoltaic losses, prioritizing maintenance and verifying recovered clean energy.`
 - Canonical: `https://orbiecosystem.vercel.app/climate-recovery/en`
 - HTML language: `en`
@@ -19,7 +19,7 @@ This document defines SEO requirements and the WEB-07 implementation scope.
 ## Open Graph
 
 - `og:type`: `website`
-- `og:title`: `ORBI PBMetrics IA | Climate Recovery Intelligence`
+- `og:title`: `ORBI PVMetrics IA | Climate Recovery Intelligence`
 - `og:description`: `Explainable AI for identifying recoverable photovoltaic losses, prioritizing maintenance and verifying recovered clean energy.`
 - `og:url`: route-specific canonical public URL
 - `og:site_name`: `ORBI Ecosystem SpA`
@@ -28,7 +28,7 @@ This document defines SEO requirements and the WEB-07 implementation scope.
 ## Twitter / X
 
 - `twitter:card`: `summary_large_image`
-- `twitter:title`: `ORBI PBMetrics IA | Climate Recovery Intelligence`
+- `twitter:title`: `ORBI PVMetrics IA | Climate Recovery Intelligence`
 - `twitter:description`: `Explainable AI for identifying recoverable photovoltaic losses, prioritizing maintenance and verifying recovered clean energy.`
 - `twitter:image`: `SOCIAL IMAGE PENDING APPROVAL`
 
@@ -39,7 +39,7 @@ The sitemap includes approved public routes only:
 - `https://orbiecosystem.vercel.app/`
 - `https://orbiecosystem.vercel.app/climate-recovery`
 - `https://orbiecosystem.vercel.app/climate-recovery/en`
-- `https://orbiecosystem.vercel.app/projects/orbi-pbmetrics`
+- `https://orbiecosystem.vercel.app/projects/orbi-PVMetrics`
 
 ## robots.txt
 
@@ -80,9 +80,9 @@ Implemented for the corporate site:
 
 ### SoftwareApplication
 
-Implemented for ORBI PBMetrics IA with conservative, verified information only:
+Implemented for ORBI PVMetrics IA with conservative, verified information only:
 
-- Name: ORBI PBMetrics IA
+- Name: ORBI PVMetrics IA
 - Application category: Renewable energy operational intelligence
 - Operating system: omitted because it is not verified
 - Offers/pricing: Do not include unless verified

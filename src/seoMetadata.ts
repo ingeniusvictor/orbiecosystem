@@ -53,10 +53,10 @@ const website = {
   },
 };
 
-const pbmetricsSoftwareApplication = {
+const PVMetricsSoftwareApplication = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "ORBI PBMetrics IA",
+  name: "ORBI PVMetrics IA",
   applicationCategory: "Renewable energy operational intelligence",
   description:
     "Explainable operational intelligence proposal for identifying recoverable photovoltaic losses, prioritizing maintenance and verifying recovered clean energy.",
@@ -114,11 +114,11 @@ const routeMetadata = {
   climateRecovery: {
     es: {
       lang: "es",
-      title: "ORBI PBMetrics IA | Climate Recovery Intelligence",
+      title: "ORBI PVMetrics IA | Climate Recovery Intelligence",
       description: climateDescription,
       canonical: `${siteUrl}/climate-recovery`,
       ...createSocialMetadata({
-        title: "ORBI PBMetrics IA | Climate Recovery Intelligence",
+        title: "ORBI PVMetrics IA | Climate Recovery Intelligence",
         description: climateDescription,
         url: `${siteUrl}/climate-recovery`,
       }),
@@ -127,16 +127,16 @@ const routeMetadata = {
         { hreflang: "en", href: `${siteUrl}/climate-recovery/en` },
         { hreflang: "x-default", href: `${siteUrl}/climate-recovery` },
       ],
-      structuredData: [pbmetricsSoftwareApplication],
+      structuredData: [PVMetricsSoftwareApplication],
       socialImageStatus,
     },
     en: {
       lang: "en",
-      title: "ORBI PBMetrics IA | Climate Recovery Intelligence",
+      title: "ORBI PVMetrics IA | Climate Recovery Intelligence",
       description: climateDescription,
       canonical: `${siteUrl}/climate-recovery/en`,
       ...createSocialMetadata({
-        title: "ORBI PBMetrics IA | Climate Recovery Intelligence",
+        title: "ORBI PVMetrics IA | Climate Recovery Intelligence",
         description: climateDescription,
         url: `${siteUrl}/climate-recovery/en`,
       }),
@@ -145,27 +145,27 @@ const routeMetadata = {
         { hreflang: "en", href: `${siteUrl}/climate-recovery/en` },
         { hreflang: "x-default", href: `${siteUrl}/climate-recovery` },
       ],
-      structuredData: [pbmetricsSoftwareApplication],
+      structuredData: [PVMetricsSoftwareApplication],
       socialImageStatus,
     },
   },
-  pbmetrics: {
+  PVMetrics: {
     lang: "es",
-    title: "ORBI PBMetrics IA | Technical Product Profile",
+    title: "ORBI PVMetrics IA | Technical Product Profile",
     description:
-      "Ficha tecnica publica de ORBI PBMetrics IA para evaluacion tecnica, limites de IA y relacion con Climate Recovery Edition.",
-    canonical: `${siteUrl}/projects/orbi-pbmetrics`,
+      "Ficha tecnica publica de ORBI PVMetrics IA para evaluacion tecnica, limites de IA y relacion con Climate Recovery Edition.",
+    canonical: `${siteUrl}/projects/orbi-PVMetrics`,
     ...createSocialMetadata({
-      title: "ORBI PBMetrics IA | Technical Product Profile",
+      title: "ORBI PVMetrics IA | Technical Product Profile",
       description:
-        "Ficha tecnica publica de ORBI PBMetrics IA para evaluacion tecnica, limites de IA y relacion con Climate Recovery Edition.",
-      url: `${siteUrl}/projects/orbi-pbmetrics`,
+        "Ficha tecnica publica de ORBI PVMetrics IA para evaluacion tecnica, limites de IA y relacion con Climate Recovery Edition.",
+      url: `${siteUrl}/projects/orbi-PVMetrics`,
     }),
     structuredData: [
       {
-        ...pbmetricsSoftwareApplication,
+        ...PVMetricsSoftwareApplication,
         description:
-          "Public technical product profile for ORBI PBMetrics IA, AI boundaries and its relationship with Climate Recovery Edition.",
+          "Public technical product profile for ORBI PVMetrics IA, AI boundaries and its relationship with Climate Recovery Edition.",
       },
     ],
     socialImageStatus,
@@ -173,12 +173,12 @@ const routeMetadata = {
 } as const satisfies {
   home: SeoRouteMetadata;
   climateRecovery: Record<ClimateLocale, SeoRouteMetadata>;
-  pbmetrics: SeoRouteMetadata;
+  PVMetrics: SeoRouteMetadata;
 };
 
-export function getSeoRouteMetadata(route: "home" | "pbmetrics"): SeoRouteMetadata;
+export function getSeoRouteMetadata(route: "home" | "PVMetrics"): SeoRouteMetadata;
 export function getSeoRouteMetadata(route: "climateRecovery", locale: ClimateLocale): SeoRouteMetadata;
-export function getSeoRouteMetadata(route: "home" | "climateRecovery" | "pbmetrics", locale: ClimateLocale = "es") {
+export function getSeoRouteMetadata(route: "home" | "climateRecovery" | "PVMetrics", locale: ClimateLocale = "es") {
   if (route === "climateRecovery") {
     return routeMetadata.climateRecovery[locale];
   }
@@ -190,7 +190,7 @@ export const seoPublicRoutes = [
   `${siteUrl}/`,
   `${siteUrl}/climate-recovery`,
   `${siteUrl}/climate-recovery/en`,
-  `${siteUrl}/projects/orbi-pbmetrics`,
+  `${siteUrl}/projects/orbi-PVMetrics`,
 ] as const;
 
 export const seoSocialImageStatus = socialImageStatus;

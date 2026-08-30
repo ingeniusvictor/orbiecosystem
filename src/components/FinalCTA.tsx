@@ -1,4 +1,4 @@
-import { ArrowRight, Compass, Sparkles } from "lucide-react";
+import { ArrowRight, Compass, MessageCircle, Play, Sparkles } from "lucide-react";
 import { competitionContent } from "../content/competition";
 
 interface FinalCTAProps {
@@ -7,62 +7,76 @@ interface FinalCTAProps {
 
 export default function FinalCTA({ onNavigate }: FinalCTAProps) {
   return (
-    <section className="py-24 bg-slate-950 relative overflow-hidden font-sans border-t border-slate-900 select-none">
-      {/* Background radial glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-0 right-10 w-64 h-64 bg-purple-600/5 rounded-full blur-[80px] pointer-events-none animate-pulse" />
+    <section id="season-one-final-cta" className="relative overflow-hidden border-t border-cyan-400/10 bg-[#050816] py-24 font-sans select-none">
+      <div className="absolute inset-0 grid-overlay opacity-[0.04]" aria-hidden="true" />
+      <div className="absolute left-1/2 top-1/2 h-[44rem] w-[44rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-500/10 blur-3xl" aria-hidden="true" />
+      <div className="absolute bottom-0 right-0 h-[28rem] w-[28rem] rounded-full bg-violet-500/10 blur-3xl" aria-hidden="true" />
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-8">
-        
-        {/* Banner sparkles icon */}
-        <div className="inline-flex p-3 bg-gradient-to-tr from-blue-600/20 via-purple-600/20 to-emerald-500/20 rounded-2xl border border-slate-800/80 animate-bounce duration-5000">
-          <Sparkles className="w-6 h-6 text-blue-400" />
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="orbitron-panel overflow-hidden p-6 md:p-10 lg:p-12">
+          <div className="grid gap-10 lg:grid-cols-[1fr_0.72fr] lg:items-center">
+            <div className="space-y-7">
+              <div className="orbitron-chip inline-flex">
+                <Sparkles className="h-3.5 w-3.5" />
+                <span>ORBI SEASON 1 / LAUNCH READY</span>
+              </div>
+
+              <div className="space-y-5">
+                <h2 className="orbitron-title max-w-5xl">
+                  ORBI no es solo una idea. Es una plataforma en movimiento.
+                </h2>
+                <p className="orbitron-subtitle max-w-4xl">
+                  Aplicaciones, inteligencia artificial, contenido educativo, energía, automatización, videojuegos, bienestar y noticias se ordenan bajo una misma visión: construir tecnología útil, visual y accionable.
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <a href="/climate-recovery" className="orbitron-primary-action">
+                  <span>{competitionContent.home.cta}</span>
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </a>
+
+                <button type="button" onClick={() => onNavigate("proyectos")} className="orbitron-secondary-action">
+                  <Compass className="h-4 w-4 text-cyan-200" aria-hidden="true" />
+                  <span>Ver soluciones</span>
+                </button>
+
+                <button type="button" onClick={() => onNavigate("foton-prime")} className="orbitron-ghost-action">
+                  <Play className="h-4 w-4" aria-hidden="true" />
+                  <span>Probar Foton Prime</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="grid gap-4">
+              <div className="rounded-3xl border border-cyan-400/15 bg-cyan-400/[0.06] p-5">
+                <p className="font-mono text-[10px] font-black uppercase tracking-[0.24em] text-cyan-300">Próximo paso</p>
+                <h3 className="mt-3 font-space text-2xl font-black text-white">Convertir visitas en conversación.</h3>
+                <p className="mt-3 text-sm leading-7 text-slate-400">
+                  La web queda preparada para mostrar productos, recibir interés y evolucionar hacia ORBI ChatBox IA sin mezclar desarrollos internos en la vitrina pública.
+                </p>
+              </div>
+
+              <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-violet-400/20 bg-violet-400/10 text-violet-200">
+                    <MessageCircle className="h-5 w-5" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <p className="font-space text-lg font-black text-white">Contacto y comunidad</p>
+                    <p className="mt-2 text-sm leading-6 text-slate-400">
+                      Season 1 prioriza claridad, confianza y demostraciones. La capa comercial puede activarse después con canales verificados.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="font-mono text-[10px] font-black uppercase tracking-[0.22em] text-slate-600">
+                Welcome to the ORBI Ecosystem // Portal Up // Season 1
+              </div>
+            </div>
+          </div>
         </div>
-
-        {/* Dynamic Titles */}
-        <div className="space-y-2">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-none uppercase">
-            ORBI no es solo una idea.
-          </h2>
-          <h3 className="text-2xl sm:text-3xl font-extrabold gradient-text-accessible bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400">
-            Es un ecosistema en construcción.
-          </h3>
-        </div>
-
-        {/* Descriptive Summary Paragraph */}
-        <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-          Aplicaciones, videojuegos, inteligencia artificial, energía, productividad y diseño convergen en una misma visión: crear tecnología útil, visualmente poderosa y preparada para evolucionar hacia desafíos planetarios reales.
-        </p>
-
-        {/* Action Buttons Trigger */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 max-w-md mx-auto">
-          <a
-            href="/climate-recovery"
-            className="w-full sm:w-auto px-6 py-3.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold text-sm rounded-full shadow-lg shadow-blue-500/15 transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer flex items-center justify-center space-x-1.5"
-          >
-            <span>{competitionContent.home.cta}</span>
-            <ArrowRight className="w-4 h-4" aria-hidden="true" />
-          </a>
-
-          <button
-            onClick={() => onNavigate("proyectos")}
-            className="w-full sm:w-auto px-6 py-3.5 bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-slate-700 text-slate-100 font-semibold text-sm rounded-full transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer flex items-center justify-center space-x-1.5"
-          >
-            <Compass className="w-4 h-4" />
-            <span>Ver Ecosistema</span>
-          </button>
-        </div>
-
-        {/* Epílogo / Prominent Welcome Phrase */}
-        <div className="pt-6">
-          <span className="text-xs font-mono font-bold tracking-widest text-slate-500 uppercase block select-none">
-            Welcome to the ORBI Ecosystem.
-          </span>
-          <span className="text-[10px] font-mono text-slate-600 tracking-wider">
-            SECURE_KEY: #ORB_INIT_2026 // PORTAL_UP
-          </span>
-        </div>
-
       </div>
     </section>
   );

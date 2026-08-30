@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;530;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;530;700&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -21,6 +21,24 @@
   --color-energy-green: #3CFF9B;
 }
 
+:root {
+  --orbi-bg: #050816;
+  --orbi-surface: #081027;
+  --orbi-surface-soft: rgba(15, 23, 42, 0.72);
+  --orbi-border: rgba(148, 163, 184, 0.14);
+  --orbi-border-strong: rgba(0, 228, 255, 0.28);
+  --orbi-text: #f8fafc;
+  --orbi-muted: #94a3b8;
+  --orbi-blue: #2979ff;
+  --orbi-cyan: #00e4ff;
+  --orbi-violet: #8a2be2;
+  --orbi-green: #3cff9b;
+  --orbi-gold: #ffd166;
+  --orbi-radius-lg: 1.5rem;
+  --orbi-radius-xl: 2rem;
+  --orbi-shadow-premium: 0 24px 80px rgba(0, 0, 0, 0.38);
+}
+
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
@@ -35,6 +53,158 @@
     opacity: 0.7;
     filter: drop-shadow(0 0 25px rgba(0, 228, 255, 0.6));
   }
+}
+
+@keyframes orbitronSweep {
+  0% { transform: translateX(-120%); opacity: 0; }
+  18% { opacity: 0.9; }
+  52% { opacity: 0.55; }
+  100% { transform: translateX(120%); opacity: 0; }
+}
+
+@keyframes orbitronSoftReveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* ORBITRON Season 1 utilities */
+.orbitron-section {
+  position: relative;
+  overflow: hidden;
+  padding-block: clamp(5rem, 9vw, 9rem);
+}
+
+.orbitron-shell {
+  width: min(1180px, calc(100vw - 2rem));
+  margin-inline: auto;
+}
+
+.orbitron-panel {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--orbi-border);
+  border-radius: var(--orbi-radius-xl);
+  background:
+    linear-gradient(135deg, rgba(15, 23, 42, 0.82), rgba(2, 6, 23, 0.68)),
+    radial-gradient(circle at 20% 0%, rgba(0, 228, 255, 0.12), transparent 34%),
+    radial-gradient(circle at 80% 15%, rgba(138, 43, 226, 0.14), transparent 30%);
+  box-shadow: var(--orbi-shadow-premium);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.orbitron-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.08) 45%, transparent 70%);
+  transform: translateX(-120%);
+  opacity: 0;
+}
+
+.orbitron-panel:hover::before {
+  animation: orbitronSweep 1.4s ease-out;
+}
+
+.orbitron-chip {
+  display: inline-flex;
+  min-height: 2rem;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 228, 255, 0.2);
+  background: rgba(8, 16, 39, 0.72);
+  padding: 0.45rem 0.8rem;
+  color: #67e8f9;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.orbitron-title {
+  font-family: var(--font-space);
+  font-size: clamp(2.35rem, 4.6vw, 4.85rem);
+  line-height: 0.96;
+  font-weight: 850;
+  letter-spacing: -0.065em;
+  color: white;
+  text-wrap: balance;
+}
+
+.orbitron-subtitle {
+  max-width: 62rem;
+  color: rgba(203, 213, 225, 0.9);
+  font-size: clamp(1rem, 1.35vw, 1.22rem);
+  line-height: 1.85;
+  text-wrap: pretty;
+}
+
+.orbitron-primary-action,
+.orbitron-secondary-action,
+.orbitron-ghost-action {
+  display: inline-flex;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  border-radius: 999px;
+  padding: 0.9rem 1.25rem;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, box-shadow 180ms ease, color 180ms ease;
+}
+
+.orbitron-primary-action {
+  color: white;
+  border: 1px solid rgba(0, 228, 255, 0.28);
+  background: linear-gradient(135deg, #2563eb 0%, #7c3aed 52%, #0891b2 100%);
+  box-shadow: 0 18px 48px rgba(37, 99, 235, 0.22);
+}
+
+.orbitron-secondary-action {
+  color: #dbeafe;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(15, 23, 42, 0.76);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.25);
+}
+
+.orbitron-ghost-action {
+  color: #67e8f9;
+  border: 1px solid rgba(0, 228, 255, 0.22);
+  background: rgba(8, 16, 39, 0.54);
+}
+
+.orbitron-primary-action:hover,
+.orbitron-secondary-action:hover,
+.orbitron-ghost-action:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0, 228, 255, 0.48);
+  box-shadow: 0 20px 60px rgba(0, 228, 255, 0.12);
+}
+
+.orbitron-metric-card {
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 1.25rem;
+  background: rgba(2, 6, 23, 0.52);
+  padding: 1rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.24);
+}
+
+.orbitron-reveal {
+  animation: orbitronSoftReveal 700ms ease-out both;
 }
 
 /* Glassmorphism Classes */
@@ -113,8 +283,10 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at center, rgba(0, 229, 255, 0.15), transparent 45%),
-    linear-gradient(180deg, rgba(5, 8, 22, 0.4) 0%, rgba(5, 8, 22, 0.75) 50%, rgba(5, 8, 22, 0.98) 100%);
+    radial-gradient(circle at 50% 12%, rgba(0, 229, 255, 0.20), transparent 34%),
+    radial-gradient(circle at 14% 62%, rgba(138, 43, 226, 0.20), transparent 36%),
+    radial-gradient(circle at 84% 46%, rgba(60, 255, 155, 0.09), transparent 28%),
+    linear-gradient(180deg, rgba(5, 8, 22, 0.35) 0%, rgba(5, 8, 22, 0.72) 48%, rgba(5, 8, 22, 0.98) 100%);
   z-index: 1;
 }
 
@@ -168,7 +340,8 @@
   }
 
   .animated,
-  .hero-logo {
+  .hero-logo,
+  .orbitron-reveal {
     animation: none !important;
   }
 }
@@ -178,6 +351,13 @@ body,
 #root {
   max-width: 100%;
   overflow-x: clip;
+  background: var(--orbi-bg);
+}
+
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 :where(a[href], button, input, select, textarea, summary) {

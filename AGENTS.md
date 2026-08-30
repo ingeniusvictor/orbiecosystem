@@ -10,7 +10,7 @@ Headquarters: Rancagua, Chile
 
 Founded: 2026
 
-Competition product: ORBI PBMetrics IA — Climate Recovery Edition
+Competition product: ORBI PVMetrics IA — Climate Recovery Edition
 
 Competition: AI for Climate Innovation Factory 2026
 
@@ -78,7 +78,7 @@ If one of these documents does not exist yet, report it instead of inventing its
 - Company name: ORBI Ecosystem SpA.
 - Public headquarters: Rancagua, Chile.
 - Founded: 2026.
-- Product: ORBI PBMetrics IA.
+- Product: ORBI PVMetrics IA.
 - Edition: Climate Recovery Edition.
 - Competition: AI for Climate Innovation Factory 2026.
 - Category: Renewable Energy Integration and Efficiency.

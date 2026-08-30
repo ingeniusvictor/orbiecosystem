@@ -21,10 +21,10 @@ No merge, push, pull request or production deployment was performed.
 
 | Route | Status | Local HTTP | Title | Lang | Canonical | Navigation | Responsive | Visible Errors | Console |
 |---|---|---:|---|---|---|---|---|---|---|
-| `/` | PASS | 200 | `ORBI Ecosystem SpA` | `es` | `https://orbiecosystem.vercel.app/` | Climate Recovery and PBMetrics links detected | PASS at 1440, 1024, 768, 390, 360 | None detected | No runtime console errors captured in browser DOM QA |
-| `/climate-recovery` | PASS | 200 | `ORBI PBMetrics IA \| Climate Recovery Intelligence` | `es` | `https://orbiecosystem.vercel.app/climate-recovery` | ES/EN selector detected | PASS at 1440, 1024, 768, 390, 360 | None detected | No runtime console errors captured in browser DOM QA |
-| `/climate-recovery/en` | PASS | 200 | `ORBI PBMetrics IA \| Climate Recovery Intelligence` | `en` | `https://orbiecosystem.vercel.app/climate-recovery/en` | ES/EN selector detected | PASS at 1440, 1024, 768, 390, 360 | None detected | No runtime console errors captured in browser DOM QA |
-| `/projects/orbi-pbmetrics` | PASS | 200 | `ORBI PBMetrics IA \| Technical Product Profile` | `es` | `https://orbiecosystem.vercel.app/projects/orbi-pbmetrics` | Climate Recovery CTA detected | PASS at 1440, 1024, 768, 390, 360 | None detected | No runtime console errors captured in browser DOM QA |
+| `/` | PASS | 200 | `ORBI Ecosystem SpA` | `es` | `https://orbiecosystem.vercel.app/` | Climate Recovery and PVMetrics links detected | PASS at 1440, 1024, 768, 390, 360 | None detected | No runtime console errors captured in browser DOM QA |
+| `/climate-recovery` | PASS | 200 | `ORBI PVMetrics IA \| Climate Recovery Intelligence` | `es` | `https://orbiecosystem.vercel.app/climate-recovery` | ES/EN selector detected | PASS at 1440, 1024, 768, 390, 360 | None detected | No runtime console errors captured in browser DOM QA |
+| `/climate-recovery/en` | PASS | 200 | `ORBI PVMetrics IA \| Climate Recovery Intelligence` | `en` | `https://orbiecosystem.vercel.app/climate-recovery/en` | ES/EN selector detected | PASS at 1440, 1024, 768, 390, 360 | None detected | No runtime console errors captured in browser DOM QA |
+| `/projects/orbi-PVMetrics` | PASS | 200 | `ORBI PVMetrics IA \| Technical Product Profile` | `es` | `https://orbiecosystem.vercel.app/projects/orbi-PVMetrics` | Climate Recovery CTA detected | PASS at 1440, 1024, 768, 390, 360 | None detected | No runtime console errors captured in browser DOM QA |
 | `/robots.txt` | PASS | 200 | N/A | N/A | N/A | N/A | N/A | None in HTTP response | Browser direct navigation blocked by client; HTTP verification passed |
 | `/sitemap.xml` | PASS | 200 | N/A | N/A | N/A | N/A | N/A | None in HTTP response | HTTP verification passed |
 
@@ -91,7 +91,7 @@ Verified:
 * `hreflang` alternates are present on `/climate-recovery` and `/climate-recovery/en`.
 * `lang` is `es` for `/` and `/climate-recovery`; `en` for `/climate-recovery/en`.
 * `robots.txt` is present and references the public sitemap.
-* `sitemap.xml` includes `/`, `/climate-recovery`, `/climate-recovery/en`, `/projects/orbi-pbmetrics`.
+* `sitemap.xml` includes `/`, `/climate-recovery`, `/climate-recovery/en`, `/projects/orbi-PVMetrics`.
 * JSON-LD types detected: `Organization`, `WebSite`, `SoftwareApplication`.
 
 Notes:
@@ -133,10 +133,10 @@ Status: PASS.
 
 Checked surfaces:
 
-* home navigation and Climate Recovery/PBMetrics entry points
+* home navigation and Climate Recovery/PVMetrics entry points
 * ES and EN Climate Recovery selector
 * Climate Recovery section stack
-* PBMetrics FAQ/product sections
+* PVMetrics FAQ/product sections
 * footer/home surfaces indirectly through the home route
 
 ## Performance
@@ -230,9 +230,9 @@ Files changed against production before this report:
 * `src/components/climate-recovery/ClimateRecoveryPrimitives.tsx`
 * `src/components/climate-recovery/ClimateRecoverySections.tsx`
 * `src/components/competition/CompetitionAssetLinks.tsx`
-* `src/components/projects/OrbiPBMetricsData.ts`
-* `src/components/projects/OrbiPBMetricsPage.tsx`
-* `src/components/projects/OrbiPBMetricsPrimitives.tsx`
+* `src/components/projects/OrbiPVMetricsData.ts`
+* `src/components/projects/OrbiPVMetricsPage.tsx`
+* `src/components/projects/OrbiPVMetricsPrimitives.tsx`
 * `src/content/competition.ts`
 * `src/hooks/usePrefersReducedMotion.ts`
 * `src/index.css`

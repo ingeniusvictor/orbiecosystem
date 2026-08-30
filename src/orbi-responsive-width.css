@@ -1,0 +1,93 @@
+/*
+ * ORBI responsive panoramic layout
+ * Expands the main website sections on desktop monitors while preserving readable gutters
+ * on laptops, tablets and mobile screens.
+ */
+
+:root {
+  --orbi-page-gutter: clamp(1rem, 3.2vw, 4rem);
+  --orbi-panorama-max: 1760px;
+  --orbi-panorama-wide: 1880px;
+  --orbi-hero-max: 1480px;
+}
+
+main section:not(#hero) .max-w-7xl,
+main section:not(#hero) .max-w-6xl,
+main section:not(#hero) .max-w-5xl,
+main section:not(#hero) .max-w-4xl {
+  width: min(var(--orbi-panorama-max), calc(100vw - (var(--orbi-page-gutter) * 2))) !important;
+  max-width: min(var(--orbi-panorama-max), calc(100vw - (var(--orbi-page-gutter) * 2))) !important;
+}
+
+main section:not(#hero) .orbitron-shell {
+  width: min(var(--orbi-panorama-max), calc(100vw - (var(--orbi-page-gutter) * 2)));
+  max-width: min(var(--orbi-panorama-max), calc(100vw - (var(--orbi-page-gutter) * 2)));
+}
+
+main #hero .max-w-7xl,
+main #hero .max-w-6xl,
+main #hero .max-w-5xl,
+main #hero .max-w-4xl,
+main #hero .orbitron-shell {
+  width: min(var(--orbi-hero-max), calc(100vw - 3rem)) !important;
+  max-width: min(var(--orbi-hero-max), calc(100vw - 3rem)) !important;
+}
+
+main #hero {
+  overflow: hidden;
+}
+
+main #hero h1 {
+  max-width: min(82rem, calc(100vw - 3rem));
+  font-size: clamp(2.6rem, 5.2vw, 5.5rem);
+  line-height: 0.95;
+}
+
+@media (min-width: 1800px) {
+  main section:not(#hero) .max-w-7xl,
+  main section:not(#hero) .max-w-6xl,
+  main section:not(#hero) .max-w-5xl,
+  main section:not(#hero) .max-w-4xl,
+  main section:not(#hero) .orbitron-shell {
+    width: min(var(--orbi-panorama-wide), calc(100vw - 6rem)) !important;
+    max-width: min(var(--orbi-panorama-wide), calc(100vw - 6rem)) !important;
+  }
+}
+
+@media (max-width: 1400px) {
+  body::before,
+  body::after,
+  main::before,
+  main::after,
+  main [class*="side"],
+  main [class*="Side"],
+  main [class*="rail"],
+  main [class*="Rail"],
+  main [class*="latency"],
+  main [class*="Latency"] {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  main section:not(#hero) .max-w-7xl,
+  main section:not(#hero) .max-w-6xl,
+  main section:not(#hero) .max-w-5xl,
+  main section:not(#hero) .max-w-4xl,
+  main section:not(#hero) .orbitron-shell,
+  main #hero .max-w-7xl,
+  main #hero .max-w-6xl,
+  main #hero .max-w-5xl,
+  main #hero .max-w-4xl,
+  main #hero .orbitron-shell {
+    width: min(100%, calc(100vw - 2rem)) !important;
+    max-width: min(100%, calc(100vw - 2rem)) !important;
+  }
+
+  main #hero h1 {
+    max-width: 100%;
+    font-size: clamp(2.4rem, 9vw, 4.3rem);
+  }
+}

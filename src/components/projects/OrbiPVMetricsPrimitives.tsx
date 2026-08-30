@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { AlertCircle, CheckCircle2, Clock3, FlaskConical, Rocket, type LucideIcon } from "lucide-react";
-import type { ProductState } from "./OrbiPBMetricsData";
+import type { ProductState } from "./OrbiPVMetricsData";
 
 const stateMap: Record<ProductState, { icon: LucideIcon; label: string; className: string }> = {
   complete: {

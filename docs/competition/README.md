@@ -1,6 +1,6 @@
 # Competition Content Foundation
 
-This folder is the source of truth for the ORBI PBMetrics IA - Climate Recovery Edition competition content.
+This folder is the source of truth for the ORBI PVMetrics IA - Climate Recovery Edition competition content.
 
 ## Purpose
 

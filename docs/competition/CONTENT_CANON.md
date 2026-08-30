@@ -14,7 +14,7 @@ Texto de apoyo:
 
 Tarjeta destacada:
 
-"ORBI PBMetrics IA — Climate Recovery Edition"
+"ORBI PVMetrics IA — Climate Recovery Edition"
 
 Subtexto:
 
@@ -28,7 +28,7 @@ CTA:
 
 Título:
 
-"ORBI PBMetrics IA — Climate Recovery Edition"
+"ORBI PVMetrics IA — Climate Recovery Edition"
 
 Frase:
 
@@ -44,7 +44,7 @@ Problema:
 
 IA explicable:
 
-"ORBI PBMetrics IA no presenta sus hipótesis como certezas. Cada recomendación debe mostrar la evidencia utilizada, el nivel de confianza y las limitaciones del análisis. El conocimiento técnico y la decisión final permanecen en manos del equipo de operación y mantenimiento."
+"ORBI PVMetrics IA no presenta sus hipótesis como certezas. Cada recomendación debe mostrar la evidencia utilizada, el nivel de confianza y las limitaciones del análisis. El conocimiento técnico y la decisión final permanecen en manos del equipo de operación y mantenimiento."
 
 Impacto climático:
 
@@ -52,7 +52,7 @@ Impacto climático:
 
 Estado del producto:
 
-"ORBI PBMetrics IA cuenta con una base funcional previamente desarrollada. Climate Recovery Edition representa su siguiente evolución, orientada a identificar, priorizar y verificar oportunidades de recuperación de energía renovable."
+"ORBI PVMetrics IA cuenta con una base funcional previamente desarrollada. Climate Recovery Edition representa su siguiente evolución, orientada a identificar, priorizar y verificar oportunidades de recuperación de energía renovable."
 
 Advertencia de publicación:
 

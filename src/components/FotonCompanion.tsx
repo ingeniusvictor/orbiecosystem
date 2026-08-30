@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ArrowRight, Bot, Compass, Mail, MessageCircle, Play, Sparkles, X, Zap } from "lucide-react";
 
 interface FotonCompanionProps {
@@ -54,11 +54,13 @@ const DEFAULT_MESSAGE = SECTION_MESSAGES[0];
 
 export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompanionProps) {
   const [isOpen, setIsOpen] = useState(true);
-  const [isMinimized, setIsMinimized] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(true);
   const [modelViewerReady, setModelViewerReady] = useState(false);
   const [modelFailed, setModelFailed] = useState(false);
   const [orbitAngle, setOrbitAngle] = useState(CENTER_LOOK_ORBIT);
   const [activeSectionId, setActiveSectionId] = useState(DEFAULT_MESSAGE.id);
+  const [isManualControlActive, setIsManualControlActive] = useState(false);
+  const manualControlTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     const customElementsRegistry = window.customElements;
@@ -86,7 +88,27 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
   }, []);
 
   useEffect(() => {
-    if (!modelViewerReady || modelFailed) {
+    return () => {
+      if (manualControlTimeoutRef.current) {
+        window.clearTimeout(manualControlTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const activateManualModelControl = () => {
+    setIsManualControlActive(true);
+
+    if (manualControlTimeoutRef.current) {
+      window.clearTimeout(manualControlTimeoutRef.current);
+    }
+
+    manualControlTimeoutRef.current = window.setTimeout(() => {
+      setIsManualControlActive(false);
+    }, 9000);
+  };
+
+  useEffect(() => {
+    if (!modelViewerReady || modelFailed || isManualControlActive) {
       return;
     }
 
@@ -99,7 +121,7 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
     }, 6200);
 
     return () => window.clearInterval(lookAroundTimer);
-  }, [modelViewerReady, modelFailed]);
+  }, [modelViewerReady, modelFailed, isManualControlActive]);
 
   useEffect(() => {
     const sectionElements = SECTION_MESSAGES.map((section) => document.getElementById(section.id)).filter(
@@ -179,13 +201,16 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
             "max-camera-orbit": "90deg 82deg 105%",
             "field-of-view": "30deg",
             "interpolation-decay": "170",
-            "camera-controls": false,
+            "camera-controls": true,
             "disable-zoom": true,
             "interaction-prompt": "none",
             "shadow-intensity": "0.55",
             exposure: "1.05",
             loading: "lazy",
             reveal: "auto",
+            onPointerDown: activateManualModelControl,
+            onPointerMove: activateManualModelControl,
+            onTouchStart: activateManualModelControl,
             onError: () => setModelFailed(true),
           })
         ) : (

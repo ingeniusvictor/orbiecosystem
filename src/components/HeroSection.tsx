@@ -7,6 +7,22 @@ interface HeroSectionProps {
   onPlayVideo?: (compId: string) => void;
 }
 
+const heroSignals = ["IA aplicada", "Software", "Energía", "Educación", "Contenido"];
+const heroProofs = [
+  {
+    label: "Para empresas",
+    value: "automatización, documentos, chatbots y productividad"
+  },
+  {
+    label: "Para personas",
+    value: "aprendizaje, bienestar digital y soluciones prácticas"
+  },
+  {
+    label: "Para energía",
+    value: "solar, operación, análisis y cultura técnica"
+  }
+];
+
 export default function HeroSection({ onNavigate, onPlayVideo }: HeroSectionProps) {
   const [logoFailed, setLogoFailed] = useState(false);
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -38,11 +54,11 @@ export default function HeroSection({ onNavigate, onPlayVideo }: HeroSectionProp
       <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-40 bg-gradient-to-b from-slate-950 via-slate-950/75 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-44 bg-gradient-to-t from-slate-950 via-slate-950/82 to-transparent" />
 
-      <div className="orbitron-shell relative z-20 grid min-h-[calc(100vh-5rem)] items-start pb-28 pt-28 sm:pt-32 lg:pt-36 xl:pt-36">
-        <div className="orbitron-reveal flex max-w-5xl flex-col items-start text-left">
+      <div className="orbitron-shell relative z-20 grid min-h-[calc(100vh-5rem)] items-start pb-28 pt-24 sm:pt-28 lg:pt-32 xl:pt-32">
+        <div className="orbitron-reveal flex max-w-6xl flex-col items-start text-left">
           <div className="orbitron-chip mb-7">
             <Sparkles className="h-3.5 w-3.5 text-energy-cyan" aria-hidden="true" />
-            <span>ORBI Universe · Season 1</span>
+            <span>ORBI Ecosystem · Season 1 Live</span>
           </div>
 
           <div className="mb-6 flex items-center gap-4">
@@ -60,31 +76,42 @@ export default function HeroSection({ onNavigate, onPlayVideo }: HeroSectionProp
               )}
             </div>
             <div>
-              <p className="font-mono text-[10px] font-black uppercase tracking-[0.34em] text-cyan-300/80">ORBI Ecosystem</p>
-              <p className="mt-1 text-sm font-semibold text-slate-300">Sede digital de una empresa AI-native</p>
+              <p className="font-mono text-[10px] font-black uppercase tracking-[0.34em] text-cyan-300/80">ORBI Ecosystem SpA</p>
+              <p className="mt-1 text-sm font-semibold text-slate-300">IA, software, energía y contenido en una sola plataforma</p>
             </div>
           </div>
 
-          <h1 className="orbitron-title max-w-5xl text-5xl leading-[0.96] sm:text-6xl lg:text-7xl xl:text-8xl">
-            Transformamos ideas en soluciones inteligentes.
+          <h1 className="orbitron-title max-w-6xl text-5xl leading-[0.96] sm:text-6xl lg:text-7xl xl:text-[5.7rem]">
+            Un ecosistema de IA y tecnología para convertir ideas en soluciones reales.
           </h1>
 
-          <p className="orbitron-subtitle mt-7 max-w-3xl text-base sm:text-lg">
-            ORBI Ecosystem integra inteligencia artificial, ingeniería, educación, energía, automatización, medios y desarrollo para construir soluciones útiles para personas y empresas.
+          <p className="orbitron-subtitle mt-7 max-w-4xl text-base sm:text-lg">
+            ORBI conecta desarrollo de software, inteligencia artificial, educación técnica, energía solar, automatización, bienestar digital, videojuegos y noticias para crear herramientas útiles para personas, empresas y comunidades.
           </p>
+
+          <div className="mt-6 flex flex-wrap gap-2.5">
+            {heroSignals.map((signal) => (
+              <span
+                key={signal}
+                className="rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-2 font-mono text-[10px] font-black uppercase tracking-[0.2em] text-slate-300"
+              >
+                {signal}
+              </span>
+            ))}
+          </div>
 
           <div className="mt-9 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
             <button
-              onClick={() => onNavigate("ecosistema-mirada")}
+              onClick={() => onNavigate("ecosystem-season-one")}
               className="orbitron-primary-action"
             >
               <Compass className="h-4 w-4 text-cyan-100" aria-hidden="true" />
-              <span>Explorar ORBI</span>
+              <span>Entrar al ecosistema</span>
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </button>
 
             <button
-              onClick={() => onNavigate("divisiones")}
+              onClick={() => onNavigate("proyectos")}
               className="orbitron-secondary-action"
             >
               <ShieldCheck className="h-4 w-4 text-purple-300" aria-hidden="true" />
@@ -100,26 +127,35 @@ export default function HeroSection({ onNavigate, onPlayVideo }: HeroSectionProp
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-300" />
               </span>
               <Play className="h-4 w-4" aria-hidden="true" />
-              <span>Ver presentación</span>
+              <span>Ver en 60 segundos</span>
             </button>
+          </div>
+
+          <div className="mt-10 grid w-full max-w-5xl gap-3 md:grid-cols-3">
+            {heroProofs.map((proof) => (
+              <div key={proof.label} className="rounded-3xl border border-cyan-400/10 bg-slate-950/45 p-4 backdrop-blur-xl">
+                <p className="font-mono text-[10px] font-black uppercase tracking-[0.22em] text-cyan-300">{proof.label}</p>
+                <p className="mt-2 text-sm leading-6 text-slate-300">{proof.value}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
       <div className="absolute bottom-22 left-6 z-20 hidden flex-col space-y-1 font-mono text-[8px] tracking-widest text-slate-500 lg:flex">
         <span>SEASON: ONE</span>
-        <span>MISSION: WOW</span>
+        <span>MISSION: CONVERT</span>
       </div>
       <div className="absolute bottom-22 right-6 z-20 hidden flex-col space-y-1 text-right font-mono text-[8px] tracking-widest text-slate-500 lg:flex">
-        <span>BUILD: FAST</span>
+        <span>BUILD: ACTIVE</span>
         <span>QUALITY: PREMIUM</span>
       </div>
 
       <button
         type="button"
-        onClick={() => onNavigate("ecosistema-mirada")}
+        onClick={() => onNavigate("ecosystem-season-one")}
         className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 cursor-pointer flex-col items-center space-y-2 rounded-xl px-3 py-2 text-slate-400 transition-colors hover:text-energy-cyan focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-950"
-        aria-label="Ir a la mirada del ecosistema"
+        aria-label="Ir al mapa del ecosistema ORBI"
       >
         <span className="font-mono text-[10px] font-bold uppercase tracking-[0.25em]">
           Desliza para descubrir

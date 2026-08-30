@@ -10,6 +10,7 @@ import LoaderScreen from "./components/LoaderScreen";
 import AtAGlance from "./components/AtAGlance";
 import SeasonOneEcosystem from "./components/SeasonOneEcosystem";
 import FotonPrimeSection from "./components/FotonPrimeSection";
+import FotonCompanion from "./components/FotonCompanion";
 import ProductGrid from "./components/ProductGrid";
 import Differentiators from "./components/Differentiators";
 import Roadmap from "./components/Roadmap";
@@ -249,6 +250,8 @@ export default function App() {
         {/* Final Interactive CTA Banner */}
         <FinalCTA onNavigate={handleNavigate} />
       </main>
+
+      <FotonCompanion onNavigate={handleNavigate} onPlayVideo={handlePlayVideo} />
 
       {/* Footer legal & navigation coordinates */}
       <Footer onNavigate={handleNavigate} />

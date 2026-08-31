@@ -3,6 +3,7 @@ import path from "path";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from "dotenv";
+import { createFotonAssistantResponse } from "./src/server/fotonAssistant";
 
 dotenv.config();
 
@@ -12,6 +13,37 @@ async function startServer() {
 
   // Middleware for parsing JSON
   app.use(express.json());
+
+  app.post("/api/foton-chat", async (req, res) => {
+    try {
+      const { question, context } = req.body;
+
+      if (!question || typeof question !== "string") {
+        res.status(400).json({ error: "El campo 'question' es requerido para FOTON." });
+        return;
+      }
+
+      const response = await createFotonAssistantResponse({
+        question,
+        context: {
+          pageSection: context?.pageSection,
+          source: context?.source || "foton_prime",
+        },
+      });
+
+      res.json(response);
+    } catch (error: any) {
+      console.error("Error in FOTON Chat Router:", error);
+      res.status(500).json({
+        mode: "fallback",
+        answer: "FOTON no pudo procesar la consulta en este momento. Intenta nuevamente o revisa la conexión del backend.",
+        confidence: "low",
+        status: "answered",
+        suggestedActions: [{ label: "Ver capacidades ORBI", href: "#orbi-capacidades" }],
+        sources: [{ label: "FOTON backend fallback", type: "fallback", status: "active" }],
+      });
+    }
+  });
 
   // Initialize Gemini if key exists
   const apiKey = process.env.GEMINI_API_KEY;

@@ -28,6 +28,7 @@ const capabilityCards = [
 ];
 
 const suggestedPrompts = [
+  "Necesito información de automatización web",
   "Explícame qué es ORBI Ecosystem en 30 segundos",
   "¿Qué divisiones tiene ORBI Platform Season 1?",
   "¿Qué productos pueden servir a una empresa?",
@@ -51,15 +52,15 @@ function modeLabel(mode: FotonAssistantResponse["mode"]) {
 }
 
 function formatAssistantAnswer(response: FotonAssistantResponse) {
-  const actions = response.suggestedActions.length
-    ? `\n\nAcciones sugeridas:\n${response.suggestedActions.map((action) => `• ${action.label}: ${action.href}`).join("\n")}`
+  const actionText = response.suggestedActions.length
+    ? `\n\nSiguiente paso recomendado: ${response.suggestedActions.map((action) => action.label).join(" · ")}.`
     : "";
 
-  const sources = response.sources.length
-    ? `\n\nFuentes / conectores:\n${response.sources.map((source) => `• ${source.label} · ${source.type} · ${source.status}`).join("\n")}`
+  const connectorText = response.status === "needs_connector"
+    ? "\n\nNota: esta función ya está preparada en arquitectura, pero falta activar el conector real para entregar resultados externos o privados."
     : "";
 
-  return `[${modeLabel(response.mode)} · ${response.status}]\n\n${response.answer}${actions}${sources}`;
+  return `${response.answer}${actionText}${connectorText}`;
 }
 
 export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProps) {
@@ -71,6 +72,7 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
       timestamp: new Date(),
     },
   ]);
+  const [lastAssistantResponse, setLastAssistantResponse] = useState<FotonAssistantResponse | null>(null);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -113,6 +115,7 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
       };
 
       window.setTimeout(() => {
+        setLastAssistantResponse(assistantResponse);
         setMessages((previous) => [...previous, assistantMessage]);
         setIsLoading(false);
       }, 280);
@@ -132,6 +135,7 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
         timestamp: new Date(),
       },
     ]);
+    setLastAssistantResponse(null);
     setError(null);
   };
 
@@ -213,6 +217,22 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
                 Reset
               </button>
             </div>
+
+            {lastAssistantResponse && (
+              <div className="border-b border-white/10 bg-slate-950/65 px-5 py-3">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="rounded-full border border-cyan-300/20 bg-cyan-300/[0.08] px-3 py-1 font-mono text-[8px] font-black uppercase tracking-[0.16em] text-cyan-100">
+                    {modeLabel(lastAssistantResponse.mode)}
+                  </span>
+                  <span className="rounded-full border border-white/10 bg-white/[0.045] px-3 py-1 font-mono text-[8px] font-black uppercase tracking-[0.16em] text-slate-300">
+                    {lastAssistantResponse.status}
+                  </span>
+                  <span className="rounded-full border border-white/10 bg-white/[0.045] px-3 py-1 font-mono text-[8px] font-black uppercase tracking-[0.16em] text-slate-400">
+                    {lastAssistantResponse.sources.map((source) => `${source.label}: ${source.status}`).join(" / ")}
+                  </span>
+                </div>
+              </div>
+            )}
 
             <div className="h-[420px] space-y-4 overflow-y-auto bg-slate-950/30 p-5 scrollbar-thin">
               {messages.map((message, index) => (

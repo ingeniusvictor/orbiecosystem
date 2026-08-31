@@ -3,6 +3,8 @@ import type { ClimateLocale } from "./content/competition";
 const siteUrl = "https://orbiecosystem.vercel.app";
 const siteName = "ORBI Ecosystem SpA";
 const socialImageStatus = "SOCIAL IMAGE PENDING APPROVAL";
+const homeDescription =
+  "ORBI Ecosystem SpA desarrolla soluciones de inteligencia artificial, software, automatización, educación técnica, energía solar, domótica, bienestar digital y experiencias interactivas desde Rancagua, Chile.";
 
 export type SeoRouteMetadata = {
   lang: string;
@@ -37,8 +39,21 @@ const organization = {
   address: {
     "@type": "PostalAddress",
     addressLocality: "Rancagua",
+    addressRegion: "Región de O’Higgins",
     addressCountry: "CL",
   },
+  areaServed: ["Chile", "Latinoamérica"],
+  knowsAbout: [
+    "Inteligencia artificial",
+    "Software",
+    "Automatización",
+    "Agentes IA",
+    "Energía solar",
+    "Domótica",
+    "Educación técnica",
+    "Contenido digital",
+    "Experiencias interactivas",
+  ],
 };
 
 const website = {
@@ -46,11 +61,35 @@ const website = {
   "@type": "WebSite",
   name: "ORBI Ecosystem",
   url: `${siteUrl}/`,
+  description: homeDescription,
+  inLanguage: "es-CL",
   publisher: {
     "@type": "Organization",
     name: siteName,
     url: `${siteUrl}/`,
   },
+};
+
+const homeServiceCatalog = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "Divisiones y capacidades de ORBI Ecosystem",
+  description:
+    "Portafolio de divisiones ORBI para software, IA, automatización, educación, energía solar, domótica, bienestar digital, gaming y radar tecnológico.",
+  itemListElement: [
+    "ORBI Development System",
+    "ORBI Corporate System",
+    "ORBI Academy",
+    "ORBI Servicios Fotovoltaicos",
+    "ORBI Automatización Inteligente",
+    "ORBI Sleep Frequencies",
+    "ORBI Game System",
+    "ORBI Radar IA & Tecnología",
+  ].map((name, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    name,
+  })),
 };
 
 const PVMetricsSoftwareApplication = {
@@ -98,17 +137,15 @@ const climateDescription =
 const routeMetadata = {
   home: {
     lang: "es",
-    title: siteName,
-    description:
-      "ORBI Ecosystem SpA desarrolla software, inteligencia artificial y experiencias digitales desde Rancagua, Chile.",
+    title: "ORBI Ecosystem SpA | IA, Software, Automatización y Energía Solar",
+    description: homeDescription,
     canonical: `${siteUrl}/`,
     ...createSocialMetadata({
-      title: siteName,
-      description:
-        "ORBI Ecosystem SpA desarrolla software, inteligencia artificial y experiencias digitales desde Rancagua, Chile.",
+      title: "ORBI Ecosystem SpA | IA, Software y Automatización",
+      description: homeDescription,
       url: `${siteUrl}/`,
     }),
-    structuredData: [organization, website],
+    structuredData: [organization, website, homeServiceCatalog],
     socialImageStatus,
   },
   climateRecovery: {

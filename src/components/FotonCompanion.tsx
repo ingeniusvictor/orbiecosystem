@@ -175,7 +175,7 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
   const activeMessage = SECTION_MESSAGES.find((section) => section.id === activeSectionId) ?? DEFAULT_MESSAGE;
 
   const goToFoton = () => {
-    setIsMinimized(false);
+    setIsMinimized(true);
     onNavigate("foton-prime");
   };
 
@@ -288,7 +288,7 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
                     <span className="relative z-10 flex items-center justify-between gap-3">
                       <span className="inline-flex items-center gap-2">
                         <MessageCircle className="h-4 w-4" aria-hidden="true" />
-                        Preguntar a FOTON
+                        Abrir FOTON Prime
                       </span>
                       <ArrowRight className="h-4 w-4" aria-hidden="true" />
                     </span>
@@ -326,11 +326,11 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
                   </div>
                 </div>
 
-                <FotonGuidedChat selectedQuestionId={selectedQuestionId} onSelectQuestion={setSelectedQuestionId} />
+                <FotonGuidedChat selectedQuestionId={selectedQuestionId} onSelectQuestion={setSelectedQuestionId} onOpenPrime={goToFoton} />
 
                 <div className="mt-4 flex items-center gap-2 border-t border-white/[0.09] pt-3 font-mono text-[8.5px] font-black uppercase tracking-[0.16em] text-slate-200/62 drop-shadow-[0_2px_12px_rgba(0,0,0,0.65)]">
                   <Zap className="h-3 w-3 shrink-0 text-yellow-100" aria-hidden="true" />
-                  <span>Contextual guide / Guided chat preview</span>
+                  <span>Widget preview / Prime console for deep answers</span>
                 </div>
               </div>
             </div>

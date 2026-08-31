@@ -9,6 +9,8 @@ interface FotonPrimeSectionProps {
   onPlayVideo?: (compId: string) => void;
 }
 
+const FOTON_MODEL_SRC = "/assets/models/orbi-foton.glb";
+
 const capabilityCards = [
   {
     title: "ORBI Knowledge",
@@ -79,12 +81,39 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [modelViewerReady, setModelViewerReady] = useState(false);
+  const [modelFailed, setModelFailed] = useState(false);
   const prefersReducedMotion = usePrefersReducedMotion();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth" });
   }, [messages, isLoading, prefersReducedMotion]);
+
+  useEffect(() => {
+    const customElementsRegistry = window.customElements;
+
+    if (customElementsRegistry.get("model-viewer")) {
+      setModelViewerReady(true);
+      return;
+    }
+
+    const existingScript = document.querySelector<HTMLScriptElement>('script[data-orbi-model-viewer="true"]');
+
+    if (existingScript) {
+      existingScript.addEventListener("load", () => setModelViewerReady(true), { once: true });
+      existingScript.addEventListener("error", () => setModelFailed(true), { once: true });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.type = "module";
+    script.src = "https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js";
+    script.dataset.orbiModelViewer = "true";
+    script.onload = () => setModelViewerReady(true);
+    script.onerror = () => setModelFailed(true);
+    document.head.appendChild(script);
+  }, []);
 
   const handleSendMessage = async (textToSend: string) => {
     if (!textToSend.trim() || isLoading) {
@@ -150,6 +179,32 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
     setError(null);
   };
 
+  const renderFotonPrimeAvatar = () => (
+    <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-cyan-300/25 bg-slate-950 text-cyan-100 shadow-[0_0_26px_rgba(34,211,238,0.16)] ring-1 ring-white/10">
+      <span className="absolute inset-0 bg-[radial-gradient(circle_at_35%_18%,rgba(255,255,255,0.18),transparent_36%),radial-gradient(circle_at_70%_80%,rgba(34,211,238,0.18),transparent_42%)]" aria-hidden="true" />
+      {modelViewerReady && !modelFailed ? (
+        React.createElement("model-viewer", {
+          src: FOTON_MODEL_SRC,
+          alt: "Mini avatar 3D de ORBI FOTON",
+          className: "relative z-10 h-14 w-14",
+          "camera-orbit": "0deg 72deg 105%",
+          "field-of-view": "28deg",
+          "interaction-prompt": "none",
+          "disable-zoom": true,
+          "camera-controls": false,
+          "shadow-intensity": "0.45",
+          exposure: "1.05",
+          loading: "lazy",
+          reveal: "auto",
+          onError: () => setModelFailed(true),
+        })
+      ) : (
+        <Bot className="relative z-10 h-5 w-5" aria-hidden="true" />
+      )}
+      <span className="absolute right-1.5 top-1.5 z-20 h-2.5 w-2.5 rounded-full border-2 border-slate-950 bg-emerald-400 shadow-lg shadow-emerald-500/40" />
+    </div>
+  );
+
   return (
     <section id="foton-prime" className="relative overflow-hidden border-y border-white/5 bg-[#030712] py-24 sm:py-28">
       <div className="absolute inset-0 grid-overlay opacity-[0.04]" aria-hidden="true" />
@@ -209,10 +264,7 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
           <div className="orbitron-panel overflow-hidden">
             <div className="flex items-center justify-between border-b border-white/10 bg-slate-950/70 px-5 py-4">
               <div className="flex items-center gap-3">
-                <div className="relative flex h-10 w-10 items-center justify-center rounded-2xl border border-violet-400/25 bg-violet-400/10 text-violet-200">
-                  <Bot className="h-5 w-5" />
-                  <span className="absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full border-2 border-slate-950 bg-emerald-400" />
-                </div>
+                {renderFotonPrimeAvatar()}
                 <div>
                   <h3 className="font-space text-sm font-black uppercase tracking-wide text-white">ORBI FOTON PRIME</h3>
                   <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-slate-500">Knowledge / Web / Notion-MCP Router</p>

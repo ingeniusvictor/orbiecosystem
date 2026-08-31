@@ -201,7 +201,6 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
       ) : (
         <Bot className="relative z-10 h-5 w-5" aria-hidden="true" />
       )}
-      <span className="absolute right-1.5 top-1.5 z-20 h-2.5 w-2.5 rounded-full border-2 border-slate-950 bg-emerald-400 shadow-lg shadow-emerald-500/40" />
     </div>
   );
 

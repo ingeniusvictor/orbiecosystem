@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ArrowRight, Bot, Compass, Mail, MessageCircle, Play, Sparkles, X, Zap } from "lucide-react";
+import FotonGuidedChat from "./FotonGuidedChat";
 
 interface FotonCompanionProps {
   onNavigate: (sectionId: string) => void;
@@ -23,6 +24,18 @@ const SECTION_MESSAGES = [
     label: "Mapa del ecosistema",
     title: "Estás viendo la arquitectura ORBI.",
     message: "Aquí se conectan IA, software, energía, educación, automatización, bienestar y contenido tecnológico.",
+  },
+  {
+    id: "orbi-presentaciones",
+    label: "Dossiers ORBI",
+    title: "Estás viendo las divisiones en detalle.",
+    message: "Aquí puedes revisar qué hace cada división, a quién sirve y cómo se proyecta dentro del ecosistema.",
+  },
+  {
+    id: "orbi-capacidades",
+    label: "Capacidades ORBI",
+    title: "Estas son las capacidades de construcción.",
+    message: "ORBI puede transformar ideas, procesos y necesidades reales en software, automatización, contenido y soluciones aplicadas.",
   },
   {
     id: "proyectos",
@@ -59,6 +72,7 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
   const [modelFailed, setModelFailed] = useState(false);
   const [orbitAngle, setOrbitAngle] = useState(CENTER_LOOK_ORBIT);
   const [activeSectionId, setActiveSectionId] = useState(DEFAULT_MESSAGE.id);
+  const [selectedQuestionId, setSelectedQuestionId] = useState("que-es-orbi");
   const [isManualControlActive, setIsManualControlActive] = useState(false);
   const manualControlTimeoutRef = useRef<number | null>(null);
 
@@ -161,7 +175,7 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
   const activeMessage = SECTION_MESSAGES.find((section) => section.id === activeSectionId) ?? DEFAULT_MESSAGE;
 
   const goToFoton = () => {
-    setIsMinimized(true);
+    setIsMinimized(false);
     onNavigate("foton-prime");
   };
 
@@ -234,8 +248,8 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
       `}</style>
 
       {!isMinimized && (
-        <div className="mb-4 hidden overflow-hidden rounded-[2rem] bg-white/[0.026] shadow-[0_18px_48px_rgba(0,0,0,0.22)] ring-1 ring-white/[0.10] backdrop-blur-[40px] lg:block">
-          <div className="relative overflow-hidden p-5">
+        <div className="mb-4 hidden max-h-[calc(100vh-8rem)] overflow-hidden rounded-[2rem] bg-white/[0.026] shadow-[0_18px_48px_rgba(0,0,0,0.22)] ring-1 ring-white/[0.10] backdrop-blur-[40px] lg:block">
+          <div className="relative max-h-[calc(100vh-8rem)] overflow-y-auto p-5 [scrollbar-width:thin] [scrollbar-color:rgba(125,211,252,0.45)_transparent]">
             <div className="absolute inset-0 rounded-[2rem] bg-[linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.012)_48%,rgba(34,211,238,0.035)_100%)]" aria-hidden="true" />
             <div className="absolute inset-0 rounded-[2rem] bg-[radial-gradient(circle_at_18%_12%,rgba(255,255,255,0.14),transparent_32%),radial-gradient(circle_at_90%_10%,rgba(250,204,21,0.08),transparent_28%),radial-gradient(circle_at_0%_100%,rgba(34,211,238,0.075),transparent_38%)]" aria-hidden="true" />
             <div className="absolute inset-x-7 top-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent" aria-hidden="true" />
@@ -274,7 +288,7 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
                     <span className="relative z-10 flex items-center justify-between gap-3">
                       <span className="inline-flex items-center gap-2">
                         <MessageCircle className="h-4 w-4" aria-hidden="true" />
-                        Hablar con FOTON
+                        Preguntar a FOTON
                       </span>
                       <ArrowRight className="h-4 w-4" aria-hidden="true" />
                     </span>
@@ -312,9 +326,11 @@ export default function FotonCompanion({ onNavigate, onPlayVideo }: FotonCompani
                   </div>
                 </div>
 
+                <FotonGuidedChat selectedQuestionId={selectedQuestionId} onSelectQuestion={setSelectedQuestionId} />
+
                 <div className="mt-4 flex items-center gap-2 border-t border-white/[0.09] pt-3 font-mono text-[8.5px] font-black uppercase tracking-[0.16em] text-slate-200/62 drop-shadow-[0_2px_12px_rgba(0,0,0,0.65)]">
                   <Zap className="h-3 w-3 shrink-0 text-yellow-100" aria-hidden="true" />
-                  <span>Contextual guide / GLB companion</span>
+                  <span>Contextual guide / Guided chat preview</span>
                 </div>
               </div>
             </div>

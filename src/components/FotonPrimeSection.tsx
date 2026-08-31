@@ -84,10 +84,21 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
   const [modelViewerReady, setModelViewerReady] = useState(false);
   const [modelFailed, setModelFailed] = useState(false);
   const prefersReducedMotion = usePrefersReducedMotion();
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatScrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth" });
+    const chatPanel = chatScrollRef.current;
+
+    if (!chatPanel) {
+      return;
+    }
+
+    window.requestAnimationFrame(() => {
+      chatPanel.scrollTo({
+        top: chatPanel.scrollHeight,
+        behavior: prefersReducedMotion ? "auto" : "smooth",
+      });
+    });
   }, [messages, isLoading, prefersReducedMotion]);
 
   useEffect(() => {
@@ -296,7 +307,10 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
               </div>
             )}
 
-            <div className="h-[520px] space-y-5 overflow-y-auto bg-slate-950/30 p-5 scrollbar-thin lg:h-[560px]">
+            <div
+              ref={chatScrollRef}
+              className="h-[520px] space-y-5 overflow-y-auto bg-slate-950/30 p-5 scrollbar-thin lg:h-[560px]"
+            >
               {messages.map((message, index) => (
                 <div key={`${message.role}-${index}`} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                   <div
@@ -329,7 +343,6 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
                   <span>{error}</span>
                 </div>
               )}
-              <div ref={messagesEndRef} />
             </div>
 
             <div className="border-t border-white/10 bg-slate-950 px-4 py-3">

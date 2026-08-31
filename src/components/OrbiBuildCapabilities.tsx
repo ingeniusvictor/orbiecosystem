@@ -1,4 +1,4 @@
-import { ArrowRight, Bot, BrainCircuit, BriefcaseBusiness, Code2, FileText, Home, PanelsTopLeft, Rocket, SolarPanel, Sparkles, Workflow } from "lucide-react";
+import { ArrowRight, Bot, BrainCircuit, BriefcaseBusiness, Code2, FileText, Home, PanelsTopLeft, Rocket, Sparkles, Workflow, Zap } from "lucide-react";
 
 const capabilities = [
   {
@@ -40,7 +40,7 @@ const capabilities = [
   {
     title: "Servicios solares y domótica",
     description: "Asesoría, instalación, automatización del hogar, energía solar, bombeo y soluciones aplicadas en terreno.",
-    icon: SolarPanel,
+    icon: Zap,
     tags: ["Solar", "Domótica", "Terreno"],
   },
   {

@@ -52,12 +52,58 @@ function classifyIntent(question: string): FotonAssistantMode {
     return "notion_knowledge";
   }
 
-  if (normalizedIncludes(q, ["noticia", "actual", "hoy", "ultima", "ultimas", "precio", "tendencia", "buscar", "google", "web", "internet", "exa", "mercado"])) {
+  const explicitWebSearch = normalizedIncludes(q, [
+    "busca en internet",
+    "buscar en internet",
+    "busca en google",
+    "buscar en google",
+    "busca con exa",
+    "buscar con exa",
+    "busqueda web",
+    "web search",
+    "noticia actual",
+    "noticias actuales",
+    "noticias nuevas",
+    "que paso hoy",
+    "precio actual",
+    "ultimas noticias",
+    "ultimas novedades",
+    "tendencias actuales",
+  ]);
+
+  if (explicitWebSearch) {
     return "web_search";
   }
 
-  if (normalizedIncludes(q, ["orbi", "foton", "division", "servicio", "corporate", "development", "academy", "solar", "domotica", "sleep", "game", "radar", "ia", "automatizacion", "empresa"])) {
+  if (normalizedIncludes(q, [
+    "orbi",
+    "foton",
+    "division",
+    "servicio",
+    "corporate",
+    "development",
+    "academy",
+    "solar",
+    "domotica",
+    "sleep",
+    "game",
+    "radar",
+    "ia",
+    "automatizacion",
+    "automacion",
+    "web",
+    "pagina",
+    "landing",
+    "app",
+    "software",
+    "dashboard",
+    "empresa",
+  ])) {
     return "orbi_knowledge";
+  }
+
+  if (normalizedIncludes(q, ["noticia", "actual", "hoy", "ultima", "ultimas", "precio", "tendencia", "buscar", "google", "internet", "exa", "mercado"])) {
+    return "web_search";
   }
 
   return "fallback";
@@ -69,12 +115,15 @@ function answerFromOrbiKnowledge(question: string): FotonAssistantResponse {
   let answer =
     "ORBI Ecosystem es un ecosistema tecnológico creado desde Chile para convertir ideas, necesidades y procesos reales en soluciones digitales, contenido técnico, automatización, inteligencia artificial, educación, energía solar, domótica, bienestar digital y experiencias interactivas.";
 
-  if (normalizedIncludes(q, ["corporate", "empresa", "empresas", "corporativo"])) {
+  if (normalizedIncludes(q, ["automatizacion web", "automatizacion de procesos", "automacion web", "flujo", "workflow", "webhook", "proceso manual"])) {
+    answer =
+      "Sí. ORBI puede abordar automatización web transformando procesos repetitivos en flujos digitales: formularios inteligentes, captación de solicitudes, respuestas automáticas, conexión con correos, bases de datos, dashboards, APIs, webhooks y asistentes internos. Para una empresa, esto puede servir para reducir tareas manuales, ordenar información y convertir una web en una herramienta operativa, no solo una vitrina.";
+  } else if (normalizedIncludes(q, ["corporate", "empresa", "empresas", "corporativo"])) {
     answer =
       "ORBI Corporate System reúne soluciones para empresas: asistentes, reportabilidad, documentos, inspecciones, mantenimiento, productividad, trazabilidad y herramientas internas para equipos técnicos u operativos.";
   } else if (normalizedIncludes(q, ["development", "desarrollo", "web", "app", "software", "agente"])) {
     answer =
-      "ORBI Development System es la fábrica tecnológica del ecosistema: desarrolla webs, plataformas, MVPs, agentes IA, automatizaciones, conectores, dashboards y sistemas internos.";
+      "ORBI Development System es la fábrica tecnológica del ecosistema: desarrolla webs, plataformas, MVPs, agentes IA, automatizaciones, conectores, dashboards y sistemas internos. También puede crear landings, paneles internos y flujos conectados por APIs o webhooks.";
   } else if (normalizedIncludes(q, ["academy", "educacion", "aprender", "curso", "solar academy"])) {
     answer =
       "ORBI Academy transforma conocimiento técnico en contenido claro, visual y práctico. Incluye rutas educativas como Solar Academy, microcontenidos y explicaciones desde cero para aprender tecnología, energía e IA.";
@@ -104,12 +153,12 @@ function answerFromOrbiKnowledge(question: string): FotonAssistantResponse {
     confidence: "high",
     status: "answered",
     suggestedActions: [
-      { label: "Ver dossiers ORBI", href: "#orbi-presentaciones" },
-      { label: "Ver capacidades", href: "#orbi-capacidades" },
+      { label: "Ver capacidades ORBI", href: "#orbi-capacidades" },
+      { label: "Ver Development System", href: "#orbi-presentation-development" },
     ],
     sources: [
       {
-        label: "ORBI public website knowledge base",
+        label: "ORBI website knowledge base",
         type: "internal",
         status: "active",
       },
@@ -144,7 +193,7 @@ function answerFromNotionMock(question: string): FotonAssistantResponse {
   return {
     mode: "notion_knowledge",
     answer:
-      `FOTON detectó que esta consulta podría resolverse mejor con una base documental interna tipo Notion/MCP. La arquitectura ya está preparada, pero el conector Notion todavía no está activo en producción. Consulta recibida: “${question}”.`,
+      `Esta consulta parece requerir una base documental interna tipo Notion/MCP. La arquitectura de FOTON Prime ya está preparada para esa conexión, pero el conector todavía no está activo. Cuando lo conectemos, FOTON podrá consultar documentación interna, dossiers, procedimientos, roadmap y conocimiento privado de ORBI. Consulta recibida: “${question}”.`,
     confidence: "medium",
     status: "needs_connector",
     suggestedActions: [
@@ -165,7 +214,7 @@ function answerFromWebSearchMock(question: string): FotonAssistantResponse {
   return {
     mode: "web_search",
     answer:
-      `FOTON detectó que esta pregunta necesita búsqueda web actual. La arquitectura ya separa este modo para conectarlo luego con Exa, Google Programmable Search, Brave Search u otro proveedor. Por seguridad, esta versión todavía no inventa resultados web. Consulta recibida: “${question}”.`,
+      `Esta pregunta necesita búsqueda web actual. FOTON Prime ya separa este modo para conectarlo luego con Exa, Google Programmable Search, Brave Search u otro proveedor. Por seguridad, esta versión todavía no inventa resultados web. Cuando activemos el conector, FOTON podrá buscar fuentes reales y entregar una respuesta con referencias. Consulta recibida: “${question}”.`,
     confidence: "low",
     status: "needs_connector",
     suggestedActions: [
@@ -187,7 +236,7 @@ function answerFromFallback(question: string): FotonAssistantResponse {
     mode: "fallback",
     answer:
       question.trim().length > 0
-        ? "FOTON todavía está en modo controlado. Puedo responder mejor preguntas sobre ORBI, sus divisiones, servicios, contacto, capacidades, dossiers o roadmap. Para preguntas externas, necesitaremos activar el conector web o una IA conectada."
+        ? "FOTON todavía está en modo controlado. Puedo responder mejor preguntas sobre ORBI, sus divisiones, servicios, automatización, desarrollo web, contacto, capacidades, dossiers o roadmap. Para preguntas externas, necesitaremos activar el conector web o una IA conectada."
         : "Escribe una pregunta sobre ORBI, sus divisiones, servicios, capacidades o contacto para que FOTON pueda orientarte.",
     confidence: "low",
     status: "answered",

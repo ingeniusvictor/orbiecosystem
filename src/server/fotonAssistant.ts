@@ -1,3 +1,6 @@
+import { searchWithExa } from "./providers/exaSearchProvider";
+import { searchNotionKnowledge } from "./providers/notionKnowledgeProvider";
+
 export type FotonAssistantMode = "orbi_knowledge" | "web_search" | "notion_knowledge" | "contact" | "fallback";
 
 export interface FotonAssistantRequest {
@@ -189,45 +192,35 @@ function answerFromContactMode(): FotonAssistantResponse {
   };
 }
 
-function answerFromNotionMock(question: string): FotonAssistantResponse {
+async function answerFromNotion(question: string): Promise<FotonAssistantResponse> {
+  const providerResponse = await searchNotionKnowledge(question);
+
   return {
     mode: "notion_knowledge",
-    answer:
-      `Esta consulta parece requerir una base documental interna tipo Notion/MCP. La arquitectura de FOTON Prime ya está preparada para esa conexión, pero el conector todavía no está activo. Cuando lo conectemos, FOTON podrá consultar documentación interna, dossiers, procedimientos, roadmap y conocimiento privado de ORBI. Consulta recibida: “${question}”.`,
-    confidence: "medium",
-    status: "needs_connector",
+    answer: providerResponse.answer,
+    confidence: providerResponse.connected ? "medium" : "low",
+    status: providerResponse.connected ? "answered" : "needs_connector",
     suggestedActions: [
       { label: "Ver dossiers actuales", href: "#orbi-presentaciones" },
       { label: "Ver roadmap", href: "#roadmap" },
     ],
-    sources: [
-      {
-        label: "Notion / MCP connector",
-        type: "notion",
-        status: "planned",
-      },
-    ],
+    sources: providerResponse.sources,
   };
 }
 
-function answerFromWebSearchMock(question: string): FotonAssistantResponse {
+async function answerFromWebSearch(question: string): Promise<FotonAssistantResponse> {
+  const providerResponse = await searchWithExa(question);
+
   return {
     mode: "web_search",
-    answer:
-      `Esta pregunta necesita búsqueda web actual. FOTON Prime ya separa este modo para conectarlo luego con Exa, Google Programmable Search, Brave Search u otro proveedor. Por seguridad, esta versión todavía no inventa resultados web. Cuando activemos el conector, FOTON podrá buscar fuentes reales y entregar una respuesta con referencias. Consulta recibida: “${question}”.`,
-    confidence: "low",
-    status: "needs_connector",
+    answer: providerResponse.answer,
+    confidence: providerResponse.connected ? "medium" : "low",
+    status: providerResponse.connected ? "answered" : "needs_connector",
     suggestedActions: [
       { label: "Ver Radar IA", href: "#orbi-presentation-radar" },
       { label: "Ver videos ORBI", href: "#orbi-en-video" },
     ],
-    sources: [
-      {
-        label: "Exa / web search provider",
-        type: "web",
-        status: "planned",
-      },
-    ],
+    sources: providerResponse.sources,
   };
 }
 
@@ -254,7 +247,7 @@ function answerFromFallback(question: string): FotonAssistantResponse {
   };
 }
 
-export function createFotonAssistantResponse(request: FotonAssistantRequest): FotonAssistantResponse {
+export async function createFotonAssistantResponse(request: FotonAssistantRequest): Promise<FotonAssistantResponse> {
   const question = request.question ?? "";
   const mode = classifyIntent(question);
 
@@ -264,9 +257,9 @@ export function createFotonAssistantResponse(request: FotonAssistantRequest): Fo
     case "contact":
       return answerFromContactMode();
     case "notion_knowledge":
-      return answerFromNotionMock(question);
+      return answerFromNotion(question);
     case "web_search":
-      return answerFromWebSearchMock(question);
+      return answerFromWebSearch(question);
     default:
       return answerFromFallback(question);
   }

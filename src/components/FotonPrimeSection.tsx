@@ -52,8 +52,11 @@ function modeLabel(mode: FotonAssistantResponse["mode"]) {
 }
 
 function formatAssistantAnswer(response: FotonAssistantResponse) {
+  const isKnowledgeAnswer = response.mode === "orbi_knowledge" && response.status === "answered";
   const actionText = response.suggestedActions.length
-    ? `\n\nSiguiente paso recomendado: ${response.suggestedActions.map((action) => action.label).join(" · ")}.`
+    ? isKnowledgeAnswer
+      ? "\n\nSiguiente paso recomendado: revisar capacidades ORBI o solicitar un diagnóstico para identificar qué proceso conviene automatizar primero."
+      : `\n\nSiguiente paso recomendado: ${response.suggestedActions.map((action) => action.label).join(" · ")}.`
     : "";
 
   const connectorText = response.status === "needs_connector"
@@ -242,18 +245,18 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
               </div>
             )}
 
-            <div className="h-[420px] space-y-4 overflow-y-auto bg-slate-950/30 p-5 scrollbar-thin">
+            <div className="h-[520px] space-y-5 overflow-y-auto bg-slate-950/30 p-5 scrollbar-thin lg:h-[560px]">
               {messages.map((message, index) => (
                 <div key={`${message.role}-${index}`} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                   <div
-                    className={`max-w-[88%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+                    className={`max-w-[92%] rounded-2xl px-5 py-4 text-sm leading-relaxed shadow-lg shadow-black/10 sm:max-w-[88%] ${
                       message.role === "user"
                         ? "rounded-tr-none bg-gradient-to-r from-violet-600 to-indigo-600 text-white"
                         : "rounded-tl-none border border-white/10 bg-[#0B1026]/90 text-slate-200"
                     }`}
                   >
-                    <p className="whitespace-pre-line text-xs leading-6 sm:text-sm">{message.content}</p>
-                    <div className={`mt-2 font-mono text-[9px] ${message.role === "user" ? "text-violet-100" : "text-slate-500"}`}>
+                    <p className="whitespace-pre-line text-xs leading-6 sm:text-sm sm:leading-7">{message.content}</p>
+                    <div className={`mt-3 font-mono text-[9px] ${message.role === "user" ? "text-violet-100" : "text-slate-500"}`}>
                       {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                     </div>
                   </div>
@@ -279,7 +282,7 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
             </div>
 
             <div className="border-t border-white/10 bg-slate-950 px-4 py-3">
-              <div className="mb-3 flex gap-2 overflow-x-auto pb-1 scrollbar-thin">
+              <div className="mb-3 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-violet-400/20 bg-violet-400/10 px-3 py-1 font-mono text-[9px] font-black uppercase tracking-widest text-violet-200">
                   <Zap className="h-3 w-3" />
                   Preguntar

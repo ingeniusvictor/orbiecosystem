@@ -3,6 +3,7 @@ import { AlertCircle, Bot, BrainCircuit, Cpu, Play, RefreshCw, Send, ShieldCheck
 import { Message } from "../types";
 import SectionVideo from "./SectionVideo";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
+import { createFotonAssistantResponse, type FotonAssistantResponse } from "../server/fotonAssistant";
 
 interface FotonPrimeSectionProps {
   onPlayVideo?: (compId: string) => void;
@@ -10,18 +11,18 @@ interface FotonPrimeSectionProps {
 
 const capabilityCards = [
   {
-    title: "ChatBox Ready",
-    description: "Espacio preparado para conectar ORBI ChatBox IA sin mezclar su desarrollo interno con esta web.",
+    title: "ORBI Knowledge",
+    description: "Responde desde la narrativa controlada del ecosistema: divisiones, capacidades, servicios, dossiers y contacto.",
     icon: Bot,
   },
   {
-    title: "Contexto ORBI",
-    description: "Responde desde la narrativa del ecosistema: divisiones, productos, contenido y visión tecnológica.",
+    title: "Web Search Ready",
+    description: "Arquitectura preparada para conectar Exa, Brave, Google Programmable Search u otro proveedor de búsqueda web.",
     icon: BrainCircuit,
   },
   {
-    title: "Modo seguro",
-    description: "Puede operar como demo local cuando no exista una API configurada, evitando promesas falsas en producción.",
+    title: "Notion / MCP Ready",
+    description: "Diseñada para conectar una base interna tipo Notion y herramientas MCP sin mezclar lógica dentro del widget flotante.",
     icon: ShieldCheck,
   },
 ];
@@ -30,15 +31,43 @@ const suggestedPrompts = [
   "Explícame qué es ORBI Ecosystem en 30 segundos",
   "¿Qué divisiones tiene ORBI Platform Season 1?",
   "¿Qué productos pueden servir a una empresa?",
-  "¿Cómo se conecta ORBI News con el ecosistema?",
+  "Busca noticias nuevas de IA con Exa",
+  "Consulta la base Notion de ORBI",
 ];
+
+function modeLabel(mode: FotonAssistantResponse["mode"]) {
+  switch (mode) {
+    case "orbi_knowledge":
+      return "ORBI Knowledge";
+    case "web_search":
+      return "Web Search Ready";
+    case "notion_knowledge":
+      return "Notion / MCP Ready";
+    case "contact":
+      return "Contacto";
+    default:
+      return "Fallback seguro";
+  }
+}
+
+function formatAssistantAnswer(response: FotonAssistantResponse) {
+  const actions = response.suggestedActions.length
+    ? `\n\nAcciones sugeridas:\n${response.suggestedActions.map((action) => `• ${action.label}: ${action.href}`).join("\n")}`
+    : "";
+
+  const sources = response.sources.length
+    ? `\n\nFuentes / conectores:\n${response.sources.map((source) => `• ${source.label} · ${source.type} · ${source.status}`).join("\n")}`
+    : "";
+
+  return `[${modeLabel(response.mode)} · ${response.status}]\n\n${response.answer}${actions}${sources}`;
+}
 
 export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
       content:
-        "Hola, soy Orbi Foton Prime. En esta versión actúo como la capa conversacional de ORBI Platform Season 1: explico el ecosistema, sus divisiones, productos y visión sin reemplazar el desarrollo interno de ORBI ChatBox IA.",
+        "Hola, soy Orbi Foton Prime. Esta es la consola principal para consultas más completas. El widget flotante solo entrega orientación rápida; aquí debe vivir la capa conectada a ORBI Knowledge, Web Search, Exa, Notion y MCP.",
       timestamp: new Date(),
     },
   ]);
@@ -69,33 +98,27 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
     setIsLoading(true);
 
     try {
-      const chatHistory = [...messages, userMessage].map((message) => ({
-        role: message.role,
-        content: message.content,
-      }));
-
-      const response = await fetch("/api/foton-prime/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: chatHistory }),
+      const assistantResponse = createFotonAssistantResponse({
+        question: textToSend,
+        context: {
+          pageSection: "foton-prime",
+          source: "foton_prime",
+        },
       });
 
-      if (!response.ok) {
-        throw new Error("Foton Prime no pudo responder correctamente.");
-      }
-
-      const data = await response.json();
       const assistantMessage: Message = {
         role: "assistant",
-        content: data.text || "Respuesta no disponible en este momento.",
+        content: formatAssistantAnswer(assistantResponse),
         timestamp: new Date(),
       };
 
-      setMessages((previous) => [...previous, assistantMessage]);
+      window.setTimeout(() => {
+        setMessages((previous) => [...previous, assistantMessage]);
+        setIsLoading(false);
+      }, 280);
     } catch (err) {
       const message = err instanceof Error ? err.message : "Fallo de conexión con Foton Prime.";
       setError(message);
-    } finally {
       setIsLoading(false);
     }
   };
@@ -105,7 +128,7 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
       {
         role: "assistant",
         content:
-          "Núcleo conversacional reiniciado. Puedo ayudarte a entender ORBI Platform Season 1, sus divisiones, productos y próximos pasos.",
+          "Núcleo conversacional reiniciado. Esta consola usa el router interno de FOTON: ORBI Knowledge activo, Web Search preparado, Notion/MCP preparado y fallback seguro.",
         timestamp: new Date(),
       },
     ]);
@@ -124,12 +147,12 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
             <div className="space-y-5">
               <div className="orbitron-chip inline-flex">
                 <Cpu className="h-3.5 w-3.5" />
-                <span>FOTON PRIME / CHAT READY LAYER</span>
+                <span>FOTON PRIME / MAIN ASSISTANT CONSOLE</span>
               </div>
               <div className="space-y-4">
-                <h2 className="orbitron-title max-w-3xl">La capa conversacional que prepara a ORBI para atención inteligente.</h2>
+                <h2 className="orbitron-title max-w-3xl">La consola principal para preguntas complejas y conectores ORBI.</h2>
                 <p className="orbitron-subtitle max-w-2xl">
-                  Foton Prime funciona como una demostración visible del futuro asistente ORBI: ayuda a explicar la plataforma, orientar visitantes y preparar el espacio donde después se conectará ORBI ChatBox IA.
+                  El widget flotante queda como preview rápido. Las consultas extensas, búsqueda web, Exa, Notion, MCP y futuras conexiones de IA deben vivir aquí, en FOTON Prime.
                 </p>
               </div>
             </div>
@@ -177,7 +200,7 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
                 </div>
                 <div>
                   <h3 className="font-space text-sm font-black uppercase tracking-wide text-white">ORBI FOTON PRIME</h3>
-                  <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-slate-500">Demo layer / Season 1</p>
+                  <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-slate-500">Knowledge / Web / Notion-MCP Router</p>
                 </div>
               </div>
               <button
@@ -191,11 +214,11 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
               </button>
             </div>
 
-            <div className="h-[360px] space-y-4 overflow-y-auto bg-slate-950/30 p-5 scrollbar-thin">
+            <div className="h-[420px] space-y-4 overflow-y-auto bg-slate-950/30 p-5 scrollbar-thin">
               {messages.map((message, index) => (
                 <div key={`${message.role}-${index}`} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                   <div
-                    className={`max-w-[86%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+                    className={`max-w-[88%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                       message.role === "user"
                         ? "rounded-tr-none bg-gradient-to-r from-violet-600 to-indigo-600 text-white"
                         : "rounded-tl-none border border-white/10 bg-[#0B1026]/90 text-slate-200"
@@ -213,7 +236,7 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
                 <div className="flex justify-start">
                   <div className="inline-flex items-center gap-3 rounded-2xl rounded-tl-none border border-white/10 bg-[#0B1026] px-5 py-3 text-xs text-violet-200">
                     <span className="h-2 w-2 animate-pulse rounded-full bg-violet-300" />
-                    Procesando contexto ORBI...
+                    Procesando router FOTON...
                   </div>
                 </div>
               )}
@@ -250,7 +273,7 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
                 <input
                   aria-label="Pregunta para Orbi Foton Prime"
                   type="text"
-                  placeholder="Pregunta sobre ORBI Platform Season 1..."
+                  placeholder="Pregunta larga para FOTON Prime, Exa, Notion o MCP..."
                   value={input}
                   onChange={(event) => setInput(event.target.value)}
                   onKeyDown={(event) => {

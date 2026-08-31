@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { AlertCircle, Bot, BrainCircuit, Cpu, Play, RefreshCw, Send, ShieldCheck, Sparkles, Zap } from "lucide-react";
+import { AlertCircle, Bot, BrainCircuit, Cpu, Play, RefreshCw, Send, ShieldCheck, Zap } from "lucide-react";
 import { Message } from "../types";
 import SectionVideo from "./SectionVideo";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
-import { createFotonAssistantResponse, type FotonAssistantResponse } from "../server/fotonAssistant";
+import type { FotonAssistantResponse } from "../server/fotonAssistant";
 
 interface FotonPrimeSectionProps {
   onPlayVideo?: (compId: string) => void;
@@ -100,13 +100,23 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
     setIsLoading(true);
 
     try {
-      const assistantResponse = createFotonAssistantResponse({
-        question: textToSend,
-        context: {
-          pageSection: "foton-prime",
-          source: "foton_prime",
-        },
+      const response = await fetch("/api/foton-chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          question: textToSend,
+          context: {
+            pageSection: "foton-prime",
+            source: "foton_prime",
+          },
+        }),
       });
+
+      if (!response.ok) {
+        throw new Error("FOTON Prime no pudo completar la consulta desde el backend.");
+      }
+
+      const assistantResponse = (await response.json()) as FotonAssistantResponse;
 
       const assistantMessage: Message = {
         role: "assistant",
@@ -114,14 +124,12 @@ export default function FotonPrimeSection({ onPlayVideo }: FotonPrimeSectionProp
         timestamp: new Date(),
       };
 
-      window.setTimeout(() => {
-        setLastAssistantResponse(assistantResponse);
-        setMessages((previous) => [...previous, assistantMessage]);
-        setIsLoading(false);
-      }, 280);
+      setLastAssistantResponse(assistantResponse);
+      setMessages((previous) => [...previous, assistantMessage]);
     } catch (err) {
       const message = err instanceof Error ? err.message : "Fallo de conexión con Foton Prime.";
       setError(message);
+    } finally {
       setIsLoading(false);
     }
   };

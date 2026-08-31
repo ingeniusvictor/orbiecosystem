@@ -1,4 +1,6 @@
-import { ArrowRight, Bot, Mail, MessageCircle, Sparkles } from "lucide-react";
+import { useState } from "react";
+import { ArrowRight, Bot, Mail, MessageCircle, Search, Send, Sparkles } from "lucide-react";
+import { createFotonAssistantResponse, type FotonAssistantResponse } from "../server/fotonAssistant";
 
 interface GuidedAnswer {
   id: string;
@@ -57,8 +59,46 @@ export const fotonGuidedAnswers: GuidedAnswer[] = [
   },
 ];
 
+function modeLabel(mode: FotonAssistantResponse["mode"]) {
+  switch (mode) {
+    case "orbi_knowledge":
+      return "ORBI Knowledge";
+    case "web_search":
+      return "Web Search Ready";
+    case "notion_knowledge":
+      return "Notion / MCP Ready";
+    case "contact":
+      return "Contacto";
+    default:
+      return "Fallback seguro";
+  }
+}
+
 export default function FotonGuidedChat({ selectedQuestionId, onSelectQuestion }: FotonGuidedChatProps) {
   const selectedAnswer = fotonGuidedAnswers.find((answer) => answer.id === selectedQuestionId) ?? fotonGuidedAnswers[0];
+  const [freeQuestion, setFreeQuestion] = useState("");
+  const [assistantResponse, setAssistantResponse] = useState<FotonAssistantResponse | null>(null);
+
+  const runAssistantRouter = (question: string) => {
+    const response = createFotonAssistantResponse({
+      question,
+      context: {
+        source: "foton_widget",
+      },
+    });
+    setAssistantResponse(response);
+  };
+
+  const handleQuickQuestion = (answer: GuidedAnswer) => {
+    onSelectQuestion(answer.id);
+    setFreeQuestion(answer.question);
+    runAssistantRouter(answer.question);
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    runAssistantRouter(freeQuestion);
+  };
 
   return (
     <div className="mt-4 rounded-3xl border border-cyan-300/15 bg-slate-950/42 p-3 ring-1 ring-white/[0.045] backdrop-blur-2xl">
@@ -72,7 +112,7 @@ export default function FotonGuidedChat({ selectedQuestionId, onSelectQuestion }
             <p className="font-mono text-[8.5px] font-black uppercase tracking-[0.18em] text-cyan-100">Pregúntale a FOTON</p>
           </div>
           <p className="mt-2 text-[11px] leading-5 text-slate-300">
-            Modo guiado sin IA externa: respuestas controladas sobre ORBI, sus divisiones y formas de contacto.
+            Modo assistant architecture: ORBI Knowledge activo, Web Search y Notion/MCP preparados como conectores futuros.
           </p>
         </div>
       </div>
@@ -82,7 +122,7 @@ export default function FotonGuidedChat({ selectedQuestionId, onSelectQuestion }
           <button
             key={answer.id}
             type="button"
-            onClick={() => onSelectQuestion(answer.id)}
+            onClick={() => handleQuickQuestion(answer)}
             className={`shrink-0 rounded-full px-3 py-1.5 font-mono text-[8px] font-black uppercase tracking-[0.12em] transition ${
               answer.id === selectedAnswer.id
                 ? "border border-cyan-200/30 bg-cyan-300/15 text-cyan-50 shadow-lg shadow-cyan-950/20"
@@ -109,6 +149,62 @@ export default function FotonGuidedChat({ selectedQuestionId, onSelectQuestion }
           </a>
         )}
       </div>
+
+      <form onSubmit={handleSubmit} className="mt-3 rounded-2xl border border-white/10 bg-slate-950/55 p-2">
+        <label htmlFor="foton-free-question" className="sr-only">
+          Escribir pregunta para FOTON
+        </label>
+        <div className="flex items-center gap-2">
+          <Search className="ml-1 h-3.5 w-3.5 shrink-0 text-cyan-100/80" aria-hidden="true" />
+          <input
+            id="foton-free-question"
+            value={freeQuestion}
+            onChange={(event) => setFreeQuestion(event.target.value)}
+            placeholder="Escribe una pregunta sobre ORBI, web, Notion o contacto..."
+            className="min-w-0 flex-1 bg-transparent px-1 py-2 text-xs text-white outline-none placeholder:text-slate-500"
+          />
+          <button
+            type="submit"
+            className="rounded-full border border-cyan-300/20 bg-cyan-300/[0.10] p-2 text-cyan-50 transition hover:bg-cyan-300/[0.18]"
+            aria-label="Enviar pregunta a FOTON"
+          >
+            <Send className="h-3.5 w-3.5" aria-hidden="true" />
+          </button>
+        </div>
+      </form>
+
+      {assistantResponse && (
+        <div className="mt-3 rounded-2xl border border-yellow-200/10 bg-yellow-200/[0.045] p-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="rounded-full border border-yellow-200/15 bg-yellow-200/[0.08] px-2.5 py-1 font-mono text-[7.5px] font-black uppercase tracking-[0.14em] text-yellow-50">
+              {modeLabel(assistantResponse.mode)}
+            </span>
+            <span className="rounded-full border border-white/10 bg-white/[0.045] px-2.5 py-1 font-mono text-[7.5px] font-black uppercase tracking-[0.14em] text-slate-300">
+              {assistantResponse.status}
+            </span>
+          </div>
+          <p className="mt-3 text-xs leading-5 text-slate-200">{assistantResponse.answer}</p>
+
+          {assistantResponse.suggestedActions.length > 0 && (
+            <div className="mt-3 flex flex-wrap gap-2">
+              {assistantResponse.suggestedActions.map((action) => (
+                <a
+                  key={`${action.label}-${action.href}`}
+                  href={action.href}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.055] px-2.5 py-1 font-mono text-[7.5px] font-black uppercase tracking-[0.12em] text-cyan-50 transition hover:bg-white/[0.10]"
+                >
+                  {action.label}
+                  <ArrowRight className="h-2.5 w-2.5" aria-hidden="true" />
+                </a>
+              ))}
+            </div>
+          )}
+
+          <p className="mt-3 border-t border-white/10 pt-2 font-mono text-[7.5px] font-black uppercase tracking-[0.14em] text-slate-500">
+            Sources: {assistantResponse.sources.map((source) => `${source.label} · ${source.status}`).join(" / ")}
+          </p>
+        </div>
+      )}
     </div>
   );
 }

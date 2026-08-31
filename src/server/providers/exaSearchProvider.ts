@@ -1,4 +1,5 @@
 import type { FotonAssistantSource } from "../fotonAssistant";
+import { getFotonProviderConfig, trimQuestionForProvider } from "./providerConfig";
 
 export interface ExternalSearchResult {
   title: string;
@@ -15,12 +16,29 @@ export interface ExternalSearchProviderResponse {
 
 export async function searchWithExa(question: string): Promise<ExternalSearchProviderResponse> {
   const apiKey = process.env.EXA_API_KEY;
+  const config = getFotonProviderConfig();
+
+  if (!config.exaEnabled) {
+    return {
+      connected: false,
+      answer:
+        "Esta consulta necesita búsqueda web externa. Exa ya está preparado en la arquitectura de FOTON Prime, pero está apagado por seguridad. Para activarlo, configura FOTON_EXA_ENABLED=true junto con EXA_API_KEY en el entorno del servidor.",
+      sources: [
+        {
+          label: "Exa Search API",
+          type: "web",
+          status: "planned",
+        },
+      ],
+      results: [],
+    };
+  }
 
   if (!apiKey) {
     return {
       connected: false,
       answer:
-        "Esta consulta necesita búsqueda web externa. FOTON Prime ya está preparado para usar Exa, pero todavía no detecto EXA_API_KEY configurada en el entorno. Cuando agregues esa clave, FOTON podrá buscar fuentes reales y responder con referencias.",
+        "Esta consulta necesita búsqueda web externa. FOTON Prime ya tiene Exa habilitado, pero todavía no detecto EXA_API_KEY configurada en el entorno. Cuando agregues esa clave, FOTON podrá buscar fuentes reales y responder con referencias.",
       sources: [
         {
           label: "Exa Search API",
@@ -33,6 +51,8 @@ export async function searchWithExa(question: string): Promise<ExternalSearchPro
   }
 
   try {
+    const safeQuestion = trimQuestionForProvider(question);
+
     const response = await fetch("https://api.exa.ai/search", {
       method: "POST",
       headers: {
@@ -40,8 +60,8 @@ export async function searchWithExa(question: string): Promise<ExternalSearchPro
         "x-api-key": apiKey,
       },
       body: JSON.stringify({
-        query: question,
-        numResults: 5,
+        query: safeQuestion,
+        numResults: config.exaMaxResults,
         useAutoprompt: true,
       }),
     });
@@ -52,17 +72,17 @@ export async function searchWithExa(question: string): Promise<ExternalSearchPro
 
     const data = await response.json();
     const results: ExternalSearchResult[] = Array.isArray(data.results)
-      ? data.results.slice(0, 5).map((result: any) => ({
+      ? data.results.slice(0, config.exaMaxResults).map((result: any) => ({
           title: String(result.title || "Resultado sin título"),
           url: String(result.url || ""),
-          summary: String(result.text || result.summary || "Fuente encontrada por Exa."),
+          summary: String(result.text || result.summary || "Fuente encontrada por Exa.").slice(0, 420),
         }))
       : [];
 
     const answer = results.length
-      ? `Encontré ${results.length} resultado(s) externos relacionados. Como esta fase aún no usa un modelo generativo conectado para sintetizar fuentes, te dejo una lectura inicial basada en los títulos y fragmentos disponibles: ${results
+      ? `Encontré ${results.length} resultado(s) externos relacionados. Esta primera búsqueda con Exa entrega fuentes para revisión: ${results
           .map((result, index) => `${index + 1}. ${result.title}`)
-          .join(" ")}.`
+          .join(" ")}. Próximo paso: conectar una capa de síntesis para generar una respuesta final con citas y análisis ORBI.`
       : "Exa respondió correctamente, pero no entregó resultados relevantes para esta consulta.";
 
     return {

@@ -1,4 +1,4 @@
-import test from 'node:test';
+﻿import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { parseEnvironmentSourceRegistry } from '../../server/discovery/environment-source-registry';
@@ -23,18 +23,33 @@ test('staging environment template contains placeholders rather than real secret
   assert.doesNotMatch(raw, /re_[0-9A-Za-z]{20,}/);
 });
 
-test('staging source registry parses as three active official HTTPS RSS sources', async () => {
-  const raw = await readFile(new URL('../../docs/deployment/ORBI-NEWS-STAGING-SOURCES.json', import.meta.url), 'utf8');
-  const entries = parseEnvironmentSourceRegistry({ ORBI_NEWS_SOURCE_REGISTRY_JSON: raw });
-  assert.equal(entries.length, 3);
-  assert.deepEqual(entries.map((entry) => entry.domain), [
-    'openai.com',
-    'blog.google',
-    'nvidianews.nvidia.com',
-  ]);
+test('staging source registry parses as four active authoritative HTTPS RSS sources', async () => {
+  const raw = await readFile(
+    new URL('../../docs/deployment/ORBI-NEWS-STAGING-SOURCES.json', import.meta.url),
+    'utf8',
+  );
+
+  const entries = parseEnvironmentSourceRegistry({
+    ORBI_NEWS_SOURCE_REGISTRY_JSON: raw,
+  });
+
+  assert.equal(entries.length, 4);
+
+  assert.deepEqual(
+    entries.map((entry) => ({
+      domain: entry.domain,
+      sourceType: entry.sourceType,
+    })),
+    [
+      { domain: 'openai.com', sourceType: 'OFFICIAL' },
+      { domain: 'blog.google', sourceType: 'OFFICIAL' },
+      { domain: 'nvidianews.nvidia.com', sourceType: 'OFFICIAL' },
+      { domain: 'energy.gov', sourceType: 'GOVERNMENT' },
+    ],
+  );
+
   for (const entry of entries) {
     assert.equal(entry.status, 'ACTIVE');
-    assert.equal(entry.sourceType, 'OFFICIAL');
     assert.equal(entry.credibilityBand, 'AUTHORITATIVE');
     assert.ok(entry.feedUrl?.startsWith('https://'));
   }

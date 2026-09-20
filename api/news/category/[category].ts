@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
-import { createVercelPublicNewsService, parsePublicNewsCategory } from '../../../server/vercel/public-news-function-service';
+import { createVercelPublicNewsService, parsePublicNewsCategory } from '../../../server/vercel/public-news-function-service.js';
 
 const json = (res: ServerResponse, status: number, payload: unknown): void => {
   res.statusCode = status;

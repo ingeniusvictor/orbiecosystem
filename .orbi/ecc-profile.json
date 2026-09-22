@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "profile": "orbi-ecc-news-v0.2",
-  "status": "agentshield-baseline-classified",
+  "profile": "orbi-ecc-news-v0.3",
+  "status": "agent-sort-classified",
   "adoptionMode": "curated",
   "scope": "ingeniusvictor/orbiecosystem/orbi-news",
   "activeDevelopmentBase": "staging/orbi-news-vercel",
@@ -88,12 +88,6 @@
     "CI GREEN != VERCEL FIRESTORE PROVIDER OR CHANNEL READINESS"
   ],
   "projectSkills": [],
-  "candidateSharedSkills": [
-    "orbi-verification-loop",
-    "orbi-security-review",
-    "orbi-context-budget",
-    "orbi-agent-harness"
-  ],
   "authority": {
     "mayChangeActivationProfile": false,
     "mayEnableRuntime": false,
@@ -173,5 +167,65 @@
       "real provider reachability",
       "real publication channels"
     ]
+  },
+  "dailyAgents": [
+    "planner",
+    "architect",
+    "code-reviewer",
+    "security-reviewer",
+    "tdd-guide",
+    "doc-updater",
+    "typescript-reviewer"
+  ],
+  "libraryAgents": [
+    "react-reviewer",
+    "react-build-resolver",
+    "build-error-resolver",
+    "e2e-runner",
+    "performance-optimizer",
+    "refactor-cleaner",
+    "silent-failure-hunter",
+    "mle-reviewer",
+    "rag-pipeline-reviewer",
+    "harness-optimizer",
+    "loop-operator"
+  ],
+  "dailySkills": [
+    "architecture-decision-records",
+    "coding-standards",
+    "contract-first",
+    "tdd-workflow",
+    "orbi-verification-loop",
+    "orbi-security-review",
+    "orbi-context-budget",
+    "delivery-gate",
+    "git-workflow"
+  ],
+  "librarySkills": [
+    "agent-sort",
+    "codebase-onboarding",
+    "agent-harness-construction",
+    "ai-regression-testing",
+    "eval-harness",
+    "benchmark",
+    "benchmark-methodology",
+    "browser-qa",
+    "e2e-testing",
+    "frontend-patterns",
+    "react-patterns",
+    "react-testing",
+    "react-performance",
+    "vite-patterns",
+    "error-handling"
+  ],
+  "projectSkillPlan": [
+    "orbi-news-verification-review",
+    "orbi-news-publication-authority-review"
+  ],
+  "agentSort": {
+    "phase": "NEWS-ECC-P3",
+    "methodology": "evidence-backed selective classification",
+    "runtimeExecuted": false,
+    "nextRecommendedSkill": "orbi-news-verification-review"
   }
 }

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "profile": "orbi-ecc-news-v0.6",
-  "status": "agent-harness-contract-defined",
+  "profile": "orbi-ecc-news-v0.7",
+  "status": "context-budget-governed",
   "adoptionMode": "curated",
   "scope": "ingeniusvictor/orbiecosystem/orbi-news",
   "activeDevelopmentBase": "staging/orbi-news-vercel",
@@ -142,6 +142,18 @@
         "orbi-agent-harness"
       ],
       "activation": "agent-or-tool-contract-design",
+      "authoritative": false,
+      "runtimeDependency": false
+    },
+    {
+      "name": "orbi-news-context-budget",
+      "path": ".agents/skills/orbi-news-context-budget/SKILL.md",
+      "version": "0.1.0",
+      "origin": "ORBI",
+      "sourceKitPatterns": [
+        "orbi-context-budget"
+      ],
+      "activation": "instruction-or-context-change",
       "authoritative": false,
       "runtimeDependency": false
     }
@@ -291,7 +303,8 @@
     "conditionalSkills": [
       "orbi-news-verification-review",
       "orbi-news-publication-authority-review",
-      "orbi-news-agent-harness"
+      "orbi-news-agent-harness",
+      "orbi-news-context-budget"
     ]
   },
   "agentHarness": {
@@ -303,5 +316,25 @@
     "observationSchemaVersion": "orbi.news.agent.observation.v1",
     "authorizationEngine": false,
     "agentKitAutonomousLoop": false
+  },
+  "contextBudget": {
+    "loadingModel": {
+      "alwaysInstructions": [
+        "AGENTS.md"
+      ],
+      "discoverableSkills": [
+        "orbi-news-verification-review",
+        "orbi-news-publication-authority-review",
+        "orbi-news-agent-harness",
+        "orbi-news-context-budget"
+      ],
+      "configReferences": [
+        ".orbi/ecc-profile.json",
+        ".orbi/repository-adapter.json",
+        ".orbi/orbi-news-agent-observation-v1.schema.json"
+      ]
+    },
+    "auditor": "scripts/ecc-orbi-news-context-budget.mjs",
+    "deterministicTest": "tests/deterministic/orbi-news-context-budget.test.ts"
   }
 }

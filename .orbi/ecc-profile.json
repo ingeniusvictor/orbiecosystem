@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "profile": "orbi-ecc-news-v0.4",
-  "status": "first-project-skill-materialized",
+  "profile": "orbi-ecc-news-v0.5",
+  "status": "two-project-skills-materialized",
   "adoptionMode": "curated",
   "scope": "ingeniusvictor/orbiecosystem/orbi-news",
   "activeDevelopmentBase": "staging/orbi-news-vercel",
@@ -106,6 +106,29 @@
         "risk classification",
         "canonical story grounding",
         "AI factual/evidence boundary"
+      ],
+      "authoritative": false,
+      "runtimeDependency": false
+    },
+    {
+      "name": "orbi-news-publication-authority-review",
+      "path": ".agents/skills/orbi-news-publication-authority-review/SKILL.md",
+      "version": "0.1.0",
+      "origin": "ORBI",
+      "sourceKitPatterns": [
+        "orbi-security-review",
+        "orbi-agent-harness"
+      ],
+      "activation": "conditional",
+      "triggers": [
+        "publication policy",
+        "web publication",
+        "social distribution",
+        "runtime activation",
+        "autonomy level",
+        "automation toggle",
+        "editorial mutation",
+        "publication credentials"
       ],
       "authoritative": false,
       "runtimeDependency": false
@@ -249,12 +272,13 @@
     "phase": "NEWS-ECC-P3",
     "methodology": "evidence-backed selective classification",
     "runtimeExecuted": false,
-    "nextRecommendedSkill": "orbi-news-verification-review"
+    "nextRecommendedSkill": "orbi-news-publication-authority-review"
   },
   "projectSkillRouting": {
     "defaultLoad": false,
     "conditionalSkills": [
-      "orbi-news-verification-review"
+      "orbi-news-verification-review",
+      "orbi-news-publication-authority-review"
     ]
   }
 }

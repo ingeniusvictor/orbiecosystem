@@ -134,6 +134,15 @@
         "retry",
         "stop condition"
       ]
+    },
+    {
+      "skill": "orbi-news-context-budget",
+      "triggers": [
+        "AGENTS instructions",
+        "project skills",
+        "context budget",
+        "adapter/profile growth"
+      ]
     }
   ],
   "deferredCapabilities": [

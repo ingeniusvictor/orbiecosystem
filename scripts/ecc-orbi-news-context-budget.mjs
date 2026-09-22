@@ -8,6 +8,7 @@ const files=[
   ['discoverable-skill','.agents/skills/orbi-news-verification-review/SKILL.md'],
   ['discoverable-skill','.agents/skills/orbi-news-publication-authority-review/SKILL.md'],
   ['discoverable-skill','.agents/skills/orbi-news-agent-harness/SKILL.md'],
+  ['discoverable-skill','.agents/skills/orbi-news-context-budget/SKILL.md'],
   ['config-reference','.orbi/ecc-profile.json'],
   ['config-reference','.orbi/repository-adapter.json'],
   ['config-reference','.orbi/orbi-news-agent-observation-v1.schema.json']

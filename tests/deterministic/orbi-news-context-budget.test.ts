@@ -12,7 +12,7 @@ test('News context budget reports layered loading model',()=>{
   assert.equal(report.loadingModel.alwaysInstructions,'persistent');
   assert.equal(report.loadingModel.discoverableSkills,'conditional');
   assert.equal(report.loadingModel.configReferences,'on-demand');
-  assert.equal(report.files.filter((x:any)=>x.kind==='discoverable-skill').length,3);
+  assert.equal(report.files.filter((x:any)=>x.kind==='discoverable-skill').length,4);
   assert.ok(report.totals.persistentEstimateTokens>0);
   assert.ok(report.totals.discoverableIfAllLoadedTokens>0);
   assert.ok(report.totals.configIfAllLoadedTokens>0);

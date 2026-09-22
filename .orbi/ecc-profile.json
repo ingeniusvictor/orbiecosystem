@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "profile": "orbi-ecc-news-v0.1",
-  "status": "inventory-and-adapter-baseline",
+  "profile": "orbi-ecc-news-v0.2",
+  "status": "agentshield-report-baseline",
   "adoptionMode": "curated",
   "scope": "ingeniusvictor/orbiecosystem/orbi-news",
   "activeDevelopmentBase": "staging/orbi-news-vercel",
@@ -127,9 +127,18 @@
     "enabled": false
   },
   "agentShield": {
-    "mode": "not-enabled-yet",
-    "phase": "NEWS-ECC-P2",
-    "inheritedAcceptedFindings": false
+    "mode": "report-only",
+    "package": "ecc-agentshield",
+    "version": "1.6.0",
+    "repository": "affaan-m/agentshield",
+    "commit": "b0891303bdcd6037376a94263d45cfd2ff3dfb98",
+    "autoFix": false,
+    "ciEnforced": false,
+    "failOnFindings": false,
+    "onlineSupplyChainLookup": false,
+    "evidenceRetentionDays": 14,
+    "inheritedAcceptedFindings": false,
+    "baselineClassification": "pending-first-run-review"
   },
   "ci": {
     "workflow": ".github/workflows/orbi-news-ecc-pr-gate.yml",

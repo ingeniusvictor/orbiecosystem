@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 1,
+  "profile": "orbi-ecc-news-v0.1",
+  "status": "inventory-and-adapter-baseline",
+  "adoptionMode": "curated",
+  "scope": "ingeniusvictor/orbiecosystem/orbi-news",
+  "activeDevelopmentBase": "staging/orbi-news-vercel",
+  "repositoryBaseline": "fda4aa198b6f706e13dcc4805560e8eb6d836ebd",
+  "sourceKit": {
+    "repository": "ingeniusvictor/orbi-agent-kit",
+    "version": "0.2-development",
+    "certifiedCoreThrough": "K2-03",
+    "canonicalCommit": "27ae18c74eb67a3f311b00ac406555369f00ca40",
+    "adapterSchema": "orbi.repository.adapter.v1"
+  },
+  "upstream": {
+    "ecc": {
+      "repository": "affaan-m/ECC",
+      "version": "2.2.2",
+      "commit": "91ba9b4cf6c47c8130829004f8bb64762a76ccbb"
+    },
+    "agentShield": {
+      "repository": "affaan-m/agentshield",
+      "package": "ecc-agentshield",
+      "version": "1.6.0",
+      "commit": "b0891303bdcd6037376a94263d45cfd2ff3dfb98"
+    }
+  },
+  "stack": {
+    "node": 22,
+    "language": [
+      "TypeScript",
+      "TSX",
+      "JavaScript ESM"
+    ],
+    "ui": [
+      "React 19",
+      "Vite 6"
+    ],
+    "server": [
+      "Express",
+      "esbuild"
+    ],
+    "persistence": [
+      "Google Cloud Firestore"
+    ],
+    "ai": [
+      "Google GenAI / Gemini"
+    ],
+    "packageManager": "npm"
+  },
+  "existingOperationalModel": {
+    "safeRuntimeDefaults": [
+      "runtime disabled",
+      "MAINTENANCE",
+      "LEVEL_0"
+    ],
+    "controlledActivationProfiles": [
+      "DISABLED",
+      "DISCOVERY_ONLY",
+      "EDITORIAL_ASSISTED",
+      "WEB_AUTONOMOUS"
+    ],
+    "autonomyLevels": [
+      "LEVEL_0",
+      "LEVEL_1",
+      "LEVEL_2",
+      "LEVEL_3",
+      "LEVEL_4",
+      "LEVEL_5"
+    ],
+    "exactAllowListActivation": true,
+    "killSwitches": true,
+    "dailyBudgets": true,
+    "retryBudgets": true,
+    "downstreamPublicationGatesRequired": true
+  },
+  "evidenceBoundaries": [
+    "DISCOVERY != VERIFICATION",
+    "VERIFICATION GATE PASS != ABSOLUTE FACTUAL TRUTH",
+    "MODEL OUTPUT != VERIFIED NEWS FACT",
+    "OPERATIONAL ALLOW != PUBLICATION AUTHORITY",
+    "RUNTIME READY != ACTIVATION AUTHORIZATION",
+    "EDITORIAL ALLOW != WEB OR SOCIAL PUBLICATION PERMISSION",
+    "WEB_AUTONOMOUS != SOCIAL EMAIL OR IMAGE AUTONOMY",
+    "GENERATED IMAGE != EVIDENTIARY SOURCE",
+    "SOURCE FETCHED != SOURCE TRUSTED",
+    "CI GREEN != VERCEL FIRESTORE PROVIDER OR CHANNEL READINESS"
+  ],
+  "projectSkills": [],
+  "candidateSharedSkills": [
+    "orbi-verification-loop",
+    "orbi-security-review",
+    "orbi-context-budget",
+    "orbi-agent-harness"
+  ],
+  "authority": {
+    "mayChangeActivationProfile": false,
+    "mayEnableRuntime": false,
+    "mayIncreaseAutonomyLevel": false,
+    "mayEnableAutomationToggles": false,
+    "mayDisableKillSwitches": false,
+    "mayConfigureSecrets": false,
+    "mayTreatModelOutputAsVerifiedFact": false,
+    "mayBypassVerificationEditorialOrPublicationGates": false,
+    "mayAuthorizeSocialPublication": false,
+    "mayTreatCiAsProductionReadiness": false
+  },
+  "hooks": {
+    "enabled": false
+  },
+  "mcp": {
+    "enabled": false
+  },
+  "continuousLearning": {
+    "enabled": false
+  },
+  "unifiedMemory": {
+    "enabled": false,
+    "authoritative": false
+  },
+  "autonomousLoops": {
+    "enabled": false,
+    "note": "ORBI News product autonomy exists separately; ECC/Agent Kit autonomous loops remain disabled."
+  },
+  "multiAgentRoles": {
+    "enabled": false
+  },
+  "agentShield": {
+    "mode": "not-enabled-yet",
+    "phase": "NEWS-ECC-P2",
+    "inheritedAcceptedFindings": false
+  },
+  "ci": {
+    "workflow": ".github/workflows/orbi-news-ecc-pr-gate.yml",
+    "requiredCommands": [
+      "npm ci",
+      "npm run lint",
+      "npm run test:orbi-news",
+      "npm run build"
+    ],
+    "externalEvidenceNotProvenByCi": [
+      "Vercel secrets/configuration",
+      "Firestore production access",
+      "real provider reachability",
+      "real publication channels"
+    ]
+  }
+}

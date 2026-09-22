@@ -9,7 +9,7 @@ Measure and preserve the selective loading model for ORBI News.
 ## Loading classes
 
 - AGENTS.md: persistent invariant guidance
-- 3 News project skills: conditional/discoverable
+- 4 News project skills: conditional/discoverable
 - profile/adapter/observation schema: on-demand config references
 
 The existence of a skill does not mean its full text should be injected into every News task.

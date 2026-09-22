@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orbi.local/schemas/orbi-news-agent-observation-v1.schema.json",
+  "title": "ORBI News Agent Observation v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "summary",
+    "nextActions",
+    "artifacts",
+    "evidence",
+    "authorityImpact"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "orbi.news.agent.observation.v1"
+    },
+    "status": {
+      "enum": [
+        "success",
+        "warning",
+        "error"
+      ]
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "nextActions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "maxItems": 20
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "maxItems": 50
+    },
+    "evidence": {
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "reference",
+          "verification"
+        ],
+        "properties": {
+          "kind": {
+            "enum": [
+              "git",
+              "test",
+              "ci",
+              "file",
+              "artifact",
+              "runtime",
+              "external"
+            ]
+          },
+          "reference": {
+            "type": "string",
+            "minLength": 1
+          },
+          "verification": {
+            "enum": [
+              "verified",
+              "observed",
+              "unverified"
+            ]
+          }
+        }
+      }
+    },
+    "authorityImpact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "productionActivationProfile",
+        "runtimeEnabled",
+        "autonomyLevel",
+        "automationToggles",
+        "killSwitches",
+        "canonicalFactualClaims",
+        "webPublication",
+        "socialPublication",
+        "secretOrProviderConfig"
+      ],
+      "properties": {
+        "productionActivationProfile": {
+          "type": "boolean"
+        },
+        "runtimeEnabled": {
+          "type": "boolean"
+        },
+        "autonomyLevel": {
+          "type": "boolean"
+        },
+        "automationToggles": {
+          "type": "boolean"
+        },
+        "killSwitches": {
+          "type": "boolean"
+        },
+        "canonicalFactualClaims": {
+          "type": "boolean"
+        },
+        "webPublication": {
+          "type": "boolean"
+        },
+        "socialPublication": {
+          "type": "boolean"
+        },
+        "secretOrProviderConfig": {
+          "type": "boolean"
+        }
+      }
+    },
+    "humanApprovalRequired": {
+      "type": "boolean"
+    },
+    "externalEvidenceRequired": {
+      "type": "boolean"
+    },
+    "recovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rootCauseHint",
+        "safeRetry",
+        "stopCondition"
+      ],
+      "properties": {
+        "rootCauseHint": {
+          "type": "string",
+          "minLength": 1
+        },
+        "safeRetry": {
+          "type": "string",
+          "minLength": 1
+        },
+        "stopCondition": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "error"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "required": [
+          "recovery"
+        ]
+      }
+    }
+  ]
+}

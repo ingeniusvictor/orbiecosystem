@@ -94,9 +94,24 @@
       "package-lock.json"
     ],
     "inheritAcceptedFindings": false,
-    "acceptedFindingClasses": []
+    "acceptedFindingClasses": [
+      "ACCEPTED_FALSE_POSITIVE — NPM_INTEGRITY_SHA512"
+    ]
   },
-  "skillRouting": [],
+  "skillRouting": [
+    {
+      "skill": "orbi-news-verification-review",
+      "triggers": [
+        "verification",
+        "source research",
+        "claim confidence",
+        "contradiction",
+        "risk",
+        "grounding",
+        "factual evidence"
+      ]
+    }
+  ],
   "deferredCapabilities": [
     "hooks",
     "mcp",

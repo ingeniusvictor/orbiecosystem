@@ -1,6 +1,6 @@
 # NEWS-ECC-P2 — AgentShield Repository Baseline
 
-Status: REPORT-ONLY / FIRST-RUN CLASSIFICATION PENDING
+Status: REPORT-ONLY / BASELINE CLASSIFIED
 
 ## Purpose
 
@@ -65,3 +65,58 @@ P2 passes only when:
 5. any accepted false positive is justified from ORBI News evidence;
 6. the P1 software gate stays GREEN;
 7. no runtime/domain behavior changes.
+
+## First-run evidence
+
+AgentShield run: `35684359987`
+
+Result:
+
+- scanner outcome: SUCCESS;
+- score: **80 / 100**;
+- grade: **B**;
+- total findings: **397**;
+- critical findings: **397**;
+- unique finding classes: **1**;
+- supply-chain status: **CLEAN**;
+- evidence-pack verification: **PASSED**;
+- evidence-pack digest: `sha256:40d48692bbbd7fda626dc721e1c50ae16bd39dae85e46b4c87854241bab6a0f5`;
+- artifact ID: `10675688807`;
+- artifact digest: `sha256:249c061d04fb80e47bdd57c32ff6ea9adf4cf0d3303b2ead7ec897df7f4f5108`.
+
+## Finding classification
+
+All **397 / 397** findings are the same detector class:
+
+`Hardcoded Azure storage account key`
+
+All point to `package-lock.json`.
+
+Direct ORBI News repository inspection confirmed the matched material is standard npm Subresource Integrity metadata, for example:
+
+```json
+"integrity": "sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw=="
+```
+
+The surrounding record is a normal npm dependency entry with `resolved: https://registry.npmjs.org/...`.
+
+Classification:
+
+`ACCEPTED_FALSE_POSITIVE — NPM_INTEGRITY_SHA512`
+
+This acceptance is scoped only to the observed AgentShield detector class in ORBI News `package-lock.json`.
+
+It does **not** authorize ignoring:
+
+- values in `.env*`;
+- Gemini keys;
+- cron secrets;
+- Firestore credentials;
+- Resend credentials;
+- social credentials;
+- other files;
+- future scanner classes.
+
+The lockfile must not be redacted or rewritten to silence this detector because npm integrity fields are dependency integrity metadata.
+
+No non-lockfile finding class was reported by the first run.

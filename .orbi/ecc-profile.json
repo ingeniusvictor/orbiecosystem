@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "profile": "orbi-ecc-news-v0.3",
-  "status": "agent-sort-classified",
+  "profile": "orbi-ecc-news-v0.4",
+  "status": "first-project-skill-materialized",
   "adoptionMode": "curated",
   "scope": "ingeniusvictor/orbiecosystem/orbi-news",
   "activeDevelopmentBase": "staging/orbi-news-vercel",
@@ -87,7 +87,30 @@
     "SOURCE FETCHED != SOURCE TRUSTED",
     "CI GREEN != VERCEL FIRESTORE PROVIDER OR CHANNEL READINESS"
   ],
-  "projectSkills": [],
+  "projectSkills": [
+    {
+      "name": "orbi-news-verification-review",
+      "path": ".agents/skills/orbi-news-verification-review/SKILL.md",
+      "version": "0.1.0",
+      "origin": "ORBI",
+      "sourceKitPatterns": [
+        "orbi-verification-loop",
+        "orbi-security-review"
+      ],
+      "activation": "conditional",
+      "triggers": [
+        "verification engine or policy",
+        "research/source policy",
+        "claim confidence or status",
+        "contradiction handling",
+        "risk classification",
+        "canonical story grounding",
+        "AI factual/evidence boundary"
+      ],
+      "authoritative": false,
+      "runtimeDependency": false
+    }
+  ],
   "authority": {
     "mayChangeActivationProfile": false,
     "mayEnableRuntime": false,
@@ -227,5 +250,11 @@
     "methodology": "evidence-backed selective classification",
     "runtimeExecuted": false,
     "nextRecommendedSkill": "orbi-news-verification-review"
+  },
+  "projectSkillRouting": {
+    "defaultLoad": false,
+    "conditionalSkills": [
+      "orbi-news-verification-review"
+    ]
   }
 }

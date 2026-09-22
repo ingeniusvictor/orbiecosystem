@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "profile": "orbi-ecc-news-v0.2",
-  "status": "agentshield-report-baseline",
+  "status": "agentshield-baseline-classified",
   "adoptionMode": "curated",
   "scope": "ingeniusvictor/orbiecosystem/orbi-news",
   "activeDevelopmentBase": "staging/orbi-news-vercel",
@@ -138,7 +138,26 @@
     "onlineSupplyChainLookup": false,
     "evidenceRetentionDays": 14,
     "inheritedAcceptedFindings": false,
-    "baselineClassification": "pending-first-run-review"
+    "baselineClassification": "accepted-false-positive-only",
+    "firstRun": {
+      "runId": 35684359987,
+      "score": 80,
+      "grade": "B",
+      "totalFindings": 397,
+      "criticalFindings": 397,
+      "uniqueFindingClasses": 1,
+      "acceptedFalsePositive": {
+        "detector": "Hardcoded Azure storage account key",
+        "file": "package-lock.json",
+        "actualMaterial": "npm integrity sha512 values",
+        "classification": "ACCEPTED_FALSE_POSITIVE — NPM_INTEGRITY_SHA512"
+      },
+      "supplyChain": "clean",
+      "evidencePackVerified": true,
+      "evidencePackDigest": "sha256:40d48692bbbd7fda626dc721e1c50ae16bd39dae85e46b4c87854241bab6a0f5",
+      "artifactId": 10675688807,
+      "artifactDigest": "sha256:249c061d04fb80e47bdd57c32ff6ea9adf4cf0d3303b2ead7ec897df7f4f5108"
+    }
   },
   "ci": {
     "workflow": ".github/workflows/orbi-news-ecc-pr-gate.yml",

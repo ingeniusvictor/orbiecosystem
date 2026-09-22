@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "profile": "orbi-agent-kit-news-portable-v0.1",
+  "status": "selective-reuse-ready",
+  "sourcePilot": {
+    "repository": "ingeniusvictor/orbiecosystem",
+    "canonicalBranch": "staging/orbi-news-vercel",
+    "certifiedThroughPhase": "NEWS-ECC-P7.1",
+    "certifiedBaseline": "3914329c25d20667a1341c7b02e6526929be7efc",
+    "sourceKit": {
+      "repository": "ingeniusvictor/orbi-agent-kit",
+      "canonicalCommit": "27ae18c74eb67a3f311b00ac406555369f00ca40",
+      "certifiedCoreThrough": "K2-03"
+    }
+  },
+  "portableComponents": [
+    {
+      "name": "repository-adapter-pattern",
+      "reuse": "portable-with-domain-review",
+      "reason": "Exact gates, external evidence, authority domains and skill routing are reusable structure."
+    },
+    {
+      "name": "factual-verification-boundary",
+      "reuse": "portable-for-research-content-systems",
+      "reason": "Model output, fetched sources and verification state must remain distinct."
+    },
+    {
+      "name": "publication-authority-separation",
+      "reuse": "portable-for-publishing-automation",
+      "reason": "Editorial/runtime allow does not itself authorize external publication."
+    },
+    {
+      "name": "ci-vs-channel-readiness",
+      "reuse": "portable-with-external-evidence-review",
+      "reason": "CI cannot prove real provider, credential or channel readiness."
+    },
+    {
+      "name": "conditional-domain-skill-loading",
+      "reuse": "portable",
+      "reason": "Publication/verification procedures remain discoverable rather than permanently loaded."
+    },
+    {
+      "name": "structured-agent-observation",
+      "reuse": "portable-with-authority-field-review",
+      "reason": "Observation structure generalizes; authority-impact fields are target-specific."
+    }
+  ],
+  "newsSpecific": [
+    "activation profiles and autonomy levels",
+    "verification/research/source credibility policy",
+    "editorial and publication gates",
+    "web/social/email channel policy",
+    "canonical story grounding",
+    "News AgentShield npm-integrity false-positive baseline",
+    "Vercel/Firestore/provider/channel readiness evidence"
+  ],
+  "projectSkills": [
+    {
+      "name": "orbi-news-verification-review",
+      "reuse": "domain-specific-pattern"
+    },
+    {
+      "name": "orbi-news-publication-authority-review",
+      "reuse": "adaptable-for-publishing-systems"
+    },
+    {
+      "name": "orbi-news-agent-harness",
+      "reuse": "adaptable-pattern"
+    },
+    {
+      "name": "orbi-news-context-budget",
+      "reuse": "portable-with-review"
+    }
+  ],
+  "validationEvidence": {
+    "finalPreCertificationGateRun": 35686452513,
+    "deterministicTests": {
+      "passed": 528,
+      "failed": 0
+    },
+    "typescript": "pass",
+    "build": "pass",
+    "finalPreCertificationAgentShieldRun": 35686452554,
+    "agentShieldFindings": 397,
+    "uniqueFindingClasses": 1,
+    "acceptedFinding": "ACCEPTED_FALSE_POSITIVE — NPM_INTEGRITY_SHA512",
+    "supplyChain": "clean"
+  },
+  "authority": {
+    "mayChangeActivationProfile": false,
+    "mayEnableRuntime": false,
+    "mayIncreaseAutonomyLevel": false,
+    "mayEnableAutomationToggles": false,
+    "mayDisableKillSwitches": false,
+    "mayConfigureSecrets": false,
+    "mayTreatModelOutputAsVerifiedFact": false,
+    "mayBypassVerificationEditorialOrPublicationGates": false,
+    "mayAuthorizeSocialPublication": false,
+    "mayTreatCiAsProductionReadiness": false
+  },
+  "deferred": {
+    "hooks": false,
+    "mcp": false,
+    "continuousLearning": false,
+    "unifiedMemory": false,
+    "agentKitAutonomousLoops": false,
+    "multiAgentRoles": false
+  }
+}

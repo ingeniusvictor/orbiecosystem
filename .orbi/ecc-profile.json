@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "profile": "orbi-ecc-news-v0.7",
-  "status": "context-budget-governed",
+  "profile": "orbi-ecc-news-v1.0",
+  "status": "selective-adoption-certified",
   "adoptionMode": "curated",
   "scope": "ingeniusvictor/orbiecosystem/orbi-news",
   "activeDevelopmentBase": "staging/orbi-news-vercel",
@@ -336,5 +336,21 @@
     },
     "auditor": "scripts/ecc-orbi-news-context-budget.mjs",
     "deterministicTest": "tests/deterministic/orbi-news-context-budget.test.ts"
+  },
+  "certification": {
+    "phase": "NEWS-ECC-P8",
+    "certifiedThrough": "NEWS-ECC-P7.1",
+    "preCertificationCanonical": "3914329c25d20667a1341c7b02e6526929be7efc",
+    "prGateRun": 35686452513,
+    "deterministicTests": {
+      "passed": 528,
+      "failed": 0
+    },
+    "typescript": "pass",
+    "build": "pass",
+    "agentShieldRun": 35686452554,
+    "agentShieldNewFindingClass": false,
+    "portableProfile": ".orbi/agent-kit-portable-profile.json",
+    "productionChannelReadinessCertifiedByCi": false
   }
 }

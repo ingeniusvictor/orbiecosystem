@@ -110,6 +110,19 @@
         "grounding",
         "factual evidence"
       ]
+    },
+    {
+      "skill": "orbi-news-publication-authority-review",
+      "triggers": [
+        "publication",
+        "web autonomy",
+        "social distribution",
+        "runtime activation",
+        "autonomy level",
+        "automation toggles",
+        "editorial mutation",
+        "publication credentials"
+      ]
     }
   ],
   "deferredCapabilities": [

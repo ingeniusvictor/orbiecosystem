@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "profile": "orbi-ecc-news-v0.5",
-  "status": "two-project-skills-materialized",
+  "profile": "orbi-ecc-news-v0.6",
+  "status": "agent-harness-contract-defined",
   "adoptionMode": "curated",
   "scope": "ingeniusvictor/orbiecosystem/orbi-news",
   "activeDevelopmentBase": "staging/orbi-news-vercel",
@@ -130,6 +130,18 @@
         "editorial mutation",
         "publication credentials"
       ],
+      "authoritative": false,
+      "runtimeDependency": false
+    },
+    {
+      "name": "orbi-news-agent-harness",
+      "path": ".agents/skills/orbi-news-agent-harness/SKILL.md",
+      "version": "0.1.0",
+      "origin": "ORBI",
+      "sourceKitPatterns": [
+        "orbi-agent-harness"
+      ],
+      "activation": "agent-or-tool-contract-design",
       "authoritative": false,
       "runtimeDependency": false
     }
@@ -278,7 +290,18 @@
     "defaultLoad": false,
     "conditionalSkills": [
       "orbi-news-verification-review",
-      "orbi-news-publication-authority-review"
+      "orbi-news-publication-authority-review",
+      "orbi-news-agent-harness"
     ]
+  },
+  "agentHarness": {
+    "contractDefined": true,
+    "runtimeEnabled": false,
+    "schema": ".orbi/orbi-news-agent-observation-v1.schema.json",
+    "validator": "scripts/validate-orbi-news-agent-observation.mjs",
+    "test": "tests/deterministic/orbi-news-agent-harness-contract.test.ts",
+    "observationSchemaVersion": "orbi.news.agent.observation.v1",
+    "authorizationEngine": false,
+    "agentKitAutonomousLoop": false
   }
 }

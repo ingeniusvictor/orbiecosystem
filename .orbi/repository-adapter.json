@@ -123,6 +123,17 @@
         "editorial mutation",
         "publication credentials"
       ]
+    },
+    {
+      "skill": "orbi-news-agent-harness",
+      "triggers": [
+        "agent workflow",
+        "tool contract",
+        "structured observation",
+        "handoff",
+        "retry",
+        "stop condition"
+      ]
     }
   ],
   "deferredCapabilities": [

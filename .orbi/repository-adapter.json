@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "orbi.repository.adapter.v1",
+  "project": {
+    "id": "orbi-news",
+    "repository": "ingeniusvictor/orbiecosystem",
+    "canonicalBranch": "staging/orbi-news-vercel"
+  },
+  "verification": {
+    "install": [
+      "npm ci"
+    ],
+    "focused": [
+      "npm run test:orbi-news"
+    ],
+    "integrated": [
+      "npm run lint",
+      "npm run test:orbi-news",
+      "npm run build"
+    ],
+    "localOnly": [],
+    "externalEvidence": [
+      "Vercel staging environment/secret configuration",
+      "Firestore project/database access and production persistence",
+      "real external source/network reachability",
+      "real Gemini/provider availability",
+      "real email/social/publication credentials and channel readiness"
+    ]
+  },
+  "authorityDomains": [
+    {
+      "id": "production-activation-profile",
+      "description": "Changing ORBI News runtime from disabled/safe defaults into a controlled activation profile.",
+      "agentMayAuthorize": false,
+      "humanApprovalRequired": true,
+      "localEvidenceRequired": true
+    },
+    {
+      "id": "web-autonomous-publication",
+      "description": "Actual web publication under an already operator-authorized exact WEB_AUTONOMOUS profile and downstream gates.",
+      "agentMayAuthorize": false,
+      "humanApprovalRequired": false,
+      "localEvidenceRequired": true
+    },
+    {
+      "id": "social-publication",
+      "description": "Facebook/Instagram publication; current v1 publication policy requires human review.",
+      "agentMayAuthorize": false,
+      "humanApprovalRequired": true,
+      "localEvidenceRequired": true
+    },
+    {
+      "id": "high-risk-editorial-approval",
+      "description": "Approval of high-risk, contradicted, disputed, or insufficiently verified stories.",
+      "agentMayAuthorize": false,
+      "humanApprovalRequired": true,
+      "localEvidenceRequired": false
+    },
+    {
+      "id": "secret-and-provider-configuration",
+      "description": "Vercel/provider/Firestore/email/social secret and credential configuration.",
+      "agentMayAuthorize": false,
+      "humanApprovalRequired": true,
+      "localEvidenceRequired": true
+    },
+    {
+      "id": "canonical-factual-claims",
+      "description": "Promotion of claims into canonical/public ORBI News factual content.",
+      "agentMayAuthorize": false,
+      "humanApprovalRequired": true,
+      "localEvidenceRequired": false
+    }
+  ],
+  "agentShield": {
+    "branches": [
+      "staging/orbi-news-vercel"
+    ],
+    "paths": [
+      ".github/**",
+      ".orbi/**",
+      ".agents/**",
+      "docs/ecc/**",
+      "AGENTS.md",
+      "domain/operations/**",
+      "domain/verification/**",
+      "domain/editorial/**",
+      "domain/publications/**",
+      "server/operations/**",
+      "server/editorial/**",
+      "server/news/**",
+      "api/**",
+      "server.ts",
+      "orbi-news-runtime.ts",
+      "package.json",
+      "package-lock.json"
+    ],
+    "inheritAcceptedFindings": false,
+    "acceptedFindingClasses": []
+  },
+  "skillRouting": [],
+  "deferredCapabilities": [
+    "hooks",
+    "mcp",
+    "continuous-learning",
+    "unified-memory",
+    "autonomous-loops",
+    "multi-agent-roles"
+  ]
+}

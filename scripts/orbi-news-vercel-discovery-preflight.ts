@@ -1,5 +1,6 @@
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { config as loadDotenv } from 'dotenv';
 import {
   runVercelDiscoveryPreflight,
   type VercelDiscoveryEnvironment,
@@ -26,6 +27,10 @@ export interface VercelDiscoveryPreflightReport {
 }
 
 const present = (value: string | undefined): boolean => Boolean(value?.trim());
+
+export const resolvePreflightEnvironmentFile = (
+  environment: { readonly ORBI_NEWS_PREFLIGHT_ENV_FILE?: string },
+): string => environment.ORBI_NEWS_PREFLIGHT_ENV_FILE?.trim() || '.env.staging.local';
 
 export const buildVercelDiscoveryPreflightReport = (
   environment: VercelDiscoveryEnvironment,
@@ -69,6 +74,10 @@ export const buildVercelDiscoveryPreflightReport = (
 
 const invokedPath = process.argv[1] ? resolve(process.argv[1]) : null;
 if (invokedPath === fileURLToPath(import.meta.url)) {
+  loadDotenv({
+    path: resolvePreflightEnvironmentFile(process.env),
+    quiet: true,
+  });
   const report = buildVercelDiscoveryPreflightReport(process.env);
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
   process.exitCode = report.ready ? 0 : 1;

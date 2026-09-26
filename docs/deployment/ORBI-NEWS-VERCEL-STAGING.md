@@ -59,11 +59,19 @@ ORBI_NEWS_ENABLED_TOGGLES=AUTO_DISCOVERY
 ORBI_NEWS_AVAILABLE_CAPABILITIES=NEWS_DISCOVERY
 ```
 
-Before invoking any endpoint, run the side-effect-free staging preflight:
+After the local repository is linked to the staging Vercel project, pull the Preview environment into a gitignored local file:
+
+```text
+vercel env pull .env.staging.local --environment=preview
+```
+
+Then run the side-effect-free staging preflight:
 
 ```text
 npm run preflight:orbi-news:staging
 ```
+
+The command automatically reads `.env.staging.local` when the file exists. An alternate file can be selected with `ORBI_NEWS_PREFLIGHT_ENV_FILE`.
 
 The command validates the Vercel Discovery-only configuration and prints only a redacted readiness report: profile, source counts, reason codes and boolean presence checks. It does not print secret values or source-registry payload contents, and it does not call RSS, Firestore, Gemini, publication or email providers.
 

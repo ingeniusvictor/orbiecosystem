@@ -12,6 +12,7 @@
     "start:orbi-news-runtime": "node dist/orbi-news-runtime.cjs",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
+    "preflight:orbi-news:staging": "tsx scripts/orbi-news-vercel-discovery-preflight.ts",
     "test:orbi-news": "tsx --test tests/deterministic/orbi-news-*.test.ts"
   },
   "dependencies": {

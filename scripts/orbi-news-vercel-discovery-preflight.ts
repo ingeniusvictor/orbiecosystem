@@ -29,7 +29,7 @@ export interface VercelDiscoveryPreflightReport {
 const present = (value: string | undefined): boolean => Boolean(value?.trim());
 
 export const resolvePreflightEnvironmentFile = (
-  environment: Pick<NodeJS.ProcessEnv, 'ORBI_NEWS_PREFLIGHT_ENV_FILE'>,
+  environment: { readonly ORBI_NEWS_PREFLIGHT_ENV_FILE?: string },
 ): string => environment.ORBI_NEWS_PREFLIGHT_ENV_FILE?.trim() || '.env.staging.local';
 
 export const buildVercelDiscoveryPreflightReport = (

@@ -1,6 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildVercelDiscoveryPreflightReport } from '../../scripts/orbi-news-vercel-discovery-preflight';
+import {
+  buildVercelDiscoveryPreflightReport,
+  resolvePreflightEnvironmentFile,
+} from '../../scripts/orbi-news-vercel-discovery-preflight';
 
 const sourceRegistry = JSON.stringify([
   {
@@ -79,4 +82,12 @@ test('Vercel discovery preflight report converts invalid configuration into a fa
   assert.equal(report.ready, false);
   assert.deepEqual(report.reasons, ['VERCEL_DISCOVERY_PREFLIGHT_EXCEPTION']);
   assert.equal(report.fatalError, 'ORBI_NEWS_ACTIVATION_PROFILE_INVALID');
+});
+
+test('staging preflight uses a dedicated local env file by default and allows an explicit override', () => {
+  assert.equal(resolvePreflightEnvironmentFile({}), '.env.staging.local');
+  assert.equal(
+    resolvePreflightEnvironmentFile({ ORBI_NEWS_PREFLIGHT_ENV_FILE: ' C:/tmp/orbi-news.env ' }),
+    'C:/tmp/orbi-news.env',
+  );
 });

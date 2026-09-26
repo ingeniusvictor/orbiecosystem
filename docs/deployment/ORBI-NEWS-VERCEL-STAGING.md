@@ -4,18 +4,18 @@
 
 Validate ORBI News end-to-end in the user's Vercel team before touching the production Vercel project that serves the public ORBI website.
 
-## Staging platform constraint
+## Staging scheduling constraint
 
-The current `ORBI` Vercel team is Hobby. Hobby cron jobs are limited to daily cadence, while the production `vercel.json` intentionally defines hourly Discovery, Processing and Digest invocations. Therefore staging must deploy with `vercel.staging.json`, which contains no automatic cron schedule. Staging ticks are triggered manually through the protected cron endpoints.
+The current canonical branch does not define automatic cron schedules in either `vercel.json` or `vercel.staging.json`. Staging ticks are therefore triggered manually through the protected cron endpoints.
 
-Do not replace production `vercel.json` with the staging configuration.
+The existence of a cron route does not mean Vercel is scheduling it. Production scheduling remains a separate deployment decision and must be verified explicitly before activation.
 
 ## Deployment target
 
 - Team: `ORBI`
 - Suggested project name: `orbi-news-staging`
-- Git source: `v1m2l3p4/orbiecosystem`
-- Branch: `feature/orbi-news-agent`
+- Git source: `ingeniusvictor/orbiecosystem`
+- Canonical News branch: `staging/orbi-news-vercel`
 - Framework/build: existing Vite + Vercel Functions project
 - Alternate local config for CLI deployment: `vercel.staging.json`
 
@@ -58,6 +58,16 @@ ORBI_NEWS_AUTONOMY_LEVEL=LEVEL_1
 ORBI_NEWS_ENABLED_TOGGLES=AUTO_DISCOVERY
 ORBI_NEWS_AVAILABLE_CAPABILITIES=NEWS_DISCOVERY
 ```
+
+Before invoking any endpoint, run the side-effect-free staging preflight:
+
+```text
+npm run preflight:orbi-news:staging
+```
+
+The command validates the Vercel Discovery-only configuration and prints only a redacted readiness report: profile, source counts, reason codes and boolean presence checks. It does not print secret values or source-registry payload contents, and it does not call RSS, Firestore, Gemini, publication or email providers.
+
+A ready report must return `"ready": true` before the first live discovery tick.
 
 Manually invoke:
 
@@ -112,4 +122,4 @@ Staging is considered validated only after:
 9. duplicate ticks/replays remain idempotent;
 10. no secrets exist in GitHub.
 
-Once all ten pass, transfer the same code and approved environment configuration to the production Vercel project. The production project can then use the normal `vercel.json` hourly schedules if its plan supports them.
+Once all ten pass, transfer the same code and approved environment configuration to the production Vercel project. Production cron scheduling must then be introduced or verified separately, subject to the selected Vercel plan and deployment policy.

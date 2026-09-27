@@ -4,7 +4,12 @@ import { OperationalAction } from '../../domain/operations/operational-authority
 import { SchedulerJob } from '../../domain/operations/scheduler';
 import type { IsoUtcDateTime } from '../../domain/common/types';
 import type { FirestoreClientLike } from '../editorial/firestore-persistence';
-import { createConfiguredFirestoreClient, type FirestoreSdkLoader } from '../editorial/firestore-sdk';
+import {
+  createConfiguredFirestoreClient,
+  validateEditorialFirestoreAuthConfiguration,
+  type EditorialFirestoreEnvironment,
+  type FirestoreSdkLoader,
+} from '../editorial/firestore-sdk';
 import { createInMemorySourceRegistry, parseEnvironmentSourceRegistry } from '../discovery/environment-source-registry';
 import { createFetchRssFeedClient, type FetchRssFeedClientOptions } from '../discovery/fetch-rss-feed-client';
 import { createFirestoreDiscoverySink } from '../discovery/firestore-discovery-sink';
@@ -19,7 +24,7 @@ import { SourceRegistryStatus } from '../../domain/discovery/source-registry';
 import type { VercelCronEnvironment } from './cron-auth';
 import { resolveVercelCronSecret } from './cron-auth';
 
-export interface VercelDiscoveryEnvironment extends ControlledActivationEnvironment, VercelCronEnvironment {}
+export interface VercelDiscoveryEnvironment extends ControlledActivationEnvironment, VercelCronEnvironment, EditorialFirestoreEnvironment {}
 
 export interface VercelDiscoveryPreflight {
   readonly ready: boolean;
@@ -52,6 +57,20 @@ export const runVercelDiscoveryPreflight = (environment: VercelDiscoveryEnvironm
     reasons.push('VERCEL_DISCOVERY_PROFILE_NOT_ALLOWED');
   }
   try { resolveVercelCronSecret(environment); } catch { reasons.push('VERCEL_DISCOVERY_CRON_SECRET_REQUIRED'); }
+  if (!runtime.firestore.enabled) reasons.push('VERCEL_DISCOVERY_FIRESTORE_REQUIRED');
+  if (!runtime.firestore.projectId) reasons.push('VERCEL_DISCOVERY_FIRESTORE_PROJECT_ID_REQUIRED');
+
+  const firestoreAuthMode = environment.ORBI_EDITORIAL_FIRESTORE_AUTH_MODE?.trim().toUpperCase();
+  if (firestoreAuthMode !== 'VERCEL_OIDC') {
+    reasons.push('VERCEL_DISCOVERY_FIRESTORE_VERCEL_OIDC_REQUIRED');
+  } else {
+    try {
+      validateEditorialFirestoreAuthConfiguration(environment);
+    } catch {
+      reasons.push('VERCEL_DISCOVERY_FIRESTORE_AUTH_CONFIGURATION_INVALID');
+    }
+  }
+
   if (sources.length === 0) reasons.push('VERCEL_DISCOVERY_SOURCE_REGISTRY_REQUIRED');
   if (rssSourceCount === 0) reasons.push('VERCEL_DISCOVERY_ACTIVE_RSS_SOURCE_REQUIRED');
   if (runtime.organizationId && sources.some((source) => source.organizationId !== runtime.organizationId)) {

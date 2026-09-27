@@ -5,6 +5,10 @@ import express from 'express';
 import {
   createConfiguredFirestoreClient,
   EDITORIAL_FIRESTORE_SERVER_SDK_PACKAGE,
+  EDITORIAL_FIRESTORE_VERCEL_OIDC_EXPIRATION_BUFFER_MS,
+  EDITORIAL_FIRESTORE_VERCEL_OIDC_SCOPE,
+  type ExternalAccountConfigLike,
+  type FirestoreVercelOidcDependencies,
 } from '../../server/editorial/firestore-sdk';
 import {
   mountEditorialPrivateApiIfConfigured,
@@ -111,6 +115,121 @@ test('official SDK constructor receives explicit project/database and safe undef
     databaseId: 'orbi-news',
     ignoreUndefinedProperties: true,
   });
+});
+
+test('Firestore auth mode rejects unknown values', () => {
+  assert.throws(
+    () => createConfiguredFirestoreClient({
+      ORBI_EDITORIAL_FIRESTORE_ENABLED: 'true',
+      ORBI_EDITORIAL_FIRESTORE_PROJECT_ID: 'orbi-prod',
+      ORBI_EDITORIAL_FIRESTORE_AUTH_MODE: 'STATIC_KEY',
+    }, () => sdkModule),
+    /EDITORIAL_FIRESTORE_AUTH_MODE_INVALID/,
+  );
+});
+
+test('Vercel OIDC mode wires exact WIF audience, impersonation and renewable token supplier', async () => {
+  MinimalFirestore.lastSettings = null;
+  let externalConfig: ExternalAccountConfigLike | null = null;
+  let googleAuthOptions: {
+    readonly projectId: string;
+    readonly scopes: readonly string[];
+    readonly authClient: unknown;
+  } | null = null;
+  let tokenOptions: {
+    readonly audience: string;
+    readonly expirationBufferMs: number;
+  } | null = null;
+
+  const externalClient = { kind: 'external-account-client' };
+  const googleAuth = { kind: 'google-auth' };
+  const dependencies: FirestoreVercelOidcDependencies = {
+    createExternalAccountClient(config) {
+      externalConfig = config;
+      return externalClient;
+    },
+    createGoogleAuth(options) {
+      googleAuthOptions = options;
+      return googleAuth;
+    },
+    async getVercelOidcToken(options) {
+      tokenOptions = options;
+      return 'vercel-oidc-token';
+    },
+  };
+
+  const client = createConfiguredFirestoreClient({
+    ORBI_EDITORIAL_FIRESTORE_ENABLED: 'true',
+    ORBI_EDITORIAL_FIRESTORE_PROJECT_ID: 'cs-project-95cg3lcv',
+    ORBI_EDITORIAL_FIRESTORE_DATABASE_ID: 'orbi-news-staging',
+    ORBI_EDITORIAL_FIRESTORE_AUTH_MODE: 'VERCEL_OIDC',
+    ORBI_EDITORIAL_FIRESTORE_GCP_PROJECT_NUMBER: '1028562296104',
+    ORBI_EDITORIAL_FIRESTORE_WIF_POOL_ID: 'orbi-vercel',
+    ORBI_EDITORIAL_FIRESTORE_WIF_PROVIDER_ID: 'orbi-news-preview',
+    ORBI_EDITORIAL_FIRESTORE_SERVICE_ACCOUNT_EMAIL:
+      'orbi-news-vercel@cs-project-95cg3lcv.iam.gserviceaccount.com',
+  }, () => sdkModule, dependencies);
+
+  assert.ok(client instanceof MinimalFirestore);
+  assert.ok(externalConfig);
+  const audience =
+    'https://iam.googleapis.com/projects/1028562296104/locations/global/' +
+    'workloadIdentityPools/orbi-vercel/providers/orbi-news-preview';
+  assert.equal(externalConfig.audience, audience);
+  assert.equal(externalConfig.subject_token_type, 'urn:ietf:params:oauth:token-type:jwt');
+  assert.equal(externalConfig.token_url, 'https://sts.googleapis.com/v1/token');
+  assert.equal(
+    externalConfig.service_account_impersonation_url,
+    'https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/' +
+      'orbi-news-vercel@cs-project-95cg3lcv.iam.gserviceaccount.com:generateAccessToken',
+  );
+
+  assert.equal(await externalConfig.subject_token_supplier.getSubjectToken(), 'vercel-oidc-token');
+  assert.deepEqual(tokenOptions, {
+    audience,
+    expirationBufferMs: EDITORIAL_FIRESTORE_VERCEL_OIDC_EXPIRATION_BUFFER_MS,
+  });
+  assert.deepEqual(googleAuthOptions, {
+    projectId: 'cs-project-95cg3lcv',
+    scopes: [EDITORIAL_FIRESTORE_VERCEL_OIDC_SCOPE],
+    authClient: externalClient,
+  });
+  assert.deepEqual(MinimalFirestore.lastSettings, {
+    projectId: 'cs-project-95cg3lcv',
+    databaseId: 'orbi-news-staging',
+    ignoreUndefinedProperties: true,
+    auth: googleAuth,
+  });
+});
+
+test('Vercel OIDC mode fails closed when identity metadata is incomplete or mismatched', () => {
+  const base = {
+    ORBI_EDITORIAL_FIRESTORE_ENABLED: 'true',
+    ORBI_EDITORIAL_FIRESTORE_PROJECT_ID: 'cs-project-95cg3lcv',
+    ORBI_EDITORIAL_FIRESTORE_AUTH_MODE: 'VERCEL_OIDC',
+    ORBI_EDITORIAL_FIRESTORE_GCP_PROJECT_NUMBER: '1028562296104',
+    ORBI_EDITORIAL_FIRESTORE_WIF_POOL_ID: 'orbi-vercel',
+    ORBI_EDITORIAL_FIRESTORE_WIF_PROVIDER_ID: 'orbi-news-preview',
+    ORBI_EDITORIAL_FIRESTORE_SERVICE_ACCOUNT_EMAIL:
+      'orbi-news-vercel@cs-project-95cg3lcv.iam.gserviceaccount.com',
+  };
+
+  assert.throws(
+    () => createConfiguredFirestoreClient({
+      ...base,
+      ORBI_EDITORIAL_FIRESTORE_GCP_PROJECT_NUMBER: 'not-a-number',
+    }, () => sdkModule),
+    /EDITORIAL_FIRESTORE_GCP_PROJECT_NUMBER_INVALID/,
+  );
+
+  assert.throws(
+    () => createConfiguredFirestoreClient({
+      ...base,
+      ORBI_EDITORIAL_FIRESTORE_SERVICE_ACCOUNT_EMAIL:
+        'orbi-news-vercel@different-project.iam.gserviceaccount.com',
+    }, () => sdkModule),
+    /EDITORIAL_FIRESTORE_SERVICE_ACCOUNT_PROJECT_MISMATCH/,
+  );
 });
 
 test('runtime auto-loads Firestore only when no persistence dependency was injected', () => {

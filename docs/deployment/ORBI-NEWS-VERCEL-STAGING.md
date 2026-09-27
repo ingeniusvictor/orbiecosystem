@@ -46,6 +46,31 @@ Expected results:
 - cron endpoints reject requests without the configured `CRON_SECRET`;
 - no discovery, Gemini research, publication or email is performed.
 
+## Keyless Firestore identity
+
+Staging uses Vercel OIDC -> Google Cloud Workload Identity Federation. No service-account JSON key is stored in Vercel or GitHub.
+
+Non-secret staging identifiers:
+
+```text
+ORBI_EDITORIAL_FIRESTORE_ENABLED=true
+ORBI_EDITORIAL_FIRESTORE_PROJECT_ID=cs-project-95cg3lcv
+ORBI_EDITORIAL_FIRESTORE_DATABASE_ID=orbi-news-staging
+ORBI_EDITORIAL_FIRESTORE_AUTH_MODE=VERCEL_OIDC
+ORBI_EDITORIAL_FIRESTORE_GCP_PROJECT_NUMBER=1028562296104
+ORBI_EDITORIAL_FIRESTORE_WIF_POOL_ID=orbi-vercel
+ORBI_EDITORIAL_FIRESTORE_WIF_PROVIDER_ID=orbi-news-preview
+ORBI_EDITORIAL_FIRESTORE_SERVICE_ACCOUNT_EMAIL=orbi-news-vercel@cs-project-95cg3lcv.iam.gserviceaccount.com
+```
+
+The Google provider accepts only Vercel Preview identity for:
+
+```text
+owner:orbi4:project:orbi-news-staging:environment:preview
+```
+
+The service account has `roles/datastore.user`; the Firestore database is `orbi-news-staging` in `southamerica-west1` with delete protection enabled.
+
 ## Stage 1 — Discovery only
 
 Set exactly:
@@ -57,6 +82,14 @@ ORBI_NEWS_SYSTEM_MODE=NORMAL
 ORBI_NEWS_AUTONOMY_LEVEL=LEVEL_1
 ORBI_NEWS_ENABLED_TOGGLES=AUTO_DISCOVERY
 ORBI_NEWS_AVAILABLE_CAPABILITIES=NEWS_DISCOVERY
+ORBI_EDITORIAL_FIRESTORE_ENABLED=true
+ORBI_EDITORIAL_FIRESTORE_PROJECT_ID=cs-project-95cg3lcv
+ORBI_EDITORIAL_FIRESTORE_DATABASE_ID=orbi-news-staging
+ORBI_EDITORIAL_FIRESTORE_AUTH_MODE=VERCEL_OIDC
+ORBI_EDITORIAL_FIRESTORE_GCP_PROJECT_NUMBER=1028562296104
+ORBI_EDITORIAL_FIRESTORE_WIF_POOL_ID=orbi-vercel
+ORBI_EDITORIAL_FIRESTORE_WIF_PROVIDER_ID=orbi-news-preview
+ORBI_EDITORIAL_FIRESTORE_SERVICE_ACCOUNT_EMAIL=orbi-news-vercel@cs-project-95cg3lcv.iam.gserviceaccount.com
 ```
 
 After the local repository is linked to the staging Vercel project, pull the Preview environment into a gitignored local file:
@@ -73,7 +106,7 @@ npm run preflight:orbi-news:staging
 
 The command automatically reads `.env.staging.local` when the file exists. An alternate file can be selected with `ORBI_NEWS_PREFLIGHT_ENV_FILE`.
 
-The command validates the Vercel Discovery-only configuration and prints only a redacted readiness report: profile, source counts, reason codes and boolean presence checks. It does not print secret values or source-registry payload contents, and it does not call RSS, Firestore, Gemini, publication or email providers.
+The command validates the Vercel Discovery-only configuration and prints only a redacted readiness report: profile, source counts, reason codes and boolean presence checks. For Vercel staging, `ready: true` also requires the complete keyless Firestore WIF identity contract above. It does not print secret values or source-registry payload contents, and it does not call RSS, Firestore, Gemini, publication or email providers.
 
 A ready report must return `"ready": true` before the first live discovery tick.
 

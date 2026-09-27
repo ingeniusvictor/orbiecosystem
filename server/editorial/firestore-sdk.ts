@@ -109,11 +109,18 @@ const assertPathSegment = (label: string, value: string): void => {
   if (!/^[a-z0-9-]+$/.test(value)) throw new Error(`${label}_INVALID`);
 };
 
-const createVercelOidcAuth = (
+export interface EditorialFirestoreVercelOidcConfiguration {
+  readonly projectNumber: string;
+  readonly poolId: string;
+  readonly providerId: string;
+  readonly serviceAccountEmail: string;
+  readonly audience: string;
+}
+
+export const resolveEditorialFirestoreVercelOidcConfiguration = (
   environment: EditorialFirestoreEnvironment,
   projectId: string,
-  dependencies: FirestoreVercelOidcDependencies,
-): unknown => {
+): EditorialFirestoreVercelOidcConfiguration => {
   const projectNumber = required(
     'EDITORIAL_FIRESTORE_GCP_PROJECT_NUMBER',
     environment.ORBI_EDITORIAL_FIRESTORE_GCP_PROJECT_NUMBER,
@@ -144,6 +151,30 @@ const createVercelOidcAuth = (
   const audience =
     `https://iam.googleapis.com/projects/${projectNumber}/locations/global/` +
     `workloadIdentityPools/${poolId}/providers/${providerId}`;
+
+  return { projectNumber, poolId, providerId, serviceAccountEmail, audience };
+};
+
+export const validateEditorialFirestoreAuthConfiguration = (
+  environment: EditorialFirestoreEnvironment,
+): void => {
+  const projectId = required(
+    'EDITORIAL_FIRESTORE_PROJECT_ID',
+    environment.ORBI_EDITORIAL_FIRESTORE_PROJECT_ID,
+  );
+  const authMode = resolveAuthMode(environment.ORBI_EDITORIAL_FIRESTORE_AUTH_MODE);
+  if (authMode === 'VERCEL_OIDC') {
+    resolveEditorialFirestoreVercelOidcConfiguration(environment, projectId);
+  }
+};
+
+const createVercelOidcAuth = (
+  environment: EditorialFirestoreEnvironment,
+  projectId: string,
+  dependencies: FirestoreVercelOidcDependencies,
+): unknown => {
+  const { audience, serviceAccountEmail } =
+    resolveEditorialFirestoreVercelOidcConfiguration(environment, projectId);
 
   const externalAccountClient = dependencies.createExternalAccountClient({
     type: 'external_account',

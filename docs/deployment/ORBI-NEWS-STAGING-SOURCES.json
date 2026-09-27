@@ -8,14 +8,8 @@
     "feedUrl": "https://openai.com/news/rss.xml",
     "sourceType": "OFFICIAL",
     "credibilityBand": "AUTHORITATIVE",
-    "allowedOrigins": [
-      "RSS"
-    ],
-    "categories": [
-      "AI",
-      "TECH",
-      "SOFTWARE"
-    ],
+    "allowedOrigins": ["RSS"],
+    "categories": ["AI", "TECH", "SOFTWARE"],
     "status": "ACTIVE",
     "isPrimaryPreferred": true,
     "notes": "Official OpenAI news feed. HTTPS XML endpoint verified reachable for staging on 2026-08-27.",
@@ -31,15 +25,8 @@
     "feedUrl": "https://blog.google/rss/",
     "sourceType": "OFFICIAL",
     "credibilityBand": "AUTHORITATIVE",
-    "allowedOrigins": [
-      "RSS"
-    ],
-    "categories": [
-      "AI",
-      "TECH",
-      "SOFTWARE",
-      "HARDWARE"
-    ],
+    "allowedOrigins": ["RSS"],
+    "categories": ["AI", "TECH", "SOFTWARE", "HARDWARE"],
     "status": "ACTIVE",
     "isPrimaryPreferred": true,
     "notes": "Official Google company/product RSS feed. HTTPS XML endpoint re-verified on 2026-09-27; /feed/ now returns HTML and is intentionally not used.",
@@ -55,15 +42,8 @@
     "feedUrl": "https://nvidianews.nvidia.com/cats/press_release.xml",
     "sourceType": "OFFICIAL",
     "credibilityBand": "AUTHORITATIVE",
-    "allowedOrigins": [
-      "RSS"
-    ],
-    "categories": [
-      "AI",
-      "TECH",
-      "HARDWARE",
-      "ROBOTICS"
-    ],
+    "allowedOrigins": ["RSS"],
+    "categories": ["AI", "TECH", "HARDWARE", "ROBOTICS"],
     "status": "ACTIVE",
     "isPrimaryPreferred": true,
     "notes": "Official NVIDIA press-release feed. HTTPS XML endpoint verified reachable for staging on 2026-08-27.",

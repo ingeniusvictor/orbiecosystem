@@ -21,6 +21,12 @@ export interface VercelDiscoveryPreflightReport {
     readonly workerId: boolean;
     readonly firestoreEnabled: boolean;
     readonly firestoreProjectId: boolean;
+    readonly firestoreDatabaseId: boolean;
+    readonly firestoreAuthMode: boolean;
+    readonly firestoreGcpProjectNumber: boolean;
+    readonly firestoreWifPoolId: boolean;
+    readonly firestoreWifProviderId: boolean;
+    readonly firestoreServiceAccountEmail: boolean;
     readonly cronSecret: boolean;
     readonly sourceRegistry: boolean;
   };
@@ -42,6 +48,12 @@ export const buildVercelDiscoveryPreflightReport = (
     workerId: present(environment.ORBI_NEWS_WORKER_ID),
     firestoreEnabled: environment.ORBI_EDITORIAL_FIRESTORE_ENABLED?.trim().toLowerCase() === 'true',
     firestoreProjectId: present(environment.ORBI_EDITORIAL_FIRESTORE_PROJECT_ID),
+    firestoreDatabaseId: present(environment.ORBI_EDITORIAL_FIRESTORE_DATABASE_ID),
+    firestoreAuthMode: environment.ORBI_EDITORIAL_FIRESTORE_AUTH_MODE?.trim().toUpperCase() === 'VERCEL_OIDC',
+    firestoreGcpProjectNumber: present(environment.ORBI_EDITORIAL_FIRESTORE_GCP_PROJECT_NUMBER),
+    firestoreWifPoolId: present(environment.ORBI_EDITORIAL_FIRESTORE_WIF_POOL_ID),
+    firestoreWifProviderId: present(environment.ORBI_EDITORIAL_FIRESTORE_WIF_PROVIDER_ID),
+    firestoreServiceAccountEmail: present(environment.ORBI_EDITORIAL_FIRESTORE_SERVICE_ACCOUNT_EMAIL),
     cronSecret: present(environment.CRON_SECRET),
     sourceRegistry: present(environment.ORBI_NEWS_SOURCE_REGISTRY_JSON),
   };

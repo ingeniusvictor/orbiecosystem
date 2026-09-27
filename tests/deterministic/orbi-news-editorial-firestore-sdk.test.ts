@@ -60,6 +60,16 @@ test('Firestore SDK remains disabled by default and does not invoke loader', () 
   assert.equal(EDITORIAL_FIRESTORE_SERVER_SDK_PACKAGE, '@google-cloud/firestore');
 });
 
+test('default loader resolves the statically linked official Firestore SDK', () => {
+  const client = createConfiguredFirestoreClient({
+    ORBI_EDITORIAL_FIRESTORE_ENABLED: 'true',
+    ORBI_EDITORIAL_FIRESTORE_PROJECT_ID: 'orbi-packaging-test',
+  });
+
+  assert.ok(client);
+  assert.equal(typeof client.collection, 'function');
+});
+
 test('Firestore enabled flag accepts true/1 and rejects ambiguous values', () => {
   assert.throws(
     () => createConfiguredFirestoreClient({ ORBI_EDITORIAL_FIRESTORE_ENABLED: 'sometimes' }, () => sdkModule),

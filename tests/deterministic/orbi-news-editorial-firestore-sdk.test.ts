@@ -138,7 +138,7 @@ test('Firestore auth mode rejects unknown values', () => {
   );
 });
 
-test('Vercel OIDC mode wires exact WIF audience, impersonation and renewable token supplier', async () => {
+test('Vercel OIDC mode wires exact STS resource audience and provider token audience', async () => {
   MinimalFirestore.lastSettings = null;
   let externalConfig: ExternalAccountConfigLike | null = null;
   let googleAuthOptions: {
@@ -183,6 +183,9 @@ test('Vercel OIDC mode wires exact WIF audience, impersonation and renewable tok
   assert.ok(client instanceof MinimalFirestore);
   assert.ok(externalConfig);
   const audience =
+    '//iam.googleapis.com/projects/1028562296104/locations/global/' +
+    'workloadIdentityPools/orbi-vercel/providers/orbi-news-preview';
+  const oidcTokenAudience =
     'https://iam.googleapis.com/projects/1028562296104/locations/global/' +
     'workloadIdentityPools/orbi-vercel/providers/orbi-news-preview';
   assert.equal(externalConfig.audience, audience);
@@ -196,7 +199,7 @@ test('Vercel OIDC mode wires exact WIF audience, impersonation and renewable tok
 
   assert.equal(await externalConfig.subject_token_supplier.getSubjectToken(), 'vercel-oidc-token');
   assert.deepEqual(tokenOptions, {
-    audience,
+    audience: oidcTokenAudience,
     expirationBufferMs: EDITORIAL_FIRESTORE_VERCEL_OIDC_EXPIRATION_BUFFER_MS,
   });
   assert.deepEqual(googleAuthOptions, {

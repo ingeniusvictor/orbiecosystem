@@ -8,8 +8,14 @@
     "feedUrl": "https://openai.com/news/rss.xml",
     "sourceType": "OFFICIAL",
     "credibilityBand": "AUTHORITATIVE",
-    "allowedOrigins": ["RSS"],
-    "categories": ["AI", "TECH", "SOFTWARE"],
+    "allowedOrigins": [
+      "RSS"
+    ],
+    "categories": [
+      "AI",
+      "TECH",
+      "SOFTWARE"
+    ],
     "status": "ACTIVE",
     "isPrimaryPreferred": true,
     "notes": "Official OpenAI news feed. HTTPS XML endpoint verified reachable for staging on 2026-08-27.",
@@ -25,8 +31,15 @@
     "feedUrl": "https://blog.google/rss/",
     "sourceType": "OFFICIAL",
     "credibilityBand": "AUTHORITATIVE",
-    "allowedOrigins": ["RSS"],
-    "categories": ["AI", "TECH", "SOFTWARE", "HARDWARE"],
+    "allowedOrigins": [
+      "RSS"
+    ],
+    "categories": [
+      "AI",
+      "TECH",
+      "SOFTWARE",
+      "HARDWARE"
+    ],
     "status": "ACTIVE",
     "isPrimaryPreferred": true,
     "notes": "Official Google company/product RSS feed. HTTPS XML endpoint re-verified on 2026-09-27; /feed/ now returns HTML and is intentionally not used.",
@@ -42,29 +55,19 @@
     "feedUrl": "https://nvidianews.nvidia.com/cats/press_release.xml",
     "sourceType": "OFFICIAL",
     "credibilityBand": "AUTHORITATIVE",
-    "allowedOrigins": ["RSS"],
-    "categories": ["AI", "TECH", "HARDWARE", "ROBOTICS"],
+    "allowedOrigins": [
+      "RSS"
+    ],
+    "categories": [
+      "AI",
+      "TECH",
+      "HARDWARE",
+      "ROBOTICS"
+    ],
     "status": "ACTIVE",
     "isPrimaryPreferred": true,
     "notes": "Official NVIDIA press-release feed. HTTPS XML endpoint verified reachable for staging on 2026-08-27.",
     "createdAt": "2026-08-27T00:00:00.000Z",
     "updatedAt": "2026-08-27T21:30:00.000Z"
-  },
-  {
-    "id": "source-us-eia-today-in-energy",
-    "organizationId": "orbi-ecosystem-staging",
-    "name": "U.S. Energy Information Administration — Today in Energy",
-    "domain": "eia.gov",
-    "homepageUrl": "https://www.eia.gov/todayinenergy/",
-    "feedUrl": "https://www.eia.gov/rss/todayinenergy.xml",
-    "sourceType": "GOVERNMENT",
-    "credibilityBand": "AUTHORITATIVE",
-    "allowedOrigins": ["RSS"],
-    "categories": ["ENERGY", "TECH", "SCIENCE"],
-    "status": "ACTIVE",
-    "isPrimaryPreferred": true,
-    "notes": "Official U.S. Energy Information Administration (Department of Energy) Today in Energy RSS feed; verified HTTP 200, text/xml, and 19 RSS items on 2026-09-27.",
-    "createdAt": "2026-09-27T00:00:00.000Z",
-    "updatedAt": "2026-09-27T00:00:00.000Z"
   }
 ]

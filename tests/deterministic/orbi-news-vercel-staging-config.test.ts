@@ -23,7 +23,7 @@ test('staging environment template contains placeholders rather than real secret
   assert.doesNotMatch(raw, /re_[0-9A-Za-z]{20,}/);
 });
 
-test('staging source registry parses as four active authoritative HTTPS RSS sources', async () => {
+test('staging source registry parses as three active authoritative HTTPS RSS sources', async () => {
   const raw = await readFile(
     new URL('../../docs/deployment/ORBI-NEWS-STAGING-SOURCES.json', import.meta.url),
     'utf8',
@@ -33,7 +33,7 @@ test('staging source registry parses as four active authoritative HTTPS RSS sour
     ORBI_NEWS_SOURCE_REGISTRY_JSON: raw,
   });
 
-  assert.equal(entries.length, 4);
+  assert.equal(entries.length, 3);
 
   assert.deepEqual(
     entries.map((entry) => ({
@@ -45,7 +45,6 @@ test('staging source registry parses as four active authoritative HTTPS RSS sour
       { domain: 'openai.com', feedUrl: 'https://openai.com/news/rss.xml', sourceType: 'OFFICIAL' },
       { domain: 'blog.google', feedUrl: 'https://blog.google/rss/', sourceType: 'OFFICIAL' },
       { domain: 'nvidianews.nvidia.com', feedUrl: 'https://nvidianews.nvidia.com/cats/press_release.xml', sourceType: 'OFFICIAL' },
-      { domain: 'eia.gov', feedUrl: 'https://www.eia.gov/rss/todayinenergy.xml', sourceType: 'GOVERNMENT' },
     ],
   );
 

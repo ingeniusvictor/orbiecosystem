@@ -37,6 +37,13 @@ const validEnvironment = {
   ORBI_NEWS_AVAILABLE_CAPABILITIES: 'NEWS_DISCOVERY',
   ORBI_EDITORIAL_FIRESTORE_ENABLED: 'true',
   ORBI_EDITORIAL_FIRESTORE_PROJECT_ID: 'orbi-staging-project',
+  ORBI_EDITORIAL_FIRESTORE_DATABASE_ID: 'orbi-news-staging',
+  ORBI_EDITORIAL_FIRESTORE_AUTH_MODE: 'VERCEL_OIDC',
+  ORBI_EDITORIAL_FIRESTORE_GCP_PROJECT_NUMBER: '1028562296104',
+  ORBI_EDITORIAL_FIRESTORE_WIF_POOL_ID: 'orbi-vercel',
+  ORBI_EDITORIAL_FIRESTORE_WIF_PROVIDER_ID: 'orbi-news-preview',
+  ORBI_EDITORIAL_FIRESTORE_SERVICE_ACCOUNT_EMAIL:
+    'orbi-news-vercel@orbi-staging-project.iam.gserviceaccount.com',
   ORBI_NEWS_SOURCE_REGISTRY_JSON: sourceRegistry,
   CRON_SECRET: 'c'.repeat(40),
 };
@@ -51,6 +58,12 @@ test('Vercel discovery preflight report is ready for the exact discovery-only pr
   assert.equal(report.rssSourceCount, 1);
   assert.deepEqual(report.reasons, []);
   assert.equal(report.fatalError, null);
+  assert.equal(report.configurationPresent.firestoreDatabaseId, true);
+  assert.equal(report.configurationPresent.firestoreAuthMode, true);
+  assert.equal(report.configurationPresent.firestoreGcpProjectNumber, true);
+  assert.equal(report.configurationPresent.firestoreWifPoolId, true);
+  assert.equal(report.configurationPresent.firestoreWifProviderId, true);
+  assert.equal(report.configurationPresent.firestoreServiceAccountEmail, true);
   assert.equal(report.configurationPresent.cronSecret, true);
   assert.equal(report.configurationPresent.sourceRegistry, true);
 });
@@ -62,6 +75,30 @@ test('Vercel discovery preflight report fails closed when CRON_SECRET is absent'
   assert.equal(report.ready, false);
   assert.ok(report.reasons.includes('VERCEL_DISCOVERY_CRON_SECRET_REQUIRED'));
   assert.equal(report.configurationPresent.cronSecret, false);
+});
+
+test('Vercel discovery preflight fails closed when keyless Firestore identity metadata is incomplete', () => {
+  const environment = {
+    ...validEnvironment,
+    ORBI_EDITORIAL_FIRESTORE_WIF_PROVIDER_ID: undefined,
+  };
+  const report = buildVercelDiscoveryPreflightReport(environment);
+
+  assert.equal(report.ready, false);
+  assert.ok(report.reasons.includes('VERCEL_DISCOVERY_FIRESTORE_AUTH_CONFIGURATION_INVALID'));
+  assert.equal(report.configurationPresent.firestoreWifProviderId, false);
+});
+
+test('Vercel discovery preflight requires the Vercel OIDC Firestore auth mode', () => {
+  const environment = {
+    ...validEnvironment,
+    ORBI_EDITORIAL_FIRESTORE_AUTH_MODE: 'ADC',
+  };
+  const report = buildVercelDiscoveryPreflightReport(environment);
+
+  assert.equal(report.ready, false);
+  assert.ok(report.reasons.includes('VERCEL_DISCOVERY_FIRESTORE_VERCEL_OIDC_REQUIRED'));
+  assert.equal(report.configurationPresent.firestoreAuthMode, false);
 });
 
 test('Vercel discovery preflight report never emits configured secret or source-registry payload values', () => {

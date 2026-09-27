@@ -4,7 +4,7 @@ import type {
   SourceType,
 } from '../common/enums';
 import type { IsoUtcDateTime, OrganizationId, SourceId } from '../common/types';
-import { NewsOrigin } from '../news/news-item';
+import { NewsOrigin } from '../news/news-item.js';
 
 export enum SourceRegistryStatus {
   ACTIVE = 'ACTIVE',

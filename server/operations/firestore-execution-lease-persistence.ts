@@ -7,7 +7,7 @@ import {
   createAvailableExecutionLease,
   failExecutionLease,
   type ExecutionLease,
-} from '../../domain/operations/execution-lease';
+} from '../../domain/operations/execution-lease.js';
 import type {
   FirestoreClientLike,
   FirestoreDocumentReferenceLike,

@@ -1,7 +1,7 @@
-import { RssDiscoveryProvider } from '../../domain/discovery/rss-provider';
-import { NewsOrigin } from '../../domain/news/news-item';
-import { OperationalAction } from '../../domain/operations/operational-authority';
-import { SchedulerJob } from '../../domain/operations/scheduler';
+import { RssDiscoveryProvider } from '../../domain/discovery/rss-provider.js';
+import { NewsOrigin } from '../../domain/news/news-item.js';
+import { OperationalAction } from '../../domain/operations/operational-authority.js';
+import { SchedulerJob } from '../../domain/operations/scheduler.js';
 import type { IsoUtcDateTime } from '../../domain/common/types';
 import type { FirestoreClientLike } from '../editorial/firestore-persistence';
 import {
@@ -9,20 +9,20 @@ import {
   validateEditorialFirestoreAuthConfiguration,
   type EditorialFirestoreEnvironment,
   type FirestoreSdkLoader,
-} from '../editorial/firestore-sdk';
-import { createInMemorySourceRegistry, parseEnvironmentSourceRegistry } from '../discovery/environment-source-registry';
-import { createFetchRssFeedClient, type FetchRssFeedClientOptions } from '../discovery/fetch-rss-feed-client';
-import { createFirestoreDiscoverySink } from '../discovery/firestore-discovery-sink';
-import { ControlledActivationProfile, assessControlledActivationProfile } from '../operations/controlled-activation-profile';
-import { resolveProductionOperationalAuthoritySnapshot } from '../operations/production-authority-config';
-import { createProductionDiscoveryHandler } from '../operations/production-discovery-handler';
-import { createProductionOperationHandler } from '../operations/production-handler-registry';
-import { createProductionAutonomousRuntime } from '../operations/production-runtime';
-import { resolveProductionRuntimeConfiguration } from '../operations/production-runtime-config';
+} from '../editorial/firestore-sdk.js';
+import { createInMemorySourceRegistry, parseEnvironmentSourceRegistry } from '../discovery/environment-source-registry.js';
+import { createFetchRssFeedClient, type FetchRssFeedClientOptions } from '../discovery/fetch-rss-feed-client.js';
+import { createFirestoreDiscoverySink } from '../discovery/firestore-discovery-sink.js';
+import { ControlledActivationProfile, assessControlledActivationProfile } from '../operations/controlled-activation-profile.js';
+import { resolveProductionOperationalAuthoritySnapshot } from '../operations/production-authority-config.js';
+import { createProductionDiscoveryHandler } from '../operations/production-discovery-handler.js';
+import { createProductionOperationHandler } from '../operations/production-handler-registry.js';
+import { createProductionAutonomousRuntime } from '../operations/production-runtime.js';
+import { resolveProductionRuntimeConfiguration } from '../operations/production-runtime-config.js';
 import type { ControlledActivationEnvironment } from '../operations/controlled-activation-preflight';
-import { SourceRegistryStatus } from '../../domain/discovery/source-registry';
+import { SourceRegistryStatus } from '../../domain/discovery/source-registry.js';
 import type { VercelCronEnvironment } from './cron-auth';
-import { resolveVercelCronSecret } from './cron-auth';
+import { resolveVercelCronSecret } from './cron-auth.js';
 
 export interface VercelDiscoveryEnvironment extends ControlledActivationEnvironment, VercelCronEnvironment, EditorialFirestoreEnvironment {}
 

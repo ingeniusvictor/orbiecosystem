@@ -1,5 +1,5 @@
-import { AutonomyLevel, SystemCapability, SystemMode } from '../../domain/common/enums';
-import { AutomationToggle, OperationalAction } from '../../domain/operations/operational-authority';
+import { AutonomyLevel, SystemCapability, SystemMode } from '../../domain/common/enums.js';
+import { AutomationToggle, OperationalAction } from '../../domain/operations/operational-authority.js';
 import type { ProductionRuntimeConfiguration } from './production-runtime-config';
 import type { ProductionAuthorityEnvironment } from './production-authority-config';
 

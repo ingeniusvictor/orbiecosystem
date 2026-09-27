@@ -1,10 +1,10 @@
-import { CapabilityStatus, SystemCapability } from '../../domain/common/enums';
+import { CapabilityStatus, SystemCapability } from '../../domain/common/enums.js';
 import {
   AutomationToggle,
   KillSwitchScope,
   OperationalAction,
   type OperationalAuthoritySnapshot,
-} from '../../domain/operations/operational-authority';
+} from '../../domain/operations/operational-authority.js';
 import type { ProductionRuntimeConfiguration } from './production-runtime-config';
 
 export interface ProductionAuthorityEnvironment {

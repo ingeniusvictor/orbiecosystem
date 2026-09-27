@@ -1,5 +1,5 @@
 import type { SourceId, IsoUtcDateTime } from '../../domain/common/types';
-import { DiscoveryProviderStatus, type DiscoveryProvider, type DiscoveryProviderResult } from '../../domain/discovery/provider';
+import { DiscoveryProviderStatus, type DiscoveryProvider, type DiscoveryProviderResult } from '../../domain/discovery/provider.js';
 import type { AutonomousOperationHandlerContext } from './autonomous-execution-orchestrator';
 
 export interface ProductionDiscoverySink {

@@ -1,10 +1,10 @@
-import { AutonomyLevel } from '../common/enums';
+import { AutonomyLevel } from '../common/enums.js';
 import {
   OperationalAction,
   assessOperationalAuthority,
   type OperationalAuthorityAssessment,
   type OperationalAuthoritySnapshot,
-} from './operational-authority';
+} from './operational-authority.js';
 import type { OperationalHealthAssessment } from './operational-health-policy';
 
 const AUTONOMY_ORDER: Readonly<Record<AutonomyLevel, number>> = {

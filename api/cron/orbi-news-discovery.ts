@@ -1,6 +1,6 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
-import { authenticateVercelCronAuthorization, resolveVercelCronSecret } from '../../server/vercel/cron-auth';
-import { executeVercelDiscoveryCron } from '../../server/vercel/discovery-cron-service';
+import { authenticateVercelCronAuthorization, resolveVercelCronSecret } from '../../server/vercel/cron-auth.js';
+import { executeVercelDiscoveryCron } from '../../server/vercel/discovery-cron-service.js';
 
 const json = (res: ServerResponse, status: number, payload: unknown): void => {
   res.statusCode = status;

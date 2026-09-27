@@ -4,12 +4,12 @@ import {
   OperationalRunOutcome,
   createOperationalRunRecord,
   type OperationalRunRecord,
-} from '../../domain/operations/operational-run';
+} from '../../domain/operations/operational-run.js';
 import {
   AutonomousExecutionOutcome,
   type AutonomousExecutionInput,
   type AutonomousExecutionResult,
-} from './autonomous-execution-orchestrator';
+} from './autonomous-execution-orchestrator.js';
 
 export interface AutonomousExecutionRunner {
   execute(input: AutonomousExecutionInput): Promise<AutonomousExecutionResult>;

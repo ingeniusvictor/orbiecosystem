@@ -1,15 +1,15 @@
 import type { IsoUtcDateTime, OrganizationId } from '../../domain/common/types';
-import { constrainAutonomyByHealth, type HealthConstrainedAutonomyResult } from '../../domain/operations/health-constrained-authority';
-import { assessOperationalHealth, type OperationalHealthAssessment, type OperationalHealthPolicyConfig } from '../../domain/operations/operational-health-policy';
-import { aggregateOperationalHealth, type OperationalHealthSnapshot } from '../../domain/operations/operational-metrics';
-import { OperationalRunOutcome, type OperationalRunRecord } from '../../domain/operations/operational-run';
+import { constrainAutonomyByHealth, type HealthConstrainedAutonomyResult } from '../../domain/operations/health-constrained-authority.js';
+import { assessOperationalHealth, type OperationalHealthAssessment, type OperationalHealthPolicyConfig } from '../../domain/operations/operational-health-policy.js';
+import { aggregateOperationalHealth, type OperationalHealthSnapshot } from '../../domain/operations/operational-metrics.js';
+import { OperationalRunOutcome, type OperationalRunRecord } from '../../domain/operations/operational-run.js';
 import type { OperationalAuthoritySnapshot, OperationalAction } from '../../domain/operations/operational-authority';
 import type { SchedulerJob } from '../../domain/operations/scheduler';
 import {
   createObservedAutonomousExecution,
   type AutonomousExecutionRunner,
   type ObservedAutonomousExecutionResult,
-} from './observed-autonomous-execution';
+} from './observed-autonomous-execution.js';
 import type { OperationalRunLedger } from './firestore-operational-run-ledger';
 
 export interface AutonomousRuntimeInput {

@@ -1,9 +1,9 @@
 import type { IsoUtcDateTime, SourceId } from '../common/types';
-import { NewsOrigin } from '../news/news-item';
+import { NewsOrigin } from '../news/news-item.js';
 import type { DiscoveryProvider, DiscoveryProviderResult, DiscoveryQuery } from './provider';
-import { DiscoveryProviderStatus } from './provider';
+import { DiscoveryProviderStatus } from './provider.js';
 import type { SourceRegistryEntry, SourceRegistryRepository } from './source-registry';
-import { isSourceEligibleForDiscovery } from './source-registry';
+import { isSourceEligibleForDiscovery } from './source-registry.js';
 
 export interface RssFeedItem {
   readonly title: string;

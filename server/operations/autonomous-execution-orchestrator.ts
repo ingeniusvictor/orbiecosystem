@@ -1,6 +1,6 @@
 import type { OrganizationId, IsoUtcDateTime } from '../../domain/common/types';
-import { OperationalAction, OperationalDecision, assessOperationalAuthority, type OperationalAuthorityAssessment, type OperationalAuthoritySnapshot } from '../../domain/operations/operational-authority';
-import { SchedulerDecision, SchedulerJob, evaluateSchedulerTick, type SchedulerTickResult } from '../../domain/operations/scheduler';
+import { OperationalAction, OperationalDecision, assessOperationalAuthority, type OperationalAuthorityAssessment, type OperationalAuthoritySnapshot } from '../../domain/operations/operational-authority.js';
+import { SchedulerDecision, SchedulerJob, evaluateSchedulerTick, type SchedulerTickResult } from '../../domain/operations/scheduler.js';
 import type { DurableExecutionLeasePersistence } from './firestore-execution-lease-persistence';
 
 export enum AutonomousExecutionOutcome {

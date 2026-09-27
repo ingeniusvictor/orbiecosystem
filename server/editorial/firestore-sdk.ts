@@ -111,6 +111,7 @@ export interface EditorialFirestoreVercelOidcConfiguration {
   readonly providerId: string;
   readonly serviceAccountEmail: string;
   readonly audience: string;
+  readonly oidcTokenAudience: string;
 }
 
 export const resolveEditorialFirestoreVercelOidcConfiguration = (
@@ -144,11 +145,20 @@ export const resolveEditorialFirestoreVercelOidcConfiguration = (
     throw new Error('EDITORIAL_FIRESTORE_SERVICE_ACCOUNT_PROJECT_MISMATCH');
   }
 
-  const audience =
-    `https://iam.googleapis.com/projects/${projectNumber}/locations/global/` +
+  const providerResourcePath =
+    `projects/${projectNumber}/locations/global/` +
     `workloadIdentityPools/${poolId}/providers/${providerId}`;
+  const audience = `//iam.googleapis.com/${providerResourcePath}`;
+  const oidcTokenAudience = `https://iam.googleapis.com/${providerResourcePath}`;
 
-  return { projectNumber, poolId, providerId, serviceAccountEmail, audience };
+  return {
+    projectNumber,
+    poolId,
+    providerId,
+    serviceAccountEmail,
+    audience,
+    oidcTokenAudience,
+  };
 };
 
 export const validateEditorialFirestoreAuthConfiguration = (
@@ -169,7 +179,7 @@ const createVercelOidcAuth = (
   projectId: string,
   dependencies: FirestoreVercelOidcDependencies,
 ): unknown => {
-  const { audience, serviceAccountEmail } =
+  const { audience, oidcTokenAudience, serviceAccountEmail } =
     resolveEditorialFirestoreVercelOidcConfiguration(environment, projectId);
 
   const externalAccountClient = dependencies.createExternalAccountClient({
@@ -182,7 +192,7 @@ const createVercelOidcAuth = (
       `${serviceAccountEmail}:generateAccessToken`,
     subject_token_supplier: {
       getSubjectToken: () => dependencies.getVercelOidcToken({
-        audience,
+        audience: oidcTokenAudience,
         expirationBufferMs: VERCEL_OIDC_EXPIRATION_BUFFER_MS,
       }),
     },

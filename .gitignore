@@ -7,5 +7,6 @@ coverage/
 
 .env
 .env.local
+.env.staging.local
 .env.production
 .vercel/

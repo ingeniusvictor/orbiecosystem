@@ -2,16 +2,16 @@ import type { IsoUtcDateTime } from '../../domain/common/types';
 import type { OperationalAuthoritySnapshot, OperationalAction } from '../../domain/operations/operational-authority';
 import type { SchedulerJob } from '../../domain/operations/scheduler';
 import type { FirestoreClientLike } from '../editorial/firestore-persistence';
-import { createConfiguredFirestoreClient, type FirestoreSdkLoader } from '../editorial/firestore-sdk';
-import { createAutonomousExecutionOrchestrator, type AutonomousOperationHandler } from './autonomous-execution-orchestrator';
-import { createAutonomousRuntime } from './autonomous-runtime';
-import { createFirestoreExecutionLeasePersistence } from './firestore-execution-lease-persistence';
-import { createFirestoreOperationalRunLedger } from './firestore-operational-run-ledger';
+import { createConfiguredFirestoreClient, type FirestoreSdkLoader } from '../editorial/firestore-sdk.js';
+import { createAutonomousExecutionOrchestrator, type AutonomousOperationHandler } from './autonomous-execution-orchestrator.js';
+import { createAutonomousRuntime } from './autonomous-runtime.js';
+import { createFirestoreExecutionLeasePersistence } from './firestore-execution-lease-persistence.js';
+import { createFirestoreOperationalRunLedger } from './firestore-operational-run-ledger.js';
 import {
   resolveProductionRuntimeConfiguration,
   type ProductionRuntimeConfiguration,
   type ProductionRuntimeEnvironment,
-} from './production-runtime-config';
+} from './production-runtime-config.js';
 
 export interface ProductionAutonomousRuntimeInput {
   readonly job: SchedulerJob;

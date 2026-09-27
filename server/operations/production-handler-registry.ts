@@ -1,4 +1,4 @@
-import { OperationalAction } from '../../domain/operations/operational-authority';
+import { OperationalAction } from '../../domain/operations/operational-authority.js';
 import type { AutonomousOperationHandler, AutonomousOperationHandlerContext } from './autonomous-execution-orchestrator';
 
 export type ProductionActionHandler = (context: AutonomousOperationHandlerContext) => Promise<void>;

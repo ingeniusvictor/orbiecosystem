@@ -1,7 +1,7 @@
 import type { IsoUtcDateTime } from '../common/types';
-import { OperationalAction } from './operational-authority';
-import { OperationalRunOutcome, type OperationalRunRecord } from './operational-run';
-import { SchedulerJob } from './scheduler';
+import { OperationalAction } from './operational-authority.js';
+import { OperationalRunOutcome, type OperationalRunRecord } from './operational-run.js';
+import { SchedulerJob } from './scheduler.js';
 
 export interface OperationalOutcomeCounts {
   readonly total: number;

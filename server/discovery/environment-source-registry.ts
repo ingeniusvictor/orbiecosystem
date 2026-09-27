@@ -1,7 +1,7 @@
-import { ContentCategory, SourceCredibilityBand, SourceType } from '../../domain/common/enums';
+import { ContentCategory, SourceCredibilityBand, SourceType } from '../../domain/common/enums.js';
 import type { IsoUtcDateTime, OrganizationId, SourceId } from '../../domain/common/types';
-import { NewsOrigin } from '../../domain/news/news-item';
-import { SourceRegistryStatus, type SourceRegistryEntry, type SourceRegistryRepository } from '../../domain/discovery/source-registry';
+import { NewsOrigin } from '../../domain/news/news-item.js';
+import { SourceRegistryStatus, type SourceRegistryEntry, type SourceRegistryRepository } from '../../domain/discovery/source-registry.js';
 
 export interface SourceRegistryEnvironment { readonly ORBI_NEWS_SOURCE_REGISTRY_JSON?: string; }
 

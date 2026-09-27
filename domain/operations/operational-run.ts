@@ -1,6 +1,6 @@
 import type { IsoUtcDateTime, OrganizationId } from '../common/types';
-import { OperationalAction, OperationalDecision, type OperationalAuthorityAssessment } from './operational-authority';
-import { SchedulerDecision, SchedulerJob, type SchedulerTickResult } from './scheduler';
+import { OperationalAction, OperationalDecision, type OperationalAuthorityAssessment } from './operational-authority.js';
+import { SchedulerDecision, SchedulerJob, type SchedulerTickResult } from './scheduler.js';
 
 export enum OperationalRunOutcome {
   SKIPPED = 'SKIPPED',

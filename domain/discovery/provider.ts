@@ -1,5 +1,5 @@
 import type { IsoUtcDateTime, OrganizationId, SourceId } from '../common/types';
-import { NewsOrigin, type DiscoveryCandidate } from '../news/news-item';
+import { NewsOrigin, type DiscoveryCandidate } from '../news/news-item.js';
 
 export enum DiscoveryProviderStatus {
   NOT_CONFIGURED = 'NOT_CONFIGURED',

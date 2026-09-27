@@ -1,4 +1,4 @@
-import { AutonomyLevel, SystemMode } from '../../domain/common/enums';
+import { AutonomyLevel, SystemMode } from '../../domain/common/enums.js';
 import type { OrganizationId } from '../../domain/common/types';
 
 export interface ProductionRuntimeEnvironment {

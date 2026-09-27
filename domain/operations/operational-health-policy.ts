@@ -1,7 +1,7 @@
-import { AutonomyLevel } from '../common/enums';
+import { AutonomyLevel } from '../common/enums.js';
 import type { IsoUtcDateTime } from '../common/types';
 import type { OperationalHealthSnapshot } from './operational-metrics';
-import { OperationalRunOutcome, type OperationalRunRecord } from './operational-run';
+import { OperationalRunOutcome, type OperationalRunRecord } from './operational-run.js';
 
 export enum OperationalHealthStatus {
   HEALTHY = 'HEALTHY',

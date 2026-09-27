@@ -3,7 +3,7 @@ import {
   CapabilityStatus,
   SystemCapability,
   SystemMode,
-} from '../common/enums';
+} from '../common/enums.js';
 
 export enum OperationalAction {
   DISCOVER_NEWS = 'DISCOVER_NEWS',

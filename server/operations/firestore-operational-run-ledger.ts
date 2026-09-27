@@ -2,14 +2,14 @@ import type { OrganizationId } from '../../domain/common/types';
 import {
   OperationalRunOutcome,
   type OperationalRunRecord,
-} from '../../domain/operations/operational-run';
-import { OperationalAction, OperationalDecision } from '../../domain/operations/operational-authority';
-import { SchedulerDecision, SchedulerJob } from '../../domain/operations/scheduler';
+} from '../../domain/operations/operational-run.js';
+import { OperationalAction, OperationalDecision } from '../../domain/operations/operational-authority.js';
+import { SchedulerDecision, SchedulerJob } from '../../domain/operations/scheduler.js';
 import type {
   FirestoreClientLike,
   FirestoreDocumentReferenceLike,
 } from '../editorial/firestore-persistence';
-import { FIRESTORE_OPERATIONS_ROOT_COLLECTION } from './firestore-execution-lease-persistence';
+import { FIRESTORE_OPERATIONS_ROOT_COLLECTION } from './firestore-execution-lease-persistence.js';
 
 export const FIRESTORE_OPERATIONAL_RUNS_COLLECTION = 'operationalRuns';
 

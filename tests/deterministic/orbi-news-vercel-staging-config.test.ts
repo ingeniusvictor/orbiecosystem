@@ -38,13 +38,14 @@ test('staging source registry parses as four active authoritative HTTPS RSS sour
   assert.deepEqual(
     entries.map((entry) => ({
       domain: entry.domain,
+      feedUrl: entry.feedUrl,
       sourceType: entry.sourceType,
     })),
     [
-      { domain: 'openai.com', sourceType: 'OFFICIAL' },
-      { domain: 'blog.google', sourceType: 'OFFICIAL' },
-      { domain: 'nvidianews.nvidia.com', sourceType: 'OFFICIAL' },
-      { domain: 'energy.gov', sourceType: 'GOVERNMENT' },
+      { domain: 'openai.com', feedUrl: 'https://openai.com/news/rss.xml', sourceType: 'OFFICIAL' },
+      { domain: 'blog.google', feedUrl: 'https://blog.google/rss/', sourceType: 'OFFICIAL' },
+      { domain: 'nvidianews.nvidia.com', feedUrl: 'https://nvidianews.nvidia.com/cats/press_release.xml', sourceType: 'OFFICIAL' },
+      { domain: 'eia.gov', feedUrl: 'https://www.eia.gov/rss/todayinenergy.xml', sourceType: 'GOVERNMENT' },
     ],
   );
 

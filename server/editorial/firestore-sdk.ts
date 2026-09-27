@@ -1,5 +1,4 @@
-import { createRequire } from 'node:module';
-import { join } from 'node:path';
+import { Firestore } from '@google-cloud/firestore';
 import { getVercelOidcToken } from '@vercel/oidc';
 import { ExternalAccountClient, GoogleAuth } from 'google-auth-library';
 import type { FirestoreClientLike } from './firestore-persistence.js';
@@ -60,10 +59,7 @@ const FIRESTORE_PACKAGE_NAME = '@google-cloud/firestore';
 const FIRESTORE_SCOPE = 'https://www.googleapis.com/auth/cloud-platform';
 const VERCEL_OIDC_EXPIRATION_BUFFER_MS = 5 * 60 * 1000;
 
-const defaultFirestoreSdkLoader: FirestoreSdkLoader = () => {
-  const requireFromProject = createRequire(join(process.cwd(), 'package.json'));
-  return requireFromProject(FIRESTORE_PACKAGE_NAME);
-};
+const defaultFirestoreSdkLoader: FirestoreSdkLoader = () => ({ Firestore });
 
 const defaultVercelOidcDependencies: FirestoreVercelOidcDependencies = {
   createExternalAccountClient(config) {
